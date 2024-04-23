@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/04/23 15:36:12 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/04/23 17:31:07 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/libft.h"
@@ -31,6 +34,10 @@
 # define ERR_ACCESS "Access error"
 # define ERR_CMD "command not found: "
 # define ERR_PER "permission denied: "
+
+# define ERR_STAT 1
+# define MALLOC_ERR 0
+# define SPECIAL_TOKENS "<>()="
 
 typedef struct	s_file
 {
@@ -57,6 +64,17 @@ typedef struct	s_data
 	t_token	*tokens;
 	int		pipecount;
 } t_data;
+
+
+
+typedef struct s_env_lst
+{
+	char				*name;
+	char				*value;
+	int					is_global;
+	struct s_env_lst	*next;
+}				t_env_lst;
+
 
 //free
 void	ft_free_double(char **arr);
@@ -89,5 +107,57 @@ void	ft_lstiter2_ms(t_file *files, void (*f)(t_file *));
 void	ft_lstiter_ms(t_token *tokens, void (*f)(t_token *));
 void	printnode(t_token *token);
 void	printfile(t_file *node);
+
+
+
+// PANU's FUNCTIONS
+
+t_env_lst	*save_env_list(char **environ);
+
+t_env_lst	*ft_unset(t_env_lst *env_lst, char *arg);
+int			ft_export(t_env_lst *env_lst, char *new_env_var);
+int			ft_empty_export(t_env_lst *env_lst);
+int			ft_pwd(void);
+void		ft_env(t_env_lst *env_lst);
+int			ft_cd(t_env_lst *env_lst, char *path);
+void		ft_echo(int flag, char **args);
+
+int			ft_redirect(char *type, char *file);
+int			ft_heredoc(char *limiter);
+
+char		*get_var_name(char *environ_var);
+char		*get_var_value(char *environ_var);
+t_env_lst	*check_if_var_exist(t_env_lst *env_lst, char *var_name);
+
+int			process_global_env_node(t_env_lst *env_lst, char *new_env_var);
+int			process_non_global_env_node(t_env_lst *env_lst, char *new_env_var);
+int			process_null_value_env_node(t_env_lst *env_lst, char *new_env_var);
+
+t_env_lst	*get_global_env_node(char *environ_var);
+t_env_lst	*get_non_global_env_node(char *environ_var);
+t_env_lst	*get_null_value_env_node(char *environ_var);
+
+void		delete_env_node(t_env_lst *temp);
+void		free_env_lst(t_env_lst *env_lst);
+void		ft_free_doubleptr(char **ptr);
+int			env_lstsize(t_env_lst *lst);
+
+char		*expand_env_var(t_env_lst *env_lst, char *var_name);
+
+int			write_error(char *cmd, char *specifier, char *err_str);
+int			write_sys_error(char *err_str);
+
+char		**get_paths(t_env_lst *env_lst);
+char		**make_env_var_array(t_env_lst *env_lst);
+
+int			handle_command(t_env_lst *env_lst, char *cmd, char **args);
+int			execute_command(char *cmd, char **args, t_env_lst *env_lst);
+int			execute_built_in(t_env_lst *env_lst, char *cmd, char **args);
+
+int			check_for_built_in(char *cmd);
+int			is_echo(char *cmd);
+int			is_pwd(char *cmd);
+int			is_env(char *cmd);
+
 
 #endif

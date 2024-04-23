@@ -3,107 +3,111 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/08 08:51:06 by tsaari            #+#    #+#             */
-/*   Updated: 2024/03/21 09:24:43 by tsaari           ###   ########.fr       */
+/*   Created: 2023/10/25 16:14:53 by pkangas           #+#    #+#             */
+/*   Updated: 2023/11/09 11:21:08 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "libft.h"
 
-static size_t	string_length(const char *s, char c)
+static void	free_strings(char **result, int k)
 {
-	size_t	len;
+	while (k >= 0)
+	{
+		free(result[k]);
+		k--;
+	}
+	free(result);
+}
+
+static int	get_str_len(char const *s, char c, int i)
+{
+	int	len;
 
 	len = 0;
-	while (*s != c && *s != '\0')
+	while (s[i] != c && s[i] != '\0')
 	{
 		len++;
-		s++;
+		i++;
 	}
 	return (len);
 }
 
-static char	**free_array(char **s)
+static int	process_string(char const *s, char c, char **result, int k)
 {
-	size_t	i;
+	int	i;
+	int	len;
 
 	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] != NULL)
+	len = 0;
+	while (s[i] != '\0')
 	{
-		free (s[i]);
-		i++;
-	}
-	free(s);
-	return (NULL);
-}
-
-static size_t	count_strings(const char *s, char c)
-{
-	size_t	strings;
-
-	strings = 0;
-	while (*s != 0)
-	{
-		if (*s != c)
+		if (s[i] != c)
 		{
-			strings++;
-			while (*s != c && *s != '\0')
+			len = get_str_len(s, c, i);
+			result[k] = ft_substr(s, i, len);
+			if (result[k] == 0)
 			{
-				s++;
+				free_strings(result, k);
+				return (-1);
 			}
+			i = i + len;
+			k++;
 		}
 		else
-		{
-			s++;
-		}
+			i++;
 	}
-	return (strings);
+	return (k);
 }
 
-static void	*get_word(size_t len, const char *s)
+static int	get_str_count(char const *s, char c)
 {
-	size_t	j;
-	char	*str;
-
-	str = (char *)malloc((len + 1) * sizeof(char));
-	if (!str)
-		return (NULL);
-	j = -1;
-	while (++j < len)
-		str[j] = s[j];
-	str[len] = '\0';
-	return (str);
-}
-
-char	**ft_split(const char *s, char c)
-{
-	size_t	strings;
-	size_t	i;
-	size_t	len;
-	char	**return_array;
+	unsigned int	i;
+	unsigned int	count;
+	unsigned int	c_count;
 
 	i = 0;
-	strings = count_strings(s, c);
-	return_array = (char **)malloc((strings + 1) * sizeof(char *));
-	if (!return_array || !s)
-		return (NULL);
-	while (i < strings)
+	c_count = 0;
+	count = 1;
+	while (s[i] == c)
 	{
-		if (*s != c)
-		{
-			len = string_length(s, c);
-			return_array[i] = get_word(len, s);
-			if (return_array[i] == NULL)
-				return (free_array(return_array));
-			s += len;
-			i++;
-		}
-		s++;
+		i++;
+		c_count++;
 	}
-	return_array[i] = NULL;
-	return (return_array);
+	while (s[i] != '\0')
+	{
+		if (s[i] == c)
+		{
+			if (s[i + 1] != c && s[i + 1] != '\0')
+				count++;
+		}
+		i++;
+	}
+	if (s[0] == 0 || c_count == ft_strlen(s))
+		count = count - 1;
+	return (count);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	int		k;
+	int		count;
+	char	**result;
+
+	if (s == NULL)
+		return (NULL);
+	count = get_str_count(s, c);
+	result = (char **) malloc((count + 1) * sizeof(char *));
+	if (result == NULL)
+		return (NULL);
+	k = 0;
+	k = process_string(s, c, result, k);
+	if (k == -1)
+		return (NULL);
+	else
+		result[k] = NULL;
+	return (result);
 }

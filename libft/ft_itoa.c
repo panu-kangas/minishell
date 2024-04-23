@@ -3,98 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/08 09:11:17 by tsaari            #+#    #+#             */
-/*   Updated: 2024/03/20 16:40:14 by tsaari           ###   ########.fr       */
+/*   Created: 2023/10/23 13:25:51 by pkangas           #+#    #+#             */
+/*   Updated: 2023/11/08 14:11:17 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <stdlib.h>
 
-char	*ft_free_itoa(char *str)
+static void	set_number(char *number, int n, int num_size)
 {
-	free(str);
-	return (NULL);
-}
+	long int	j;
 
-static int	nbrofdigits(int n)
-{
-	int	x;
-
-	x = 0;
-	while (n != 0)
+	j = n;
+	if (j < 0)
+		j = j * -1;
+	while (num_size >= 0)
 	{
-		x++;
-		n = n / 10;
+		number[num_size] = '0' + j % 10;
+		j = j / 10;
+		num_size--;
+		if (num_size == 0 && n < 0)
+		{
+			number[0] = '-';
+			num_size--;
+		}
 	}
-	return (x);
-}
-
-static char	*allocate(int len)
-{
-	char	*ret;
-
-	ret = (char *)ft_calloc(len, sizeof(char));
-	if (ret == 0)
-		return (ft_free_itoa(ret));
-	return (ret);
-}
-
-static char	*makearray(int n, int neg)
-{
-	char	*ret;
-	int		len;
-
-	len = nbrofdigits(n);
-	if (neg == -1)
-	{
-		ret = allocate(len + 2);
-		if (!ret)
-			return (NULL);
-		ret[0] = '-';
-		len++;
-	}
-	else
-		ret = allocate(len + 1);
-	if (!ret)
-		return (ft_free_itoa(ret));
-	ret[len] = '\0';
-	len--;
-	while (n > 0)
-	{
-		ret[len] = (n % 10) + 48;
-		n = n / 10;
-		len--;
-	}
-	return (ret);
 }
 
 char	*ft_itoa(int n)
 {
-	char	*ret;
-	int		neg;
+	int			num_size;
+	long int	temp;
+	char		*number;
 
-	neg = 1;
-	if (n == -2147483648 || n == 0)
+	num_size = 0;
+	temp = n;
+	if (temp < 0)
 	{
-		if (n == -2147483648)
-			ret = allocate(12);
-		else
-			ret = allocate(2);
-		if (!ret)
-			return (ft_free_itoa(ret));
-		if (n == -2147483648)
-			ft_strlcpy (ret, "-2147483648", 12);
-		else if (n == 0)
-			ft_strlcpy (ret, "0", 2);
-		return (ret);
+		temp = temp * -1;
+		num_size++;
 	}
-	if (n < 0)
-		neg = -1;
-	n *= neg;
-	ret = makearray(n, neg);
-	if (!ret)
-		return (ft_free_itoa(ret));
-	return (ret);
+	if (n == 0)
+		num_size = 1;
+	while (temp > 0)
+	{
+		temp = temp / 10;
+		num_size++;
+	}
+	number = (char *) malloc(num_size + 1);
+	if (number == 0)
+		return (0);
+	number[num_size--] = '\0';
+	set_number(number, n, num_size);
+	return (number);
 }

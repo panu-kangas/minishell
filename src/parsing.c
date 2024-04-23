@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/04/23 15:16:07 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/04/23 18:10:19 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,8 +141,14 @@ static int	parse_input(t_data *data)
 
 int	parsing(void)
 {
-	t_data	*data;
+	t_data		*data;
+	t_env_lst 	*env_lst;
+	extern char **environ;
+	int			exit_status;
 
+	env_lst = save_env_list(environ);
+	if (env_lst == NULL)
+		return (write_sys_error("malloc failed"));
 	while (1)
 	{
 		data = (t_data *)malloc(sizeof (t_data));
@@ -160,8 +166,12 @@ int	parsing(void)
 		add_history(data->input);
 		if (parse_input(data) == -1)
 			return (ft_free_data(data, 1));
-		ft_lstiter_ms(data->tokens, printnode);
+	//	FORKING FUNCTION HERE --> We don't necessary need child process for built-ins... should we still do it?
+	//	ft_redirect() --> I'll add this here once the function's parameters have been fixed to match the data-struct
+		exit_status = handle_command(env_lst, data->tokens->com, data->tokens->args); // simple test function for command handling.
+//		ft_lstiter_ms(data->tokens, printnode);
 		ft_free_data(data, 0);
 	}
-	return (ft_free_data(data, 0));
+	ft_free_data(data, 0);
+	return (exit_status);
 }

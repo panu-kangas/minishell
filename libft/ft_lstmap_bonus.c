@@ -3,42 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/15 18:03:08 by tsaari            #+#    #+#             */
-/*   Updated: 2024/03/20 16:11:55 by tsaari           ###   ########.fr       */
+/*   Created: 2023/11/07 15:27:34 by pkangas           #+#    #+#             */
+/*   Updated: 2023/11/14 10:43:14 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdlib.h>
 
-t_list	*ft_free_list(t_list **lst, void (*del)(void *), void *fres)
+t_list	*clear_list(void *content, t_list *head, void (*del)(void *))
 {
-	if (fres)
-		(del)(fres);
-	ft_lstclear(lst, del);
+	del(content);
+	ft_lstclear(&head, del);
 	return (0);
 }
 
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_list	*ret;
-	t_list	*new;
-	void	*fres;
+	t_list	*head;
+	t_list	*temp;
+	void	*content;
 
-	if (!lst || !f || !del)
+	if (lst == 0 || f == 0 || del == 0)
 		return (0);
-	ret = 0;
-	while (lst)
+	content = f(lst->content);
+	head = ft_lstnew(content);
+	if (head == 0)
 	{
-		fres = f(lst -> content);
-		if (!fres)
-			return (ft_free_list(&ret, del, fres));
-		new = ft_lstnew(fres);
-		if (!new)
-			return (ft_free_list(&ret, del, fres));
-		ft_lstadd_back(&ret, new);
-		lst = lst -> next;
+		del(content);
+		return (0);
 	}
-	return (ret);
+	temp = head;
+	while (lst->next != 0)
+	{
+		lst = lst->next;
+		content = f(lst->content);
+		temp->next = ft_lstnew(content);
+		if (temp->next == 0)
+			return (clear_list(content, head, del));
+		temp = temp->next;
+	}
+	temp->next = 0;
+	return (head);
 }

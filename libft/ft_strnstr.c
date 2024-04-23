@@ -1,42 +1,53 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strstr.c                                        :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/20 07:37:12 by tsaari            #+#    #+#             */
-/*   Updated: 2023/11/03 14:32:49 by tsaari           ###   ########.fr       */
+/*   Created: 2023/10/25 14:00:33 by pkangas           #+#    #+#             */
+/*   Updated: 2023/11/09 11:51:25 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+static char	*search(const char *haystack, const char *needle, size_t len)
 {
-	char	*hc;
-	char	*nc;
-	int		l;
+	unsigned int	i;
+	int				j;
+	char			*found;
 
-	hc = (char *) haystack;
-	nc = (char *) needle;
-	l = (int) len;
-	if (!haystack && !len)
-		return (0);
-	if (l < 0)
-		l = ft_strlen(hc);
-	if (ft_strlen(nc) == 0)
-		return (hc);
-	l -= ft_strlen(nc);
-	while (*hc != 0 && l >= 0)
+	i = 0;
+	while (haystack[i] != '\0' && i < len)
 	{
-		if (*hc == nc[0])
+		j = 0;
+		while (haystack[i] == needle[j] && needle[j] != '\0' && i < len)
 		{
-			if (ft_strncmp(hc, nc, ft_strlen(nc)) == 0)
-				return (hc);
+			i++;
+			j++;
 		}
-		l--;
-		hc++;
+		if (needle[j] == '\0')
+		{
+			found = (char *)&haystack[i - j];
+			return (found);
+		}
+		else if (j != 0 && haystack[i] == needle[0])
+			i = i - j;
+		if (haystack[i] != '\0')
+			i++;
 	}
 	return (0);
+}
+
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+{
+	char			*found;
+
+	if (ft_strlen(needle) == 0)
+		return ((char *)haystack);
+	if (len == 0)
+		return (0);
+	found = search(haystack, needle, len);
+	return (found);
 }

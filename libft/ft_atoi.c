@@ -3,48 +3,67 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/24 11:10:47 by tsaari            #+#    #+#             */
-/*   Updated: 2024/02/12 14:05:01 by tsaari           ###   ########.fr       */
+/*   Created: 2023/10/25 14:21:29 by pkangas           #+#    #+#             */
+/*   Updated: 2023/11/14 12:13:19 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <limits.h>
 
-int	converttoint(const char *str, int i, int neg)
+static int	check_max(long int finalnum, int sign, const char *str, int i)
 {
-	long	ret;
-
-	ret = 0;
-	while (str[i] >= 48 && str[i] <= 57)
+	if (finalnum >= (LONG_MAX / 10) && sign == 1)
 	{
-		ret = ret * 10 + str[i] - 48;
-		if (ret < 0 && neg == 1)
-			return ((int)LONG_MAX);
-		else if (ret < 0 && neg == -1)
-			return ((int)LONG_MIN);
-		i++;
+		if (str[i] <= '7' && finalnum == (LONG_MAX / 10))
+			return (1);
+		else
+			return (-1);
 	}
-	return (ret);
+	if (finalnum >= (LONG_MAX / 10) && sign == -1)
+	{
+		if (str[i] <= '8' && finalnum == (LONG_MAX / 10))
+			return (1);
+		else
+			return (0);
+	}
+	return (1);
+}
+
+static int	check_space(const char *str, int i)
+{
+	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v'
+		|| str[i] == '\f' || str[i] == '\r' || str[i] == ' ')
+		i++;
+	return (i);
 }
 
 int	ft_atoi(const char *str)
 {
-	int		i;
-	int		neg;
+	int				i;
+	int				sign;
+	long int		finalnum;
 
-	neg = 1;
 	i = 0;
-	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
+	finalnum = 0;
+	sign = 1;
+	i = check_space(str, i);
+	if (str[i] == '+')
 		i++;
-	if (str[i] == '-' || str[i] == '+')
+	else if (str[i] == '-')
 	{
-		if (str[i] == '-')
-			neg = -1;
+		sign = -1;
 		i++;
 	}
-	else if (!(str[i] >= 48 && str[i] <= 57))
-		return (0);
-	return (neg * converttoint(str, i, neg));
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		if (check_max(finalnum, sign, str, i) == -1)
+			return (-1);
+		if (check_max(finalnum, sign, str, i) == 0)
+			return (0);
+		finalnum = finalnum * 10 + str[i] - '0';
+		i++;
+	}
+	return (sign * finalnum);
 }

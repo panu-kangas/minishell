@@ -3,52 +3,87 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/08 09:04:36 by tsaari            #+#    #+#             */
-/*   Updated: 2024/02/24 10:54:03 by tsaari           ###   ########.fr       */
+/*   Created: 2023/10/25 15:54:46 by pkangas           #+#    #+#             */
+/*   Updated: 2023/11/08 14:08:58 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "libft.h"
 
-static char	*removebeginning(char const *s1, char *setc)
+static int	get_trim_index_end(char const *s1, char const *set)
 {
-	int		i;
-	char	*s1c;
+	int	i;
+	int	j;
 
-	s1c = (char *)s1;
+	i = ft_strlen(s1) - 1;
+	j = 0;
+	while (i >= 0)
+	{
+		while (set[j] != '\0')
+		{
+			if (s1[i] == set[j])
+				break ;
+			j++;
+		}
+		if (set[j] == '\0')
+			break ;
+		i--;
+		j = 0;
+	}
+	return (i);
+}
+
+static int	get_trim_index_beg(char const *s1, char const *set)
+{
+	int	i;
+	int	j;
+
 	i = 0;
-	while (ft_memchr(setc, s1c[i], ft_strlen(setc)) != 0)
+	j = 0;
+	while (s1[i] != '\0')
+	{
+		while (set[j] != '\0')
+		{
+			if (s1[i] == set[j])
+				break ;
+			j++;
+		}
+		if (set[j] == '\0')
+			break ;
 		i++;
-	s1c = s1c + i;
-	return (s1c);
+		j = 0;
+	}
+	return (i);
 }
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	char	*s1c;
-	size_t	e;
-	char	*ret;
+	unsigned int		trim_index_beg;
+	unsigned int		trim_index_end;
+	int					j;
+	char				*final_str;
 
-	if (!s1 || !set)
+	if (s1 == 0)
 		return (0);
-	s1c = removebeginning(s1, (char *)set);
-	if (ft_strlen(s1c) != 0)
+	if (*s1 == '\0')
+		return (ft_strdup(s1));
+	trim_index_beg = get_trim_index_beg(s1, set);
+	if (trim_index_beg == ft_strlen(s1))
 	{
-		e = ft_strlen(s1c) - 1;
-		while (ft_memchr((char *)set, s1c[e], ft_strlen((char *)set)) != 0)
-			e--;
-		ret = (char *)malloc((e * sizeof(char)) + 2);
-		if (!ret)
-			return (0);
-		ft_strlcpy(ret, s1c, e + 2);
+		final_str = (char *)malloc(1);
+		*final_str = '\0';
+		return (final_str);
 	}
-	else
-	{
-		ret = ft_strdup("");
-		if (!ret)
-			return (0);
-	}
-	return (ret);
+	trim_index_end = get_trim_index_end(s1, set);
+	final_str = (char *) malloc((trim_index_end - trim_index_beg + 1) + 1);
+	if (final_str == 0)
+		return (0);
+	j = 0;
+	while (trim_index_beg <= trim_index_end)
+		final_str[j++] = s1[trim_index_beg++];
+	final_str[j] = '\0';
+	return (final_str);
 }

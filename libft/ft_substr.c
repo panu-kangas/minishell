@@ -3,32 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/08 09:06:47 by tsaari            #+#    #+#             */
-/*   Updated: 2023/11/08 09:28:30 by tsaari           ###   ########.fr       */
+/*   Created: 2023/10/25 15:44:43 by pkangas           #+#    #+#             */
+/*   Updated: 2023/11/09 12:41:47 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "libft.h"
+
+static void	get_str(char const *s, char *substr, unsigned int start, size_t len)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (s[start] != '\0' && i < len)
+		substr[i++] = s[start++];
+	substr[i] = '\0';
+}
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char	*ret;
-	char	*sc;
+	int				len_substr;
+	char			*substr;
 
-	sc = (char *)s;
-	if (!s)
+	if (s == 0)
 		return (0);
-	if (len + (size_t)start >= ft_strlen(sc))
-		len = ft_strlen(sc) - start;
-	if ((size_t)start >= ft_strlen(sc))
-		return (ft_strdup(""));
-	ret = (char *)malloc ((len + 1) * sizeof(char));
-	if (!ret)
+	if (start >= ft_strlen(s))
+	{
+		substr = (char *) malloc(1);
+		if (substr == 0)
+			return (0);
+		substr[0] = 0;
+		return (substr);
+	}
+	if (len <= (ft_strlen(s) - start))
+		len_substr = len;
+	else
+		len_substr = (ft_strlen(s) - start);
+	substr = (char *) malloc(len_substr + 1);
+	if (substr == 0)
 		return (0);
-	sc += start;
-	len += 1;
-	ft_strlcpy(ret, sc, len);
-	return (ret);
+	get_str(s, substr, start, len);
+	return (substr);
 }

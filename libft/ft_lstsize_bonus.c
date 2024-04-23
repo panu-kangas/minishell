@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstsize_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/15 08:24:07 by tsaari            #+#    #+#             */
-/*   Updated: 2023/11/15 08:24:09 by tsaari           ###   ########.fr       */
+/*   Created: 2023/11/15 16:56:49 by pkangas           #+#    #+#             */
+/*   Updated: 2023/11/15 16:56:57 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	ft_lstsize(t_list *lst)
 	size = 0;
 	while (lst != 0)
 	{
-		size++;
 		lst = lst->next;
+		size++;
 	}
 	return (size);
 }

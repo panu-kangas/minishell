@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/15 08:23:46 by tsaari            #+#    #+#             */
-/*   Updated: 2023/11/15 08:23:49 by tsaari           ###   ########.fr       */
+/*   Created: 2023/11/15 16:56:33 by pkangas           #+#    #+#             */
+/*   Updated: 2023/11/15 16:56:39 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "libft.h"
 
 t_list	*ft_lstnew(void *content)
 {
-	t_list	*newnode;
+	t_list	*ptr;
 
-	newnode = (t_list *)malloc(sizeof(*newnode));
-	if (!newnode)
-		return (NULL);
-	newnode->content = content;
-	newnode->next = NULL;
-	return (newnode);
+	ptr = malloc(sizeof(t_list));
+	if (ptr == 0)
+		return (0);
+	ptr->content = content;
+	ptr->next = 0;
+	return (ptr);
 }

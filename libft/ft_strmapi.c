@@ -3,33 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/08 09:20:35 by tsaari            #+#    #+#             */
-/*   Updated: 2023/11/08 09:22:36 by tsaari           ###   ########.fr       */
+/*   Created: 2023/10/23 16:01:40 by pkangas           #+#    #+#             */
+/*   Updated: 2023/11/08 14:11:30 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "libft.h"
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char			*sc;
-	char			*res;
-	unsigned int	i;
+	int		i;
+	char	*result;
 
-	if (!s)
-		return (0);
-	sc = (char *)s;
 	i = 0;
-	res = (char *)malloc(ft_strlen(sc) * sizeof(char) + 1);
-	if (!res)
+	if (s == 0)
 		return (0);
-	while (sc[i] != '\0')
+	result = (char *) malloc(ft_strlen(s) + 1);
+	if (result == 0)
+		return (0);
+	while (s[i] != '\0')
 	{
-		res[i] = f(i, sc[i]);
+		result[i] = (*f)(i, s[i]);
 		i++;
 	}
-	res[i] = '\0';
-	return (res);
+	result[i] = '\0';
+	return (result);
 }

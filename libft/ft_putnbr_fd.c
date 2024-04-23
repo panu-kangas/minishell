@@ -3,40 +3,70 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/08 08:45:52 by tsaari            #+#    #+#             */
-/*   Updated: 2023/11/08 09:17:18 by tsaari           ###   ########.fr       */
+/*   Created: 2023/10/24 14:11:29 by pkangas           #+#    #+#             */
+/*   Updated: 2023/11/08 14:12:33 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <unistd.h>
+
+static long int	ft_power(int nb, int power)
+{
+	long int	x;
+
+	x = nb;
+	if (power < 0)
+		return (0);
+	else if (power == 0)
+		return (1);
+	else
+	{
+		while (power > 1)
+		{
+			x = x * nb;
+			power--;
+		}
+		return (x);
+	}
+}
+
+static int	get_digits(int n)
+{
+	long int	digits;
+
+	digits = 0;
+	while ((n / ft_power(10, digits)) > 0)
+	{
+		digits++;
+	}
+	return (digits);
+}
 
 void	ft_putnbr_fd(int n, int fd)
 {
-	char	str[12];
-	int		i;
+	int		digits;
+	char	num;
 
-	i = 0;
-	if (n == -2147483648)
-		ft_putstr_fd("-2147483648", fd);
-	else if (n == 0)
-		ft_putstr_fd("0", fd);
-	else if (n < 0)
+	if (n == 0)
+		write (fd, "0", 1);
+	else if (n == -2147483648)
+		write (fd, "-2147483648", 11);
+	else
 	{
-		ft_putchar_fd ('-', fd);
-		n *= -1;
-	}
-	while (n > 0)
-	{
-		str[i] = (n % 10) + 48;
-		n = n / 10;
-		i++;
-	}
-	i--;
-	while (i >= 0)
-	{
-		ft_putchar_fd(str[i], fd);
-		i--;
+		if (n < 0)
+		{
+			write (fd, "-", 1);
+			n = (n * -1);
+		}
+		digits = get_digits(n) - 1;
+		while (digits >= 0)
+		{
+			num = '0' + (n / ft_power(10, digits));
+			n = n - (ft_power(10, digits) * (n / ft_power(10, digits)));
+			write(fd, &num, 1);
+			digits--;
+		}
 	}
 }

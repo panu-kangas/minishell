@@ -3,31 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/08 09:02:20 by tsaari            #+#    #+#             */
-/*   Updated: 2023/11/08 09:19:45 by tsaari           ###   ########.fr       */
+/*   Created: 2023/10/25 15:51:31 by pkangas           #+#    #+#             */
+/*   Updated: 2023/11/08 14:08:42 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "libft.h"
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*res;
-	char	*s1c;
-	char	*s2c;
-	size_t	len;
+	int		i;
+	int		j;
+	char	*final_str;
 
-	if (!s1 || ! s2)
+	if (s1 == 0 || s2 == 0)
 		return (0);
-	s2c = (char *)s2;
-	s1c = (char *)s1;
-	len = (ft_strlen(s1c) + ft_strlen(s2c)) * sizeof(char) + 1;
-	res = (char *)ft_calloc(len, sizeof(char));
-	if (res == 0)
+	i = 0;
+	j = 0;
+	final_str = (char *) malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (final_str == 0)
 		return (0);
-	ft_memmove(res, s1c, ft_strlen(s1c));
-	ft_strlcat(res, s2c, len);
-	return (res);
+	while (s1[i] != '\0')
+	{
+		final_str[j] = s1[i];
+		i++;
+		j++;
+	}
+	i = 0;
+	while (s2[i] != '\0')
+		final_str[j++] = s2[i++];
+	final_str[j] = '\0';
+	return (final_str);
 }
