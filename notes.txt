@@ -1,0 +1,110 @@
+SAVE_ENV_LIST:
+
+XX Create a NULL-value OLDPWD in the list!!
+
+
+
+
+MALLOC:
+
+Test for malloc fail and see the exit code!!
+And also bash error message.
+
+
+
+
+REDIRECT:
+
+bash-3.2$ export TEST=
+bash-3.2$ echo hello2 >$TEST
+bash: $TEST: ambiguous redirect
+
+
+ECHO:
+
+echo # does somenthing special --> do I need to handle it...?
+echo & does somenthing special --> do I need to handle it...?
+echo * does somenthing special --> do I need to handle it...? --> probably not
+
+
+EXPORT:
+
+Numbers and special characters aren't "valid identifiers"... at least most of them, I need more research
+
+Special tokens give different error (see below)
+
+bash-3.2$   export TEST =
+bash: export: `=': not a valid identifier
+
+bash-3.2$ export main.c
+bash: export: `main.c': not a valid identifier
+
+bash-3.2$ export (
+bash: syntax error near unexpected token `newline'
+
+bash-3.2$ export )
+bash: syntax error near unexpected token `)'
+
+
+
+NON_GLOBAL ENV VAR:
+
+TESTI --> shell thinks it's a command
+TESTI= --> a variable without value, cannot be seen in env or export --> if this is exported, it can be seen on both env and export with empty value
+
+export TESTI --> can be seen on export, but doesn't hhave a value, so can't be seen in env.
+
+
+EMPTY EXPORT:
+
+
+declare -x _="./a.out"
+--> this can be seen with env, but not with export (without args)
+
+
+
+
+CD:
+
+Update OLDPWD env var before moving to new folder.
+
+CD can take as many arguments as possible, but ONLY THE FIRST ONE IS USED and others are totally discarded
+
+cd /////// will take you to root. Also cd / / / /  works, because only first argument is used
+
+
+
+
+PARSING:
+
+echo & export at least can't handle "special tokens", so far I've found: < > ( ) 
+
+If you only have one | (pipe), bash will read standard input until user inserts something + NL. NL alone won't stop the reading.
+
+export TEST= hello world --> this is a valid input, no error, and sets TEST value to empty AND hello as null value AND world as null value variables
+
+single and double quotations won't show in value
+I mean:  export TEST='hello world' --> TEST=hello world in variable list
+
+Unset works with multiple arguments (for example "unset USER PATH" is valid and unsets both of these var)
+
+You can change global env var value without export!!!!
+So after export TEST=testi, you can just say TEST=festi, and it changes
+
+Unset without arguments does nothing.
+
+
+
+
+
+ECHO AND ENV VARIABLES:
+
+TEST=     jee
+bash-3.2$ echo $TEST
+jee
+ANOTHER ONE:
+export TEST="     jee      jee  "
+TEST=     jee      jee  
+bash-3.2$ echo $TEST
+jee jee
+ --> so echo discards leading white spaces AND white spaces after word AND leaves only one space in between words
