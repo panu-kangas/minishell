@@ -60,21 +60,23 @@ char	**get_execve_args(char *cmd, char **args)
 	return (new_args);
 }
 
-int	handle_command(t_env_lst *env_lst, char *cmd, char **args)
+int	handle_command(t_data *data, t_env_lst *env_lst, int index)
 {
 	int		exit_status;
 	char	**execve_args;
+	t_token	*cur_token;
 
-	if (check_for_built_in(cmd) == 1)
-		exit_status = execute_built_in(env_lst, cmd, args);
+	cur_token = get_cur_token(data, index);
+
+	if (check_for_built_in(cur_token->com) == 1)
+		exit_status = execute_built_in(env_lst, cur_token->com, cur_token->args);
 	else
 	{
-		execve_args = get_execve_args(cmd, args);
+		execve_args = get_execve_args(cur_token->com, cur_token->args);
 		if (execve_args == NULL)
 			return (write_sys_error("malloc failed"));
-		exit_status = execute_command(cmd, execve_args, env_lst); // THIS NEEDS TO HAPPEN IN A CHILD PROCESS!!! So we need to fork before this. Otherwise execve will take over
-		if (exit_status != 0)
-			ft_free_doubleptr(execve_args);
+		exit_status = execute_command(cur_token->com, execve_args, env_lst, data);
+		ft_free_doubleptr(execve_args);
 	}
 	return (exit_status);
 }

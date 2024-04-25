@@ -7,6 +7,8 @@ void	ft_echo(int flag, char **args)
 	int	i;
 
 	i = 0;
+	if (flag == 1)
+		i++;
 	while (args[i] != NULL)
 	{
 		ft_putstr_fd(args[i++], 1);

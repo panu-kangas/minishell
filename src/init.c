@@ -16,7 +16,7 @@ void	init_data(t_data *data)
 {
 	data->input = NULL;
 	data->tokens = NULL;
-	data->pipecount = 0;
+	data->proc_count = 0;
 }
 
 void	init_file(t_file *new)

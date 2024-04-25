@@ -8,16 +8,19 @@ char	*get_full_env_str(t_env_lst *node)
 	full_str = ft_strdup(node->name);
 	if (full_str == NULL)
 		return (NULL);
-	temp = full_str;
-	full_str = ft_strjoin(temp, "=");
-	free(temp);
-	if (full_str == NULL)
-		return (NULL);
-	temp = full_str;
-	full_str = ft_strjoin(full_str, node->value);
-	free(temp);
-	if (full_str == NULL)
-		return (NULL);
+	if (node->value != NULL)
+	{
+		temp = full_str;
+		full_str = ft_strjoin(temp, "=");
+		free(temp);
+		if (full_str == NULL)
+			return (NULL);
+		temp = full_str;
+		full_str = ft_strjoin(full_str, node->value);
+		free(temp);
+		if (full_str == NULL)
+			return (NULL);
+	}
 	return (full_str);
 }
 

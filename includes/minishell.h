@@ -62,7 +62,7 @@ typedef struct	s_data
 {
 	char	*input;
 	t_token	*tokens;
-	int		pipecount;
+	int		proc_count;
 } t_data;
 
 
@@ -114,7 +114,7 @@ void	printfile(t_file *node);
 
 t_env_lst	*save_env_list(char **environ);
 
-t_env_lst	*ft_unset(t_env_lst *env_lst, char *arg);
+void		ft_unset(t_env_lst *env_lst, char *arg);
 int			ft_export(t_env_lst *env_lst, char *new_env_var);
 int			ft_empty_export(t_env_lst *env_lst);
 int			ft_pwd(void);
@@ -122,7 +122,7 @@ void		ft_env(t_env_lst *env_lst);
 int			ft_cd(t_env_lst *env_lst, char *path);
 void		ft_echo(int flag, char **args);
 
-int			ft_redirect(char *type, char *file);
+int			ft_redirect(t_data *data, int **fd_pipes, int index);
 int			ft_heredoc(char *limiter);
 
 char		*get_var_name(char *environ_var);
@@ -140,6 +140,7 @@ t_env_lst	*get_null_value_env_node(char *environ_var);
 void		delete_env_node(t_env_lst *temp);
 void		free_env_lst(t_env_lst *env_lst);
 void		ft_free_doubleptr(char **ptr);
+void		ft_free_int_doubleptr(int **ptr);
 int			env_lstsize(t_env_lst *lst);
 
 char		*expand_env_var(t_env_lst *env_lst, char *var_name);
@@ -150,14 +151,22 @@ int			write_sys_error(char *err_str);
 char		**get_paths(t_env_lst *env_lst);
 char		**make_env_var_array(t_env_lst *env_lst);
 
-int			handle_command(t_env_lst *env_lst, char *cmd, char **args);
-int			execute_command(char *cmd, char **args, t_env_lst *env_lst);
+int			handle_command(t_data *data, t_env_lst *env_lst, int index);
+int			execute_command(char *cmd, char **args, t_env_lst *env_lst, t_data *data);
 int			execute_built_in(t_env_lst *env_lst, char *cmd, char **args);
 
 int			check_for_built_in(char *cmd);
 int			is_echo(char *cmd);
 int			is_pwd(char *cmd);
 int			is_env(char *cmd);
+
+int			make_processes(t_data *data, t_env_lst *env_lst);
+pid_t		*get_pids(int proc_count);
+int			**get_pipes(int pipe_cnt);
+void		close_all_pipes(int **fd_pipes, int pipe_cnt);
+
+t_token		*get_cur_token(t_data *data, int index);
+
 
 
 #endif

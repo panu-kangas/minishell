@@ -1,6 +1,26 @@
 #include "minishell.h"
 
-t_env_lst	*ft_unset(t_env_lst *env_lst, char *var_name)
+void	move_env_lst(t_env_lst *env_lst) // I'm a bit unsure about this... other option would be to copy stuff from next_node to env_lst
+{
+	t_env_lst	*next_node;
+
+	next_node = env_lst->next;
+	free(env_lst->name);
+	free(env_lst->value);
+	while (next_node != NULL)
+	{
+		env_lst->name = next_node->name;
+		env_lst->value = next_node->value;
+		env_lst->is_global = next_node->is_global;
+		if (next_node->next == NULL)
+			env_lst->next = NULL;
+		env_lst = next_node;
+		next_node = next_node->next;
+	}
+	free(env_lst);
+}
+
+void	ft_unset(t_env_lst *env_lst, char *var_name)
 {
 	t_env_lst	*temp;
 	t_env_lst	*temp_prev;
@@ -8,12 +28,11 @@ t_env_lst	*ft_unset(t_env_lst *env_lst, char *var_name)
 	temp = env_lst;
 	temp_prev = env_lst;
 	if (temp->name == NULL)
-		return (env_lst);
+		return ;
 	if (ft_strncmp(temp->name, var_name, ft_strlen(var_name) + 1) == 0)
 	{
-		env_lst = env_lst->next;
-		delete_env_node(temp);
-		return (env_lst);
+		move_env_lst(env_lst);
+		return ;
 	}
 	while (temp->next != NULL)
 	{
@@ -26,7 +45,6 @@ t_env_lst	*ft_unset(t_env_lst *env_lst, char *var_name)
 			break ;
 		}
 	}
-	return (env_lst);
 }
 
 

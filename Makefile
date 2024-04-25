@@ -25,7 +25,8 @@ SRCS = main.c parsing.c parse_utils.c node_utils.c ft_pipex_split.c free_and_err
 	env_lst_utils.c expand_env_var.c get_env_node.c make_env_node.c save_env_list.c \
 	execute_command.c get_paths.c make_env_var_array.c \
 	ft_heredoc.c ft_redirect.c \
-	write_error.c check_for_built_in.c execute_built_in.c handle_command.c
+	write_error.c check_for_built_in.c execute_built_in.c handle_command.c \
+	pids_and_pipes.c make_processes.c
 OBJS	= $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
 OBJ_DIR = obj

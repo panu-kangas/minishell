@@ -1,8 +1,9 @@
 #include "minishell.h"
 
-void	free_all_from_process(char *cmd_path, char **env_var)
+void	free_all_from_process(char *cmd_path, char **e_args, char **env_var)
 {
 	free(cmd_path);
+	ft_free_doubleptr(e_args);
 	ft_free_doubleptr(env_var);
 }
 
@@ -79,7 +80,7 @@ char	*find_cmd_path(char *cmd, char **paths, int *err_stat)
 // Should I free everything the process needs here? So on every error return, there maybe should be also a free_all -call.
 // what if I had a "write_execve_error" -function: it could have a free_all -call included!
 
-int	execute_command(char *cmd, char **execve_args, t_env_lst *env_lst)
+int	execute_command(char *cmd, char **e_args, t_env_lst *env_lst, t_data *data)
 {
 	char	*cmd_path;
 	char	**paths;
@@ -123,11 +124,13 @@ int	execute_command(char *cmd, char **execve_args, t_env_lst *env_lst)
 		free(cmd_path);
 		return (write_sys_error("malloc failed"));
 	}
+	free_env_lst(env_lst);
+	ft_free_data(data, 0);
 
-	if (execve(cmd_path, execve_args, env_var) == -1)
+	if (execve(cmd_path, e_args, env_var) == -1)
 	{
-		free_all_from_process(cmd_path, env_var);
+		free_all_from_process(cmd_path, e_args, env_var);
 		return (write_sys_error("execve failed"));
 	}
-	return (0);
+	return (1);
 }

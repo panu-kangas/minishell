@@ -15,19 +15,21 @@ int	execute_built_in(t_env_lst *env_lst, char *cmd, char **args)
 	}
 	else if (ft_strncmp(cmd, "export", ft_strlen(cmd) + 1) == 0)
 	{
-		if (args == NULL)
+		if (args == NULL || *args == NULL)
 			exit_status = ft_empty_export(env_lst);
 		else
 			exit_status = ft_export(env_lst, args[0]); // this needs to be a while loop to get all the args into ft_export.
 	}
 	else if (ft_strncmp(cmd, "cd", ft_strlen(cmd) + 1) == 0)
 		exit_status = ft_cd(env_lst, args[0]);
+	else if (ft_strncmp(cmd, "unset", ft_strlen(cmd) + 1) == 0)
+		ft_unset(env_lst, args[0]); // this needs to be a while loop to get all the args into ft_unset.
 	else if (is_pwd(cmd) == 1)
 		exit_status = ft_pwd();
 	else if (is_env(cmd) == 1)
 		ft_env(env_lst);
 
-	// still missing unset!!
+	// is exit needed here...? Or checked at parsing already?
 	
 	return (exit_status);
 }

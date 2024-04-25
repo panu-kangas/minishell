@@ -55,7 +55,7 @@ int	check_for_built_in(char *cmd)
 		return (1);
 	else if (is_env(cmd) == 1)
 		return (1);
-	else if (ft_strncmp(cmd, "exit", ft_strlen(cmd) + 1) == 0)
-		return (1);
+//	else if (ft_strncmp(cmd, "exit", ft_strlen(cmd) + 1) == 0) // is this needed...? Or already checked at parsing?
+//		return (1); // Maybe here a different value? Or is this even needed....?
 	return (0);
 }

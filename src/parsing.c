@@ -116,24 +116,24 @@ static int	parse_input(t_data *data)
 	inputarr = ft_pipex_split(data->input, '|');
 	if (!inputarr)
 		return (-1);
-	while (inputarr[data->pipecount] != NULL)
+	while (inputarr[data->proc_count] != NULL)
 	{
-		temp = inputarr[data->pipecount];
-		inputarr[data->pipecount] = ft_strtrim(temp, " ");
-		if (!inputarr[data->pipecount])
+		temp = inputarr[data->proc_count];
+		inputarr[data->proc_count] = ft_strtrim(temp, " ");
+		if (!inputarr[data->proc_count])
 		{
 			ft_free_double(inputarr);
 			free(temp);
 			return (-1);
 		}
-		if (parse_single_token(inputarr[data->pipecount], data) == -1)
+		if (parse_single_token(inputarr[data->proc_count], data) == -1)
 		{
 			ft_free_double(inputarr);
 			free(temp);
 			return (-1);
 		}
 		free(temp);
-		data->pipecount++;
+		data->proc_count++;
 	}
 	ft_free_double(inputarr);
 	return (0);
@@ -161,17 +161,18 @@ int	parsing(void)
 			free(data);
 			return (-1);
 		}
-		if (ft_strncmp(data->input, "exit", 5) == 0)
+		if (ft_strncmp(data->input, "exit", 5) == 0) // this needs fixing
 			break ;
 		add_history(data->input);
 		if (parse_input(data) == -1)
 			return (ft_free_data(data, 1));
+		exit_status = make_processes(data, env_lst);
 	//	FORKING FUNCTION HERE --> We don't necessary need child process for built-ins... should we still do it?
 	//	ft_redirect() --> I'll add this here once the function's parameters have been fixed to match the data-struct
-		exit_status = handle_command(env_lst, data->tokens->com, data->tokens->args); // simple test function for command handling.
 //		ft_lstiter_ms(data->tokens, printnode);
 		ft_free_data(data, 0);
 	}
+	free_env_lst(env_lst);
 	ft_free_data(data, 0);
 	return (exit_status);
 }
