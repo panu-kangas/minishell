@@ -51,13 +51,18 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 	int			**fd_pipes;
 	int			index;
 	int			exit_status;
+	int			std_fd[2];
 
 	if (data->tokens->next == NULL && \
 	check_for_built_in(data->tokens->com) == 1)
 	{
+		std_fd[0] = dup(0); // error handling
+		std_fd[1] = dup(1); // error handling
 		exit_status = ft_redirect(data, NULL, 0);
 		if (exit_status == 0)
 			exit_status = handle_command(data, env_lst, 0); // CHECK NOTE IN THE END
+		dup2(std_fd[0], 0); // error handling
+		dup2(std_fd[1], 1); // error handling
 		return (exit_status);
 	}
 

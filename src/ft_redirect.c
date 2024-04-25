@@ -1,96 +1,5 @@
 #include "minishell.h"
 
-// in case multiple out-redirects are made
-
-int	ft_just_create_file(char *file)
-{
-	int	file_fd;
-
-	file_fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (file_fd == -1)
-		return (write_sys_error("open failed"));
-	close(file_fd);
-	return (0);
-}
-
-int	open_outfile_append(char *file)
-{
-	int			file_fd;
-	struct stat statbuf;
-
-	if (access(file, F_OK) == 0)
-	{
-		if (stat(file, &statbuf) == 0)
-		{
-			if (S_ISDIR(statbuf.st_mode) == 1)
-				return (write_error(NULL, file, "Is a directory"));
-		}
-		if (access(file, W_OK) == -1)
-			return (write_error(NULL, file, "Permission denied"));
-	}
-	file_fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (file_fd == -1)
-		return (write_sys_error("open failed"));
-	if (dup2(file_fd, 1) == -1)
-	{
-		close(file_fd);
-		return (write_sys_error("dup2 failed"));
-	}
-	close(file_fd);
-	return (0);
-}
-
-int	open_outfile(char *file)
-{
-	int			file_fd;
-	struct stat statbuf;
-
-	if (access(file, F_OK) == 0)
-	{
-		if (stat(file, &statbuf) == 0)
-		{
-			if (S_ISDIR(statbuf.st_mode) == 1)
-				return (write_error(NULL, file, "Is a directory"));
-		}
-		if (access(file, W_OK) == -1)
-			return (write_error(NULL, file, "Permission denied"));
-	}
-	file_fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (file_fd == -1)
-		return (write_sys_error("open failed"));
-	if (dup2(file_fd, 1) == -1)
-	{
-		close(file_fd);
-		return (write_sys_error("dup2 failed"));
-	}
-	close(file_fd);
-	return (0);
-}
-
-
-int	open_infile(char *file)
-{
-	int	file_fd;
-
-	if (access(file, F_OK) == -1)
-		return (write_error(NULL, file, "No such file or directory"));
-	if (access(file, R_OK) == -1)
-		return (write_error(NULL, file, "Permission denied"));
-	file_fd = open(file, O_RDONLY);
-	if (file_fd == -1)
-		return (write_sys_error("open failed"));
-	if (dup2(file_fd, 0) == -1)
-	{
-		close(file_fd);
-		return (write_sys_error("dup2 failed"));
-	}
-	close(file_fd);
-	return (0);
-}
-
-
-
-
 t_token	*get_cur_token(t_data *data, int index)
 {
 	t_token	*cur_token;
@@ -111,7 +20,6 @@ t_token	*get_cur_token(t_data *data, int index)
 }
 
 
-
 t_file	*find_infile(t_token *cur_token)
 {
 	t_file	*file;
@@ -128,6 +36,46 @@ t_file	*find_infile(t_token *cur_token)
 	return (file);
 }
 
+int	create_extra_outfiles(t_token *cur_token, int ofile_count)
+{
+	t_file	*file;
+	t_file	*temp;
+
+	file = NULL;
+	temp = cur_token->files;
+	while (temp != NULL)
+	{
+		if (temp->is_infile == -1)
+		{
+			if (file != NULL && ofile_count > 1)
+			{
+				if (ft_just_create_file(file->filename) == 1)
+					return (1);
+				ofile_count--;
+			}
+			file = temp;
+		}
+		temp = temp->next;
+	}
+	return (0);
+}
+
+
+int	count_outfiles(t_token *cur_token)
+{
+	int		count;
+	t_file	*temp;
+
+	count = 0;
+	temp = cur_token->files;
+	while (temp != NULL)
+	{
+		if (temp->is_infile == -1)
+			count++;
+		temp = temp->next;
+	}
+	return (count);
+}
 
 t_file	*find_outfile(t_token *cur_token)
 {
@@ -168,6 +116,7 @@ int	dup_pipe_in(int **fd_pipes, int index)
 int	ft_redirect(t_data *data, int **fd_pipes, int index)
 {
 	int		exit_code;
+	int		ofile_count;
 	t_token	*cur_token;
 	t_file	*file;
 
@@ -192,7 +141,17 @@ int	ft_redirect(t_data *data, int **fd_pipes, int index)
 		return (1);
 	}
 
+
+	ofile_count = count_outfiles(cur_token);
+	if (ofile_count > 1)
+	{
+		exit_code = create_extra_outfiles(cur_token, ofile_count);
+		if (exit_code != 0)
+			return (exit_code);
+	}
 	file = find_outfile(cur_token);
+
+
 	
 	if (index != (data->proc_count - 1) && file == NULL)
 		exit_code = dup_pipe_out(fd_pipes, index);

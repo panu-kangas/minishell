@@ -25,7 +25,7 @@
 
 # define ERR_INFILE "no such file or directory: "
 # define ERR_OUTFILE "no such file or directory: "
-# define ERR_ARG "Invalid  amount of arguments"
+# define ERR_ARG "Invalid amount of arguments"
 # define ERR_PIPE "Pipe error"
 # define ERR_FORK "Fork error"
 # define ERR_DUP "Dup error"
@@ -63,6 +63,7 @@ typedef struct	s_data
 	char	*input;
 	t_token	*tokens;
 	int		proc_count;
+	int		prev_exit_status;
 } t_data;
 
 
@@ -165,6 +166,10 @@ pid_t		*get_pids(int proc_count);
 int			**get_pipes(int pipe_cnt);
 void		close_all_pipes(int **fd_pipes, int pipe_cnt);
 
+int			open_infile(char *file);
+int			open_outfile(char *file);
+int			ft_just_create_file(char *file);
+int			open_outfile_append(char *file);
 t_token		*get_cur_token(t_data *data, int index);
 
 
