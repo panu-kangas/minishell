@@ -23,16 +23,22 @@ void	close_all_pipes(int **fd_pipes, int pipe_cnt)
 	}
 }
 
-void	free_close_wait(pid_t *pids, int **fd_pipes, t_data *data)
+int	free_close_wait(pid_t *pids, int **fd_pipes, t_data *data)
 {
 	int	i;
+	int	stat_loc;
+	int	exit_status;
 
 	i = 0;
+	exit_status = 0;
 	close_all_pipes(fd_pipes, (data->proc_count - 1));
 	while (i < data->proc_count)
-		waitpid(pids[i++], NULL, 0);  // status code needed here! Change the waitpid.
+		waitpid(pids[i++], &stat_loc, 0);  // status code needed here! Change the waitpid.
 	free(pids);
 	ft_free_int_doubleptr(fd_pipes);
+	if (WIFEXITED(stat_loc) == 1)	// we also need an else statement to check if child didn't exit normally
+		exit_status = WEXITSTATUS(stat_loc);
+	return (exit_status);
 }
 
 int	fork_exit(int **fd_pipes, int index, pid_t *pids, t_data *data)
@@ -53,6 +59,12 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 	int			exit_status;
 	int			std_fd[2];
 
+	if (data->tokens->args != NULL && ft_strncmp(data->tokens->args[0], "$?", 3) == 0) // ONLY FOR TESTING !!! REMOVE THIS!!!
+	{
+		ft_printf("%d\n", data->prev_exit_status);
+		return (0);
+	}
+
 	if (data->tokens->next == NULL && \
 	check_for_built_in(data->tokens->com) == 1)
 	{
@@ -60,7 +72,7 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 		std_fd[1] = dup(1); // error handling
 		exit_status = ft_redirect(data, NULL, 0);
 		if (exit_status == 0)
-			exit_status = handle_command(data, env_lst, 0); // CHECK NOTE IN THE END
+			exit_status = handle_command(data, env_lst, 0);
 		dup2(std_fd[0], 0); // error handling
 		dup2(std_fd[1], 1); // error handling
 		return (exit_status);
@@ -90,19 +102,15 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 		else if (pids[index] == 0)
 		{
 			free(pids);
-			exit_status = ft_redirect(data, fd_pipes, index); // exit status needs to be checked!
+			exit_status = ft_redirect(data, fd_pipes, index);
 			if (exit_status == 0)
-				exit_status = handle_command(data, env_lst, index); // CHECK NOTE IN THE END
+				exit_status = handle_command(data, env_lst, index);
 			free_env_lst(env_lst);
 			ft_free_data(data, 0);
 			exit(exit_status);
 		}
 		index++;
 	}
-	free_close_wait(pids, fd_pipes, data);
-	return (0);
+	exit_status = free_close_wait(pids, fd_pipes, data);
+	return (exit_status);
 }
-
-// NOTE REGARDING HANDLE_COMMAND:
-// We need to get the error status that the function returns. But if I remember correctly, it is only taken from the last pipe-process
-// So we need to investigate this and then alter the code based on that.

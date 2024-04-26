@@ -36,8 +36,9 @@ all: $(NAME)
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
+# remove the -g flag eventually
 $(OBJ_DIR)/%.o: $(SRC_DIR)%.c
-	@$(CC) -c $< -o $@ $(HEADERS)
+	@$(CC) -c $< -o $@ $(HEADERS) -g
 	@echo "\033[0;36mObject $@ [\033[0;32mOK\033[0;36m]\033[0m"
 
 $(LIBFT):

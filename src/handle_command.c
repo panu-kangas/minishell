@@ -69,7 +69,7 @@ int	handle_command(t_data *data, t_env_lst *env_lst, int index)
 	cur_token = get_cur_token(data, index);
 
 	if (check_for_built_in(cur_token->com) == 1)
-		exit_status = execute_built_in(env_lst, cur_token->com, cur_token->args);
+		exit_status = execute_built_in(env_lst, data, cur_token->com, cur_token->args);
 	else
 	{
 		execve_args = get_execve_args(cur_token->com, cur_token->args);

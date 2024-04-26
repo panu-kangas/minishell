@@ -82,7 +82,7 @@ void	ft_free_double(char **arr);
 int		ft_free_data(t_data *data, int code);
 
 //init
-void	init_data(t_data *data);
+void	init_data(t_data *data, int exit_status);
 void	init_file(t_file *new);
 void	init_token(t_token *new);
 
@@ -154,7 +154,7 @@ char		**make_env_var_array(t_env_lst *env_lst);
 
 int			handle_command(t_data *data, t_env_lst *env_lst, int index);
 int			execute_command(char *cmd, char **args, t_env_lst *env_lst, t_data *data);
-int			execute_built_in(t_env_lst *env_lst, char *cmd, char **args);
+int			execute_built_in(t_env_lst *env_lst, t_data *data, char *cmd, char **args);
 
 int			check_for_built_in(char *cmd);
 int			is_echo(char *cmd);

@@ -82,8 +82,17 @@ int	ft_export(t_env_lst *env_lst, char *new_env_var)
 		else
 			flag = process_global_env_node(env_lst, new_env_var);
 	}
-	else
-		temp->is_global = 1;
+	else // THIS IS NOT TESTED!! When parsing can understand non_global env var, we need to run some tests
+	{
+		if (ft_strchr(new_env_var, '=') == NULL)
+			temp->is_global = 1;
+		else 
+		{
+			flag = process_global_env_node(env_lst, new_env_var); 
+			if (flag != ERR_STAT)
+				temp->is_global = 1;
+		}
+	}
 	if (flag == ERR_STAT)
 		return (ERR_STAT);
 	else

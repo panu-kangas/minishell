@@ -146,6 +146,7 @@ int	parsing(void)
 	extern char **environ;
 	int			exit_status;
 
+	exit_status = 0;
 	env_lst = save_env_list(environ);
 	if (env_lst == NULL)
 		return (write_sys_error("malloc failed"));
@@ -153,23 +154,24 @@ int	parsing(void)
 	{
 		data = (t_data *)malloc(sizeof (t_data));
 		if (!data)
-			return (-1);
-		init_data(data);
+			return (write_sys_error("malloc failed"));
+		init_data(data, exit_status);
 		data->input = readline("Minishell: ");
 		if (!data->input)
 		{
 			free(data);
-			return (-1);
+			return (write_sys_error("malloc failed"));
 		}
-		if (ft_strncmp(data->input, "exit", 5) == 0) // this needs fixing
-			break ;
-		add_history(data->input);
-		if (parse_input(data) == -1)
-			return (ft_free_data(data, 1));
-		exit_status = make_processes(data, env_lst);
-	//	FORKING FUNCTION HERE --> We don't necessary need child process for built-ins... should we still do it?
-	//	ft_redirect() --> I'll add this here once the function's parameters have been fixed to match the data-struct
-//		ft_lstiter_ms(data->tokens, printnode);
+		if (ft_strlen(data->input) == 0)
+			ft_putstr_fd("", 1); // There is probably a more elegant way for this...?
+		else
+		{
+			add_history(data->input);
+			if (parse_input(data) == -1) // Single > or < ends the program, even when it should not. Is the reason here?
+				return (ft_free_data(data, 1));
+			exit_status = make_processes(data, env_lst); // should system errors like "malloc fail" lead to whole program's termination...?
+	//		ft_lstiter_ms(data->tokens, printnode);
+		}
 		ft_free_data(data, 0);
 	}
 	free_env_lst(env_lst);

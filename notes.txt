@@ -19,6 +19,18 @@ bash-3.2$ export TEST=
 bash-3.2$ echo hello2 >$TEST
 bash: $TEST: ambiguous redirect
 
+bash-3.2$ >$NON_EXISTING_ENV_VAR
+bash: $NON_EXISTING_ENV_VAR: ambiguous redirect
+
+bash-3.2$ >
+bash: syntax error near unexpected token `newline'
+
+bash-3.2$ >""
+bash: : No such file or directory 
+--> THIS IS VERY WEIRD !!!!
+
+
+
 
 ECHO:
 

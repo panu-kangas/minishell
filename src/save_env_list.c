@@ -76,7 +76,7 @@ t_env_lst	*save_env_list(char **environ)
 		if (temp == NULL)
 			return (MALLOC_ERR);
 	}
-	if (check_if_var_exist(env_lst, "OLDPWD") == NULL)
+	if (check_if_var_exist(env_lst, "OLDPWD") == NULL) // DO THIS SAME TO PWD!! We definitely need it
 	{
 		temp->next = get_null_value_env_node("OLDPWD");
 		if (temp->next == NULL)
