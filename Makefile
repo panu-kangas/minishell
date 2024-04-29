@@ -6,7 +6,7 @@
 #    By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/04/23 18:06:22 by pkangas          ###   ########.fr        #
+#    Updated: 2024/04/29 18:18:23 by pkangas          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ SRCS = main.c parsing.c parse_utils.c node_utils.c ft_pipex_split.c free_and_err
 	execute_command.c get_paths.c make_env_var_array.c \
 	ft_heredoc.c ft_redirect.c \
 	write_error.c check_for_built_in.c execute_built_in.c handle_command.c \
-	pids_and_pipes.c make_processes.c ft_open_functions.c
+	pids_and_pipes.c make_processes.c ft_open_functions.c signal_handling.c
 OBJS	= $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
 OBJ_DIR = obj

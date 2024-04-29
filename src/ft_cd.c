@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	update_pwd_env_var(t_env_lst *env_lst, char *cur_dir) // MISTAKE!!! Use PWD value
+int	update_pwd_env_var(t_env_lst *env_lst, char *cur_dir)
 {
 	t_env_lst	*pwd;
 	t_env_lst	*old_pwd;
@@ -78,7 +78,7 @@ int	ft_cd(t_env_lst *env_lst, char *path)
 	if (check_valid_path(path) == ERR_STAT)
 		return (ERR_STAT);
 	home = check_if_var_exist(env_lst, "HOME");
-	if (path == NULL && home == NULL)
+	if (path == NULL && home == NULL) // if HOME is unset, error message occurs!! (check NOTES)
 		return (0);
 	flag = 0;
 	if (path == NULL)

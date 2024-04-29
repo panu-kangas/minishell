@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/04/23 18:10:19 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/04/29 18:20:38 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,29 +48,31 @@ int	free_token(t_token *token, int code)
 	return (code);
 }
 
-int	check_no_filename(char **tokenarr, int i)
+int	check_no_filename(char **tokenarr, int i, int exit_status)
 {
 	if (check_redir(tokenarr[i]) == -2)
-		handle_no_file(tokenarr, i);
+		exit_status = handle_no_file(tokenarr, i, exit_status);
 	else if (check_redir(tokenarr[i]) > 0 && check_redir(tokenarr[i]) \
 	< 5 && tokenarr[i + 1] == NULL)
-		handle_no_file(tokenarr, i);
-	return (0);
+		exit_status = handle_no_file(tokenarr, i, exit_status);
+	return (exit_status);
 }
 
-int	add_new_token(t_data *data, char **tokenarr)
+int	add_new_token(t_data *data, char **tokenarr, int exit_status)
 {
 	int		i;
 	t_token	*new;
 
 	new = (t_token *)malloc(sizeof(t_token));
 	if (!new)
-		return (-1);
+		return (write_sys_error("malloc failed"));
 	init_token(new);
 	i = 0;
 	while (tokenarr[i] != NULL)
 	{
-		check_no_filename(tokenarr, i);
+		exit_status = check_no_filename(tokenarr, i, exit_status);
+		if (exit_status != 0)
+			return (free_token(new, exit_status));
 		if (check_redir(tokenarr[i]) > 0 && check_redir(tokenarr[i]) < 5)
 			i += 2;
 		else if (check_redir(tokenarr[i]) > 4)
@@ -79,16 +81,16 @@ int	add_new_token(t_data *data, char **tokenarr)
 		{
 			i = parse_com_and_args(new, tokenarr, i);
 			if (i == -1)
-				return (free_token(new, -1));
+				return (free_token(new, 1));
 		}
 	}
 	ft_lstadd_back_ms(&data->tokens, new);
 	if ((add_files_to_token(new, tokenarr)) == -1)
-		return (free_token(new, -1));// tsekkaa
+		return (free_token(new, 1));// tsekkaa
 	return (0);
 }
 
-static int	parse_single_token(char *str, t_data *data)
+static int	parse_single_token(char *str, t_data *data, int exit_status)
 {
 	char	**tokenarr;
 	int		i;
@@ -98,24 +100,25 @@ static int	parse_single_token(char *str, t_data *data)
 	filecount = 0;
 	tokenarr = ft_pipex_split(str, ' ');
 	if (!tokenarr)
-		return (-1);
-	if (add_new_token(data, tokenarr) == -1)
+		return (write_sys_error("malloc failed"));
+	exit_status = add_new_token(data, tokenarr, exit_status);
+	if (exit_status != 0)
 	{
 		ft_free_double(tokenarr);
-		return (-1);
+		return (exit_status);
 	}
 	ft_free_double(tokenarr);
 	return (0);
 }
 
-static int	parse_input(t_data *data)
+static int	parse_input(t_data *data, int exit_status)
 {
 	char	**inputarr;
 	char	*temp;
 
 	inputarr = ft_pipex_split(data->input, '|');
 	if (!inputarr)
-		return (-1);
+		return (write_sys_error("malloc failed"));
 	while (inputarr[data->proc_count] != NULL)
 	{
 		temp = inputarr[data->proc_count];
@@ -124,13 +127,14 @@ static int	parse_input(t_data *data)
 		{
 			ft_free_double(inputarr);
 			free(temp);
-			return (-1);
+			return (write_sys_error("malloc failed")); // is malloc the only thing that might fail in ft_strtrim?
 		}
-		if (parse_single_token(inputarr[data->proc_count], data) == -1)
+		exit_status = parse_single_token(inputarr[data->proc_count], data, exit_status);
+		if (exit_status != 0)
 		{
 			ft_free_double(inputarr);
 			free(temp);
-			return (-1);
+			return (exit_status);
 		}
 		free(temp);
 		data->proc_count++;
@@ -149,10 +153,11 @@ int	parsing(void)
 	exit_status = 0;
 	env_lst = save_env_list(environ);
 	if (env_lst == NULL)
-		return (write_sys_error("malloc failed"));
+		return (write_sys_error("env_var malloc failed")); // is it bad that the program ends here...?
 	while (1)
 	{
-		data = (t_data *)malloc(sizeof (t_data));
+		signal_handling(); // NOT DONE
+		data = (t_data *)malloc(sizeof (t_data)); // we may need to switch this to be after readline, for signal reasons
 		if (!data)
 			return (write_sys_error("malloc failed"));
 		init_data(data, exit_status);
@@ -167,9 +172,9 @@ int	parsing(void)
 		else
 		{
 			add_history(data->input);
-			if (parse_input(data) == -1) // Single > or < ends the program, even when it should not. Is the reason here?
-				return (ft_free_data(data, 1));
-			exit_status = make_processes(data, env_lst); // should system errors like "malloc fail" lead to whole program's termination...?
+			exit_status = parse_input(data, 0);	// if (parse_input(data) == -1)
+			if (exit_status == 0)				// return (ft_free_data(data, 1)); 
+				exit_status = make_processes(data, env_lst); // should system errors like "malloc fail" lead to whole program's termination...?
 	//		ft_lstiter_ms(data->tokens, printnode);
 		}
 		ft_free_data(data, 0);

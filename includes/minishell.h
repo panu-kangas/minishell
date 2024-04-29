@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/04/23 17:31:07 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/04/29 18:08:57 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <signal.h>
 # include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -91,7 +92,7 @@ int		parsing(void);
 char	**ft_split_minishell(const char *so);
 void	split_redir_and_pipes(t_data *data);
 char	**ft_pipex_split(char const *s, char c);
-void	handle_no_file(char **tokenarr, int i);
+int		handle_no_file(char **tokenarr, int i, int exit_status);
 
 //parse_utils
 char	**make_args_arr(char **tokenarr, int j, int i);

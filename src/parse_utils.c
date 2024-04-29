@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 09:39:53 by tsaari            #+#    #+#             */
-/*   Updated: 2024/04/23 15:16:02 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/04/29 18:04:17 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,35 +60,60 @@ int	check_redir(char *str)
 		return (-1);
 }
 
-void	handle_no_file(char **tokenarr, int i)
+int	handle_no_file(char **tokenarr, int i, int exit_status) // Sorry Timo for messing up with your function!! I'll fix this later! =D
 {
 	if (check_redir(tokenarr[i]) == -2)
 	{
 		if (tokenarr[i][2] == '>')
+		{
 			ft_putendl_fd ("syntax error near unexpected token `>'", 2);
+			exit_status = 258;
+		}
 		else
+		{
 			ft_putendl_fd ("syntax error near unexpected token `newline'", 2);
+			exit_status = 258;
+		}
 	}
 	else if (check_redir(tokenarr[i]) > 0 && check_redir(tokenarr[i]) \
 	< 9 && ft_strlen(tokenarr[i]) < 3)
 	{
 		if (tokenarr[i + 1] == NULL)
+		{
 			ft_putendl_fd("syntax error near unexpected token `newline'", 2);
+			exit_status = 258;
+		}
 		else if (tokenarr[i + 1][0] == '>')
+		{
 			ft_putendl_fd ("syntax error near unexpected token `>'", 2);
+			exit_status = 258;
+		}
 		else if (tokenarr[i + 1][0] == '<')
+		{
 			ft_putendl_fd("syntax error near unexpected token `<'", 2);
+			exit_status = 258;
+		}
 		else if (tokenarr[i + 1][0] == '|')
+		{
 			ft_putendl_fd ("syntax error near unexpected token `|'", 2);
+			exit_status = 258;
+		}
 	}
 	else if (check_redir(tokenarr[i]) > 4 && check_redir(tokenarr[i]) < 9)
 	{
 		if (tokenarr[i + 1][2] == '>')
+		{
 			ft_putendl_fd ("syntax error near unexpected token `>'", 2);
+			exit_status = 258;
+		}
 		else if (tokenarr[i + 1][2] == '<')
+		{
 			ft_putendl_fd ("syntax error near unexpected token `<'", 2);
+			exit_status = 258;
+		}
 	}
-	exit (0);//vaihda taa
+	// Is exit status always 258? We need to investigate!
+	return (exit_status);
 }
 
 static t_file	*add_file_single(t_file *temp, char **tokenarr, int i)

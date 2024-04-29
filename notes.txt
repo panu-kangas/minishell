@@ -1,6 +1,14 @@
-SAVE_ENV_LIST:
+COMMAND NAMES (these are already OK in our minishell!!!)
 
-XX Create a NULL-value OLDPWD in the list!!
+EchO --> works
+ExPort --> not working && error
+Cd --> doesn't do anything, no error
+UNset --> not working && error
+PwD --> works
+EnV --> works
+eXit --> not working && error
+
+Grep, sleep and cat all work, no matter if there's capital letters
 
 
 
@@ -10,6 +18,11 @@ MALLOC:
 Test for malloc fail and see the exit code!!
 And also bash error message.
 
+
+UNSET:
+
+_=/usr/bin/env 
+--> cannot be unset
 
 
 
@@ -41,9 +54,16 @@ echo * does somenthing special --> do I need to handle it...? --> probably not
 
 EXPORT:
 
+bash-3.2$ TEST =testi
+--> Is ok, because TEST is a command...
+
+export =testi
+--> not okay
+
+
 Numbers and special characters aren't "valid identifiers"... at least most of them, I need more research
 
-Special tokens give different error (see below)
+Special tokens give different error (see below) --> THIS IS NOT NECESSARY, SINCE SPACIAL CHAR DON'T NEED TO BE HANDLED
 
 bash-3.2$   export TEST =
 bash: export: `=': not a valid identifier
@@ -78,7 +98,10 @@ declare -x _="./a.out"
 
 CD:
 
+bash: cd: HOME not set
+
 Update OLDPWD env var before moving to new folder.
+OLDPWD changes based on PWD, NOT based on CD.
 
 CD can take as many arguments as possible, but ONLY THE FIRST ONE IS USED and others are totally discarded
 
@@ -106,6 +129,23 @@ So after export TEST=testi, you can just say TEST=festi, and it changes
 Unset without arguments does nothing.
 
 
+
+SHLVL (the env var):
+
+You can open a new bash inside bash!!
+This var keeps track on the level of shell
+
+
+ENV VAR expanding:
+
+bash-3.2$ export PANU="echo hello"
+bash-3.2$ $PANU
+hello
+bash-3.2$ export PANU=echo hello
+bash-3.2$ $PANU
+
+bash-3.2$ export PANU=>file1
+bash-3.2$ echo hello $PANU
 
 
 
