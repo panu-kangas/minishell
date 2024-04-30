@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:51:38 by tsaari            #+#    #+#             */
-/*   Updated: 2024/04/23 15:35:20 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/04/30 11:00:18 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		//errorhandling
 	}
-	if (argc != 1)
+	if (argc != 1 || argv == NULL) // this needs to be checked
 	{
 		//errorhandling
 		return (0);

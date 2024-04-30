@@ -6,7 +6,7 @@
 #    By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/04/29 18:18:23 by pkangas          ###   ########.fr        #
+#    Updated: 2024/04/30 11:40:36 by pkangas          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,10 +14,10 @@ NAME = minishell
 
 CC = clang
 RM = rm -rf
-CFLAGS =  -g -lreadline
+CFLAGS =  -g -Wall -Wextra -Werror
 #FSFLAGS =-fsanitize=address
 LIBFT = libft/libft.a
-HEADERS = -I includes
+HEADERS = -I includes -I /Users/pkangas/.brew/opt/readline/include
 
 SRC_DIR = src/
 SRCS = main.c parsing.c parse_utils.c node_utils.c ft_pipex_split.c free_and_error.c init.c \
@@ -38,7 +38,7 @@ $(OBJ_DIR):
 
 # remove the -g flag eventually
 $(OBJ_DIR)/%.o: $(SRC_DIR)%.c
-	@$(CC) -c $< -o $@ $(HEADERS) -g
+	@$(CC) -c $< -o $@ $(HEADERS) $(CFLAGS)
 	@echo "\033[0;36mObject $@ [\033[0;32mOK\033[0;36m]\033[0m"
 
 $(LIBFT):
@@ -46,7 +46,7 @@ $(LIBFT):
 
 # libft/*.c might be a norm-problem because of the asterisk. Let's see!
 $(NAME):  $(OBJ_DIR) $(OBJS) $(LIBFT) libft/*.c 
-	@$(CC) $(OBJS) $(CFLAGS) $(LIBFT) $(FSFLAGS) -o $(NAME)
+	@$(CC) $(OBJS) $(CFLAGS) -lreadline -L/Users/pkangas/.brew/opt/readline/lib $(LIBFT) $(FSFLAGS) -o $(NAME)
 	@echo "\033[1;32mMinishell compile success!\n\033[0m"
 
 clean:

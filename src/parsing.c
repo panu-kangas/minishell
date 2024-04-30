@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/04/29 18:20:38 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/04/30 15:54:44 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,8 +156,8 @@ int	parsing(void)
 		return (write_sys_error("env_var malloc failed")); // is it bad that the program ends here...?
 	while (1)
 	{
-		signal_handling(); // NOT DONE
-		data = (t_data *)malloc(sizeof (t_data)); // we may need to switch this to be after readline, for signal reasons
+		process_signal_main();
+		data = (t_data *)malloc(sizeof (t_data));
 		if (!data)
 			return (write_sys_error("malloc failed"));
 		init_data(data, exit_status);
@@ -165,15 +165,14 @@ int	parsing(void)
 		if (!data->input)
 		{
 			free(data);
-			return (write_sys_error("malloc failed"));
+			ft_putstr_fd("exit\n", 2); // this now appears on a new line, even though it should be on the same line as our prompt
+			return (0);
 		}
-		if (ft_strlen(data->input) == 0)
-			ft_putstr_fd("", 1); // There is probably a more elegant way for this...?
-		else
+		if (ft_strlen(data->input) != 0)
 		{
 			add_history(data->input);
-			exit_status = parse_input(data, 0);	// if (parse_input(data) == -1)
-			if (exit_status == 0)				// return (ft_free_data(data, 1)); 
+			exit_status = parse_input(data, 0);
+			if (exit_status == 0)
 				exit_status = make_processes(data, env_lst); // should system errors like "malloc fail" lead to whole program's termination...?
 	//		ft_lstiter_ms(data->tokens, printnode);
 		}

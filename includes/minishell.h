@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/04/29 18:08:57 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/04/30 15:13:03 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <signal.h>
+# include <errno.h> // is it ok to use this?
+# include <termios.h> // JUST A TEST
 # include <sys/stat.h>
+# include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/libft.h"
@@ -173,7 +176,7 @@ int			ft_just_create_file(char *file);
 int			open_outfile_append(char *file);
 t_token		*get_cur_token(t_data *data, int index);
 
-void		signal_handling(void);
-
+void		process_signal_main(void);
+void		process_signal_commands(void);
 
 #endif

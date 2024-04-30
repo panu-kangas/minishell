@@ -38,6 +38,19 @@ int	free_close_wait(pid_t *pids, int **fd_pipes, t_data *data)
 	ft_free_int_doubleptr(fd_pipes);
 	if (WIFEXITED(stat_loc) == 1)	// we also need an else statement to check if child didn't exit normally
 		exit_status = WEXITSTATUS(stat_loc);
+	else if (WIFSIGNALED(stat_loc) == 1)
+	{
+		if (WTERMSIG(stat_loc) == 2)
+		{
+			ft_putendl_fd("", 1);
+			exit_status = 130;
+		}
+		else if (WTERMSIG(stat_loc) == 3)
+		{
+			ft_putendl_fd("Quit: 3", 1);
+			exit_status = 131;
+		}
+	}
 	return (exit_status);
 }
 
@@ -92,6 +105,10 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 	// it's still a bit unclear if THIS would be the best place for heredoc_handling?
 	// I did it in pipex, but now a have a better system for redirections...
 	// I use them only inside processes. Let's see if it works, if not, we add hd-check here!
+
+
+	signal(SIGINT, SIG_IGN); // Ignore these in parent, so they can be set in child && USE SIGACTION
+	signal(SIGQUIT, SIG_IGN); // Ignore these in parent, so they can be set in child && USE SIGACTION
 
 	index = 0;
 	while (index < data->proc_count)
