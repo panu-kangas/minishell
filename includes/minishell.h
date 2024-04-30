@@ -173,6 +173,7 @@ int			ft_just_create_file(char *file);
 int			open_outfile_append(char *file);
 t_token		*get_cur_token(t_data *data, int index);
 
+void		signal_handling(void);
 
 
 #endif

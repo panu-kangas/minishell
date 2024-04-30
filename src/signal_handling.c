@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	sigquit_handler(int signum)
+void	sig_handler(int signum)
 {
 	ft_printf("test\n");
 	return ;
@@ -10,7 +10,9 @@ void	signal_handling(void)
 {
 	struct sigaction sigact;
 
-	ft_bzero(&sigact, sizeof(sigact));
-	sigact.sa_handler = sigquit_handler;
+	ft_bzero(&sigact, sizeof(sigact)); // is this needed?
+	sigact.sa_handler = sig_handler;
+	sigaction(SIGINT, &sigact, NULL);
 	sigaction(SIGQUIT, &sigact, NULL);
+	sigaction(SIG) // how to catch ctrl-D ??
 }
