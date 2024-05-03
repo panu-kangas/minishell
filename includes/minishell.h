@@ -19,8 +19,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <signal.h>
-# include <errno.h> // is it ok to use this?
-# include <termios.h> // JUST A TEST
+# include <termios.h>
 # include <sys/stat.h>
 # include <errno.h>
 # include <readline/readline.h>
@@ -151,6 +150,7 @@ int			env_lstsize(t_env_lst *lst);
 char		*expand_env_var(t_env_lst *env_lst, char *var_name);
 
 int			write_error(char *cmd, char *specifier, char *err_str);
+int			write_export_error(char *cmd, char *specifier, char *err_str);
 int			write_sys_error(char *err_str);
 
 char		**get_paths(t_env_lst *env_lst);
@@ -178,5 +178,6 @@ t_token		*get_cur_token(t_data *data, int index);
 
 void		process_signal_main(void);
 void		process_signal_commands(void);
+void		alter_termios(int flag);
 
 #endif

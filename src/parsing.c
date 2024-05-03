@@ -93,11 +93,11 @@ int	add_new_token(t_data *data, char **tokenarr, int exit_status)
 static int	parse_single_token(char *str, t_data *data, int exit_status)
 {
 	char	**tokenarr;
-	int		i;
-	int		filecount;
+//	int		i; --> are these needed?
+//	int		filecount; --> are these needed?
 
-	i = 0;
-	filecount = 0;
+//	i = 0; --> are these needed?
+//	filecount = 0; --> are these needed?
 	tokenarr = ft_pipex_split(str, ' ');
 	if (!tokenarr)
 		return (write_sys_error("malloc failed"));
@@ -156,12 +156,14 @@ int	parsing(void)
 		return (write_sys_error("env_var malloc failed")); // is it bad that the program ends here...?
 	while (1)
 	{
+		alter_termios(0);
 		process_signal_main();
 		data = (t_data *)malloc(sizeof (t_data));
 		if (!data)
 			return (write_sys_error("malloc failed"));
 		init_data(data, exit_status);
 		data->input = readline("Minishell: ");
+		alter_termios(1);
 		if (!data->input)
 		{
 			free(data);

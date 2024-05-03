@@ -69,6 +69,8 @@ int	ft_export(t_env_lst *env_lst, char *new_env_var)
 	char		*var_name;
 	t_env_lst	*temp;
 
+	if (new_env_var != NULL && new_env_var[0] == '=')
+		return (write_export_error("export", new_env_var, "not a valid identifier"));
 	flag = 0;
 	var_name = get_var_name(new_env_var);
 	if (var_name == NULL)

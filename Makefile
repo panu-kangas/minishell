@@ -14,10 +14,10 @@ NAME = minishell
 
 CC = clang
 RM = rm -rf
-CFLAGS =  -g -Wall -Wextra -Werror
+CFLAGS =  -g -Wall -Wextra -Werror # remove the -g flag eventually ??
 #FSFLAGS =-fsanitize=address
 LIBFT = libft/libft.a
-HEADERS = -I includes -I /Users/pkangas/.brew/opt/readline/include
+HEADERS = -I includes -I /usr/local/Cellar/readline/8.2.10/include # Koulussa tää -->/Users/$(USER)/.brew/opt/readline/include
 
 SRC_DIR = src/
 SRCS = main.c parsing.c parse_utils.c node_utils.c ft_pipex_split.c free_and_error.c init.c \
@@ -36,7 +36,6 @@ all: $(NAME)
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
-# remove the -g flag eventually
 $(OBJ_DIR)/%.o: $(SRC_DIR)%.c
 	@$(CC) -c $< -o $@ $(HEADERS) $(CFLAGS)
 	@echo "\033[0;36mObject $@ [\033[0;32mOK\033[0;36m]\033[0m"
@@ -44,9 +43,10 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)%.c
 $(LIBFT):
 	@make -C libft
 
-# libft/*.c might be a norm-problem because of the asterisk. Let's see!
+# libft/*.c might be a norm-problem because of the asterisk. Let's see! 
+# Koulussa tää --> -L/Users/$(USER)/.brew/opt/readline/lib
 $(NAME):  $(OBJ_DIR) $(OBJS) $(LIBFT) libft/*.c 
-	@$(CC) $(OBJS) $(CFLAGS) -lreadline -L/Users/pkangas/.brew/opt/readline/lib $(LIBFT) $(FSFLAGS) -o $(NAME)
+	@$(CC) $(OBJS) $(CFLAGS) -lreadline -L /usr/local/Cellar/readline/8.2.10/lib $(LIBFT) $(FSFLAGS) -o $(NAME)
 	@echo "\033[1;32mMinishell compile success!\n\033[0m"
 
 clean:

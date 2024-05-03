@@ -98,12 +98,12 @@ declare -x _="./a.out"
 
 CD:
 
-bash: cd: HOME not set
+XX bash: cd: HOME not set
 
-Update OLDPWD env var before moving to new folder.
-OLDPWD changes based on PWD, NOT based on CD.
+XX Update OLDPWD env var before moving to new folder.
+XX OLDPWD changes based on PWD, NOT based on CD.
 
-CD can take as many arguments as possible, but ONLY THE FIRST ONE IS USED and others are totally discarded
+XX CD can take as many arguments as possible, but ONLY THE FIRST ONE IS USED and others are totally discarded
 
 cd /////// will take you to root. Also cd / / / /  works, because only first argument is used
 

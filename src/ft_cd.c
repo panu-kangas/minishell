@@ -73,13 +73,13 @@ int	ft_cd(t_env_lst *env_lst, char *path)
 	int			flag;
 	char		*cur_dir;
 
-	if (path[0] == '\0')
+	if (path != NULL && path[0] == '\0')
 		return (0);
 	if (check_valid_path(path) == ERR_STAT)
 		return (ERR_STAT);
 	home = check_if_var_exist(env_lst, "HOME");
-	if (path == NULL && home == NULL) // if HOME is unset, error message occurs!! (check NOTES)
-		return (0);
+	if (path == NULL && home == NULL)
+		return (write_error(NULL, "cd", "HOME not set"));
 	flag = 0;
 	if (path == NULL)
 		flag = change_dir_to_home(home);

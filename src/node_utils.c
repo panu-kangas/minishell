@@ -71,11 +71,11 @@ void	printnode(t_token *token)
 
 void	printfile(t_file *node)
 {
-	int	i;
+//	int	i;
 
 	if (!node)
 		return;
-	i = 0;
+//	i = 0;
 	if (node->filename != NULL)
 		printf("Filename: %s - ", node->filename);
 	if (node->is_append == 1)
