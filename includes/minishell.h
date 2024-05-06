@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/04/30 15:13:03 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/06 11:22:33 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ char	**ft_split_minishell(const char *so);
 void	split_redir_and_pipes(t_data *data);
 char	**ft_pipex_split(char const *s, char c);
 int		handle_no_file(char **tokenarr, int i, int exit_status);
+int		parse_out_quotes(t_data *data, int exit_status);
 
 //parse_utils
 char	**make_args_arr(char **tokenarr, int j, int i);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+         #
+#    By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/04/30 11:40:36 by pkangas          ###   ########.fr        #
+#    Updated: 2024/05/06 11:20:47 by tsaari           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ LIBFT = libft/libft.a
 HEADERS = -I includes -I /usr/local/Cellar/readline/8.2.10/include # Koulussa tää -->/Users/$(USER)/.brew/opt/readline/include
 
 SRC_DIR = src/
-SRCS = main.c parsing.c parse_utils.c node_utils.c ft_pipex_split.c free_and_error.c init.c \
+SRCS = main.c parsing.c parse_utils.c parse_quotes.c node_utils.c ft_pipex_split.c free_and_error.c init.c \
 	ft_cd.c ft_echo.c ft_empty_export.c ft_pwd_env.c ft_unset_export.c \
 	env_lst_utils.c expand_env_var.c get_env_node.c make_env_node.c save_env_list.c \
 	execute_command.c get_paths.c make_env_var_array.c \

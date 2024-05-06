@@ -24,7 +24,7 @@ void	sig_handler_main(int signum)
 	{
 		ft_putendl_fd("", 1);
 		rl_on_new_line(); // do we have to check for return value ??
-		rl_replace_line("", 0); // do we have to check for return value ??
+		//rl_replace_line("", 0); // do we have to check for return value ??
 		rl_redisplay(); // do we have to check for return value ??
 	}
 }
