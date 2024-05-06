@@ -67,9 +67,6 @@ int	handle_command(t_data *data, t_env_lst *env_lst, int index)
 
 	cur_token = get_cur_token(data, index);
 
-	signal(SIGINT, SIG_DFL); // Ignore these in parent, so they can be set in child && USE SIGACTION
-	signal(SIGQUIT, SIG_DFL); // Ignore these in parent, so they can be set in child && USE SIGACTION
-
 	if (check_for_built_in(cur_token->com) == 1)
 		exit_status = execute_built_in(env_lst, data, cur_token->com, cur_token->args);
 	else

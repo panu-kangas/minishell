@@ -29,13 +29,13 @@ static int	get_str_len(char const *s, char c, int i)
 		quot = s[i++];
 		while (s[i] != quot && s[i] != '\0')
 		{
-			if (quot == '\"' && s[i] == '\\' && s[i + 1] != '\0')
+			if (quot == '\"' && s[i] == '\\' && s[i + 1] != '\0') // should this be removed? Because we don't need to handle '\'
 				i++;
 			i++;
 		}
 		if (s[i] == '\0')
 			return (i - orig_i);
-		else if (s[i + 1] == ' ' || s[i + 1] == '\0')
+		else if (s[i + 1] == c || s[i + 1] == '\0')
 			return (i - orig_i + 1);
 		i++;
 	}
@@ -79,7 +79,7 @@ static int	skip_quotation(char const *s, int i)
 		i++;
 		while (s[i] != '\"' && s[i] != '\0')
 		{
-			if (s[i] == '\\' && s[i + 1] != '\0')
+			if (s[i] == '\\' && s[i + 1] != '\0') // should this be removed? Because we don't need to handle '\'
 				i++;
 			i++;
 		}

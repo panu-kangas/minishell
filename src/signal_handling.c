@@ -1,8 +1,5 @@
 #include "minishell.h"
 
-// if i disable ECHOCTL in the beginning, 
-// are we missing those special characters somewhere else in program (where they should be seen)?
-
 void	alter_termios(int flag)
 {
 	struct termios	term;
@@ -17,14 +14,13 @@ void	alter_termios(int flag)
 	tcsetattr(0, TCSANOW, &term);  // error handling ??
 }
 
-
 void	sig_handler_main(int signum)
 {
 	if (signum == 2)
 	{
 		ft_putendl_fd("", 1);
 		rl_on_new_line(); // do we have to check for return value ??
-		//rl_replace_line("", 0); // do we have to check for return value ??
+		rl_replace_line("", 0); // do we have to check for return value ??
 		rl_redisplay(); // do we have to check for return value ??
 	}
 }

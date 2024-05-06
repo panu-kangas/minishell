@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/06 11:20:17 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/06 14:30:20 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ int	parsing(void)
 			exit_status = parse_out_quotes(data, exit_status);
 			if (exit_status == 0)
 				exit_status = make_processes(data, env_lst); // should system errors like "malloc fail" lead to whole program's termination...?
-	//		ft_lstiter_ms(data->tokens, printnode);
+		//	ft_lstiter_ms(data->tokens, printnode);
 		}
 		ft_free_data(data, 0);
 	}

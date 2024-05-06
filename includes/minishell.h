@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/06 11:22:33 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/06 16:03:49 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,8 @@ void		ft_env(t_env_lst *env_lst);
 int			ft_cd(t_env_lst *env_lst, char *path);
 void		ft_echo(int flag, char **args);
 
-int			ft_redirect(t_data *data, int **fd_pipes, int index);
-int			ft_heredoc(char *limiter);
+int			ft_redirect(t_data *data, t_env_lst *env_lst, int **fd_pipes, int index);
+int			ft_heredoc(char *limiter, int *hd_pipe, t_data *data, t_env_lst *env_lst);
 
 char		*get_var_name(char *environ_var);
 char		*get_var_value(char *environ_var);

@@ -36,7 +36,7 @@ int	free_close_wait(pid_t *pids, int **fd_pipes, t_data *data)
 		waitpid(pids[i++], &stat_loc, 0);  // status code needed here! Change the waitpid.
 	free(pids);
 	ft_free_int_doubleptr(fd_pipes);
-	if (WIFEXITED(stat_loc) == 1)	// we also need an else statement to check if child didn't exit normally
+	if (WIFEXITED(stat_loc) == 1)
 		exit_status = WEXITSTATUS(stat_loc);
 	else if (WIFSIGNALED(stat_loc) == 1)
 	{
@@ -58,7 +58,7 @@ int	fork_exit(int **fd_pipes, int index, pid_t *pids, t_data *data)
 {
 	close_all_pipes(fd_pipes, (data->proc_count - 1));
 	while (--index != -1)
-		waitpid(pids[index], NULL, 0); // status code needed here! Change the waitpid.
+		waitpid(pids[index], NULL, 0); // DO WE NEED ERROR HANDLING ?? A basic check for -1
 	free(pids);
 	ft_free_int_doubleptr(fd_pipes);
 	return (write_sys_error("fork failed"));
@@ -78,12 +78,16 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 		return (0);
 	}
 
+	signal(SIGINT, SIG_DFL); // USE SIGACTION && ask about this from someone: what should signal setting be in built-in (parent process)?
+	signal(SIGQUIT, SIG_DFL); // USE SIGACTION && ask about this from someone: what should signal setting be in built-in (parent process)?
+
+
 	if (data->tokens->next == NULL && \
 	check_for_built_in(data->tokens->com) == 1)
 	{
 		std_fd[0] = dup(0); // error handling
 		std_fd[1] = dup(1); // error handling
-		exit_status = ft_redirect(data, NULL, 0);
+		exit_status = ft_redirect(data, env_lst, NULL, 0);
 		if (exit_status == 0)
 			exit_status = handle_command(data, env_lst, 0);
 		dup2(std_fd[0], 0); // error handling
@@ -102,11 +106,6 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 		return (write_sys_error("malloc failed"));
 	}
 
-	// it's still a bit unclear if THIS would be the best place for heredoc_handling?
-	// I did it in pipex, but now a have a better system for redirections...
-	// I use them only inside processes. Let's see if it works, if not, we add hd-check here!
-
-
 	signal(SIGINT, SIG_IGN); // Ignore these in parent, so they can be set in child && USE SIGACTION
 	signal(SIGQUIT, SIG_IGN); // Ignore these in parent, so they can be set in child && USE SIGACTION
 
@@ -118,8 +117,10 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 			return (fork_exit(fd_pipes, index, pids, data));
 		else if (pids[index] == 0)
 		{
+			signal(SIGINT, SIG_DFL); // Ignore these in parent, so they can be set in child && USE SIGACTION
+			signal(SIGQUIT, SIG_DFL); // Ignore these in parent, so they can be set in child && USE SIGACTION
 			free(pids);
-			exit_status = ft_redirect(data, fd_pipes, index);
+			exit_status = ft_redirect(data, env_lst, fd_pipes, index);
 			if (exit_status == 0)
 				exit_status = handle_command(data, env_lst, index);
 			free_env_lst(env_lst);

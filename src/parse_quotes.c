@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_quotes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 10:27:14 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/06 07:21:26 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/06 16:08:44 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ int parse_args_quotes(t_data *data, int exit_status)
 	int j;
 
 	i = 0;
-	while (data->tokens->args[i] != 0)
+	while (data->tokens->args != NULL && data->tokens->args[i] != 0)
 	{
 		j = 0;
 		while(data->tokens->args[i][j] != 0)
@@ -179,7 +179,7 @@ int parse_com_quotes(t_data *data, int exit_status)
 	int j;
 	
 	j = 0;
-	while(data->tokens->com[j] != 0)
+	while(data->tokens->com != NULL && data->tokens->com[j] != 0)
 	{
 		if (data->tokens->com[j] == '\'')
 		{

@@ -25,6 +25,15 @@ _=/usr/bin/env
 --> cannot be unset
 
 
+HERE_DOC:
+
+Minishell: <extra.c << EOF cat | grep helo
+> helo
+> helo
+> 
+
+--> When stopped with SIGINT, produces an extra NL for some reason
+
 
 REDIRECT:
 

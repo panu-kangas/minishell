@@ -1,14 +1,11 @@
 #include "minishell.h"
 
-int	write_hd(char *str, char *limiter, int bytes)
+int	write_hd(char *str, char *limiter, int bytes, int *hd_pipe_fd)
 {
 	int	fd;
 	int	str_len;
-	int	heredoc_fd[2];
 
-	if (pipe(heredoc_fd) == -1)
-		return (write_sys_error("pipe failed"));
-	fd = heredoc_fd[1];
+	fd = hd_pipe_fd[1];
 	str_len = ft_strlen(str);
 	if (ft_strlen(limiter) == 0 && bytes != 0)
 		str[str_len - 1] = '\0';
@@ -16,10 +13,8 @@ int	write_hd(char *str, char *limiter, int bytes)
 		str[str_len - ft_strlen(limiter) - 1] = '\0';
 	write(fd, str, ft_strlen(str));
 	free(str);
-	if (dup2(heredoc_fd[0], 0) == -1)
-		return (write_sys_error("dup2 failed"));
-	close(heredoc_fd[1]);
-	close(heredoc_fd[0]);
+	close(hd_pipe_fd[1]);
+	close(hd_pipe_fd[0]);
 	return (0);
 }
 
@@ -79,7 +74,13 @@ char	*get_str(char *hd_str, char *buf, int bytes)
 	return (hd_str);
 }
 
-int	ft_heredoc(char *limiter)
+
+// IMPORTANT NOTE !!
+// We need a "free all" -helper function here!
+// Because now we are in a separate process, so all needs to be freed if something fails.
+// For example: free data-struc, free env_var, close pipe
+
+int	ft_heredoc(char *limiter, int *hd_pipe_fd, t_data *data, t_env_lst *env_lst)
 {
 	char	buf[100];
 	char	*hd_str;
@@ -87,15 +88,17 @@ int	ft_heredoc(char *limiter)
 
 	bytes = 1;
 	hd_str = NULL;
-	ft_printf(">");
+	ft_printf("> ");
 	while (1)
 	{
 		if (bytes != 0 && hd_str != NULL && hd_str[ft_strlen(hd_str) - 1] == '\n')
-			ft_printf(">");
-		bytes = read(0, buf, 100);
+			ft_printf("> ");
+		bytes = read(0, buf, 100); // Use readline instead?? You get weird
 		if (bytes == -1)
 		{
 			free(hd_str);
+			free_env_lst(env_lst); // FOR TESTING, remove in the end
+			ft_free_data(data, 0); // FOR TESTING, remove in the end
 			return (write_sys_error("read failed"));
 		}
 		hd_str = get_str(hd_str, buf, bytes);
@@ -105,5 +108,5 @@ int	ft_heredoc(char *limiter)
 		(bytes == 0 && hd_str[0] == '\0'))
 			break ;
 	}
-	return (write_hd(hd_str, limiter, bytes));
+	return (write_hd(hd_str, limiter, bytes, hd_pipe_fd));
 }
