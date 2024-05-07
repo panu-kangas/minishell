@@ -20,19 +20,55 @@ void	move_env_lst(t_env_lst *env_lst) // I'm a bit unsure about this... other op
 	free(env_lst);
 }
 
-void	ft_unset(t_env_lst *env_lst, char *var_name)
+int	unset_check_valid_input(char *var_name)
+{
+	int	i;
+
+	if (var_name != NULL && ft_isalpha(var_name[0]) == 0)
+		return (write_export_error("unset", var_name, "not a valid identifier"));
+	i = 1;
+	while (var_name != NULL && var_name[i] != '\0')
+	{
+		if (ft_isalnum(var_name[i]) == 0)
+			return (write_export_error("unset", var_name, "not a valid identifier"));
+		i++;
+	}
+	return (0);
+}
+
+int	export_check_valid_input(char *new_env_var)
+{
+	int	i;
+
+	if (new_env_var != NULL && ft_isalpha(new_env_var[0]) == 0)
+		return (write_export_error("export", new_env_var, "not a valid identifier"));
+	i = 1;
+	while (new_env_var != NULL && new_env_var[i] != '=' && new_env_var[i] != '\0')
+	{
+		if (ft_isalnum(new_env_var[i]) == 0)
+			return (write_export_error("export", new_env_var, "not a valid identifier"));
+		i++;
+	}
+	return (0);
+}
+
+// Should we have a NULL protection in the beginning of unset...?
+
+int	ft_unset(t_env_lst *env_lst, char *var_name)
 {
 	t_env_lst	*temp;
 	t_env_lst	*temp_prev;
 
+	if (unset_check_valid_input(var_name) == 1)
+		return (1);
 	temp = env_lst;
 	temp_prev = env_lst;
 	if (temp->name == NULL)
-		return ;
+		return (0);
 	if (ft_strncmp(temp->name, var_name, ft_strlen(var_name) + 1) == 0)
 	{
 		move_env_lst(env_lst);
-		return ;
+		return (0);
 	}
 	while (temp->next != NULL)
 	{
@@ -45,6 +81,7 @@ void	ft_unset(t_env_lst *env_lst, char *var_name)
 			break ;
 		}
 	}
+	return (0);
 }
 
 
@@ -69,12 +106,12 @@ int	ft_export(t_env_lst *env_lst, char *new_env_var)
 	char		*var_name;
 	t_env_lst	*temp;
 
-	if (new_env_var != NULL && new_env_var[0] == '=')
-		return (write_export_error("export", new_env_var, "not a valid identifier"));
+	if (export_check_valid_input(new_env_var) == 1)
+		return (1);
 	flag = 0;
 	var_name = get_var_name(new_env_var);
 	if (var_name == NULL)
-		return (ERR_STAT);
+		return (1);
 	temp = check_if_var_exist(env_lst, var_name);
 	free(var_name);
 	if (temp == NULL || temp->is_global == 1)

@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/06 14:30:20 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/07 16:33:51 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ int	parsing(void)
 	exit_status = 0;
 	env_lst = save_env_list(environ);
 	if (env_lst == NULL)
-		return (write_sys_error("env_var malloc failed")); // is it bad that the program ends here...?
+		write_sys_error("env_var malloc failed");
 	while (1)
 	{
 		alter_termios(0);

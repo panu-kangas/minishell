@@ -1,4 +1,4 @@
-COMMAND NAMES (these are already OK in our minishell!!!)
+XX COMMAND NAMES (these are already OK in our minishell!!!)
 
 EchO --> works
 ExPort --> not working && error
@@ -13,29 +13,29 @@ Grep, sleep and cat all work, no matter if there's capital letters
 
 
 
-MALLOC:
+XX MALLOC:
 
 Test for malloc fail and see the exit code!!
 And also bash error message.
 
 
-UNSET:
+XX UNSET:
 
 _=/usr/bin/env 
 --> cannot be unset
 
 
-HERE_DOC:
+XX HERE_DOC:
 
 Minishell: <extra.c << EOF cat | grep helo
 > helo
 > helo
 > 
 
---> When stopped with SIGINT, produces an extra NL for some reason
+--> When stopped with SIGINT, minishell produces an extra NL for some reason
 
 
-REDIRECT:
+XX REDIRECT:
 
 bash-3.2$ export TEST=
 bash-3.2$ echo hello2 >$TEST
@@ -54,14 +54,7 @@ bash: : No such file or directory
 
 
 
-ECHO:
-
-echo # does somenthing special --> do I need to handle it...?
-echo & does somenthing special --> do I need to handle it...?
-echo * does somenthing special --> do I need to handle it...? --> probably not
-
-
-EXPORT:
+XX EXPORT:
 
 bash-3.2$ TEST =testi
 --> Is ok, because TEST is a command...
@@ -72,7 +65,7 @@ export =testi
 
 Numbers and special characters aren't "valid identifiers"... at least most of them, I need more research
 
-Special tokens give different error (see below) --> THIS IS NOT NECESSARY, SINCE SPACIAL CHAR DON'T NEED TO BE HANDLED
+Special tokens give different error (see below) --> THIS IS NOT NECESSARY, SINCE SPECIAL CHAR DON'T NEED TO BE HANDLED
 
 bash-3.2$   export TEST =
 bash: export: `=': not a valid identifier
@@ -88,7 +81,7 @@ bash: syntax error near unexpected token `)'
 
 
 
-NON_GLOBAL ENV VAR:
+XX NON_GLOBAL ENV VAR:
 
 TESTI --> shell thinks it's a command
 TESTI= --> a variable without value, cannot be seen in env or export --> if this is exported, it can be seen on both env and export with empty value
@@ -96,7 +89,7 @@ TESTI= --> a variable without value, cannot be seen in env or export --> if this
 export TESTI --> can be seen on export, but doesn't hhave a value, so can't be seen in env.
 
 
-EMPTY EXPORT:
+XX EMPTY EXPORT:
 
 
 declare -x _="./a.out"
@@ -105,7 +98,7 @@ declare -x _="./a.out"
 
 
 
-CD:
+XX CD:
 
 XX bash: cd: HOME not set
 
@@ -119,9 +112,7 @@ cd /////// will take you to root. Also cd / / / /  works, because only first arg
 
 
 
-PARSING:
-
-echo & export at least can't handle "special tokens", so far I've found: < > ( ) 
+XX PARSING:
 
 If you only have one | (pipe), bash will read standard input until user inserts something + NL. NL alone won't stop the reading.
 
@@ -139,13 +130,13 @@ Unset without arguments does nothing.
 
 
 
-SHLVL (the env var):
+XX SHLVL (the env var):
 
 You can open a new bash inside bash!!
 This var keeps track on the level of shell
 
 
-ENV VAR expanding:
+XX ENV VAR expanding:
 
 bash-3.2$ export PANU="echo hello"
 bash-3.2$ $PANU
@@ -158,7 +149,7 @@ bash-3.2$ echo hello $PANU
 
 
 
-ECHO AND ENV VARIABLES:
+XX ECHO AND ENV VARIABLES:
 
 TEST=     jee
 bash-3.2$ echo $TEST

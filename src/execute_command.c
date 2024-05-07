@@ -51,7 +51,8 @@ char	*find_cmd_path(char *cmd, char **paths, int *err_stat)
 		*err_stat = check_cmd_path(cmd);
 		if (*err_stat != 0)
 			return (NULL);
-		return (cmd);
+		cmd_path = ft_strdup(cmd);
+		return (cmd_path);
 	}
 	cmd_path = NULL;
 	while (paths != NULL && paths[i] != NULL)

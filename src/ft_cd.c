@@ -23,7 +23,6 @@ int	update_pwd_env_var(t_env_lst *env_lst, char *cur_dir)
 	if (old_pwd->value == NULL)
 		return (write_sys_error("malloc failed"));
 
-
 	env_var = ft_strjoin("PWD=", cur_dir);
 	if (env_var == NULL)
 		return (write_sys_error("malloc failed"));
@@ -35,8 +34,6 @@ int	update_pwd_env_var(t_env_lst *env_lst, char *cur_dir)
 	free(env_var);
 	return (0);
 }
-
-
 
 int	check_valid_path(char *path)
 {

@@ -1,19 +1,5 @@
 #include "minishell.h"
 
-/* void	ft_free_doubleptr(char **ptr)
-{
-	int	i;
-
-	i = 0;
-	if (ptr != NULL)
-	{
-		while (ptr[i] != NULL)
-			free(ptr[i++]);
-	}
-	free(ptr);
-}
-*/
-
 int	env_lstsize(t_env_lst *lst)
 {
 	int	size;
@@ -34,7 +20,7 @@ char	**copy_env_var(t_env_lst *env_lst, char **alph_order)
 
 	alph_order = malloc((env_lstsize(env_lst) + 1) * sizeof(char *));
 	if (alph_order == NULL)
-		return (MALLOC_ERR);
+		return (NULL);
 	i = 0;
 	while (env_lst != NULL)
 	{
@@ -42,7 +28,7 @@ char	**copy_env_var(t_env_lst *env_lst, char **alph_order)
 		{
 			alph_order[i] = ft_strdup(env_lst->name);
 			if (alph_order[i] == NULL)
-				return (MALLOC_ERR);
+				return (NULL);
 			i++;
 		}
 		env_lst = env_lst->next;
@@ -60,7 +46,7 @@ char	**get_env_var_alph_order(t_env_lst *env_lst, char **alph_order)
 
 	alph_order = copy_env_var(env_lst, alph_order);
 	if (alph_order == NULL)
-		return (MALLOC_ERR);
+		return (NULL);
 	lstsize = env_lstsize(env_lst);
 	i = -1;
 	while (++i < (lstsize - 1))
@@ -92,7 +78,7 @@ int	ft_empty_export(t_env_lst *env_lst)
 	if (alph_order == NULL)
 	{
 		ft_free_doubleptr(alph_order);
-		return (MALLOC_ERR);
+		return (1);
 	}
 	i = 0;
 	while (alph_order[i] != NULL)

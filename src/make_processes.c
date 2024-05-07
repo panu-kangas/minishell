@@ -107,7 +107,12 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 	}
 
 	signal(SIGINT, SIG_IGN); // Ignore these in parent, so they can be set in child && USE SIGACTION
-	signal(SIGQUIT, SIG_IGN); // Ignore these in parent, so they can be set in child && USE SIGACTION
+	signal(SIGQUIT, SIG_IGN); // Ignore these in parent, so they can be set in child && USE SIGACTION0
+
+	/*
+	HEREDOC NEEDS TO BE HERE
+	and all the info needs to be written in a pipe (stored in the data-struct ??) that is passed to child processes.
+	*/
 
 	index = 0;
 	while (index < data->proc_count)

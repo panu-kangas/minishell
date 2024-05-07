@@ -6,7 +6,7 @@
 #    By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/05/06 15:08:00 by pkangas          ###   ########.fr        #
+#    Updated: 2024/05/07 16:23:11 by pkangas          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,9 +44,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)%.c
 $(LIBFT):
 	@make -C libft
 
-# libft/*.c might be a norm-problem because of the asterisk. Let's see! 
 # Koulussa tää --> -L /Users/$(USER)/.brew/opt/readline/lib  |||  Panun kotona --> -L /usr/local/Cellar/readline/8.2.10/lib
-$(NAME):  $(OBJ_DIR) $(OBJS) $(LIBFT) libft/*.c 
+$(NAME):  $(OBJ_DIR) $(OBJS) $(LIBFT)
 	@$(CC) $(OBJS) $(CFLAGS) -lreadline -L/Users/$(USER)/.brew/opt/readline/lib $(LIBFT) $(FSFLAGS) -o $(NAME)
 	@echo "\033[1;32mMinishell compile success!\n\033[0m"
 

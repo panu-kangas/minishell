@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/06 16:03:49 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/07 13:29:57 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	printfile(t_file *node);
 
 t_env_lst	*save_env_list(char **environ);
 
-void		ft_unset(t_env_lst *env_lst, char *arg);
+int			ft_unset(t_env_lst *env_lst, char *var_name);
 int			ft_export(t_env_lst *env_lst, char *new_env_var);
 int			ft_empty_export(t_env_lst *env_lst);
 int			ft_pwd(void);
