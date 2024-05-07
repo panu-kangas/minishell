@@ -44,25 +44,25 @@ Panu:
 - HD: Travelling cursor, when termios is altered --> Is this fixed if i change read to readline...?
 - Non global env var --> if command has = and there are no args, process_non_global_env_var
 	--> Additionally: You can change global env var value without export!!!! So after export TEST=testi, you can just say TEST=festi, and it changes
-- SHLVL --> add one in save_env_lst
-- Check SHLVL edge case values
+- SHLVL --> do SHLVL++ in save_env_lst
+- Check SHLVL edge case values (int_min, int_max, negative)
 - Unset doesn't work on _=/usr/bin/env 
-- declare -x _="./a.out" --> this can be seen with env, but not with export (without args)
-- Exit-built_in arguments: check int_max, int_min etc
+- declare -x _="./a.out" --> this can be seen with env, but not with export
+- Exit-built_in arguments: check int_max, int_min , negative etc
 
 - Double check signal handling with a single built-in (so for things that happens inside the parent process)
 
 
 QUESTIONS:
 
-- Handling special characters: is this ok at the moment?
+- Handling special characters: is this ok at the moment? We should handle them always or not at all, I think.
 - How to handle this? 	bash-3.2$ echo hello2 >$NOT_EXISTING 	--> Maybe in parsing? If filename is $something, exit_code is 1 and write "ambiguous redirect"
 						bash: $NOT_EXISTING: ambiguous redirect		--> This same also works with NOT_EXISTING=, so with env_var that has value of '\0'
 
 						BUT THIS WORKS
 						bash-3.2$ ls >$?	--> so exit code is expanded no matter what
 
-- How to handle this?	bash-3.2$ export PANU=>file1 --> the value can't be seen in env-listing
+- How to handle this?	bash-3.2$ export PANU=>file1 --> this is actually same as "export PANU= >file1", so a matter of parsing
 						bash-3.2$ echo hello $PANU
 
 - Special case of 2>file1 (redirecting standard error) --> should we handle this? If yes, how?
