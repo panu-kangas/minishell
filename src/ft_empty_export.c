@@ -7,7 +7,7 @@ int	env_lstsize(t_env_lst *lst)
 	size = 0;
 	while (lst != NULL)
 	{
-		if (lst->is_global == 1)
+		if (lst->is_global == 1 && ft_strncmp(lst->name, "_", 2) != 0)
 			size++;
 		lst = lst->next;
 	}
@@ -24,7 +24,7 @@ char	**copy_env_var(t_env_lst *env_lst, char **alph_order)
 	i = 0;
 	while (env_lst != NULL)
 	{
-		if (env_lst->is_global == 1)
+		if (env_lst->is_global == 1 && ft_strncmp(env_lst->name, "_", 2) != 0)
 		{
 			alph_order[i] = ft_strdup(env_lst->name);
 			if (alph_order[i] == NULL)

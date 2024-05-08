@@ -1,51 +1,5 @@
 #include "minishell.h"
 
-int	is_arg_numeric(char *arg)
-{
-	int	i;
-
-	i = 0;
-	while (arg[i] != '\0')
-	{
-		if (i == 0 && arg[i] == '-')
-			i++;
-		if (ft_isdigit(arg[i]) == 0)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int	ft_exit(t_env_lst *env_lst, t_data *data, char **args)
-{
-	int	count;
-	int	exit_status;
-
-	ft_putendl_fd("exit", 2); // this doesn't appear if exit is piped, example: echo hello | exit --> WEIRD
-	if (args[0] == NULL)
-	{
-		free_env_lst(env_lst);
-		ft_free_data(data, 0);
-		exit(0);
-	}
-	else if (is_arg_numeric(args[0]) == 0)
-	{
-		write_error("exit", args[0], "numeric argument required");
-		free_env_lst(env_lst);
-		ft_free_data(data, 0);
-		exit(255);
-	}
-	count = 0;
-	while (args[count] != NULL)
-		count++;
-	if (count > 1)
-		return (write_error(NULL, "exit", "too many arguments"));
-	exit_status = ft_atoi(args[0]) % 256;
-	free_env_lst(env_lst);
-	ft_free_data(data, 0);
-	exit(exit_status);
-}
-
 int	handle_export(t_env_lst *env_lst, char **args)
 {
 	int	i;

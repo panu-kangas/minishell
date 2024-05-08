@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/08 12:30:44 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/08 15:24:53 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ int	parsing(void)
 	exit_status = 0;
 	env_lst = save_env_list(environ);
 	if (env_lst == NULL)
-		return (write_sys_error("env_var malloc failed")); // is it bad that the program ends here...?
+		write_sys_error("setting up env_var not successful (malloc failure)");
 	while (1)
 	{
 		alter_termios(0);
@@ -185,7 +185,7 @@ int	parsing(void)
 		}
 		if (ft_strlen(data->input) != 0)
 		{
-			add_history(data->input);
+			add_history(data->input); // error handling ??
 			exit_status = parsing_pipeline(data, env_lst);
 			//ft_lstiter_ms(data->tokens, printnode);
 			if (exit_status == 0)

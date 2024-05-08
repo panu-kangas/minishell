@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/07 13:29:57 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/08 15:26:12 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <termios.h>
 # include <sys/stat.h>
 # include <errno.h>
+# include <limits.h> // can we use this ?
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/libft.h"
@@ -91,6 +92,7 @@ void	init_token(t_token *new);
 
 //parsing
 int		parsing(void);
+int 	parse_expansions(t_data *data, t_env_lst *env_lst);
 char	**ft_split_minishell(const char *so);
 void	split_redir_and_pipes(t_data *data);
 char	**ft_pipex_split(char const *s, char c);
@@ -126,6 +128,7 @@ int			ft_pwd(void);
 void		ft_env(t_env_lst *env_lst);
 int			ft_cd(t_env_lst *env_lst, char *path);
 void		ft_echo(int flag, char **args);
+int			ft_exit(t_env_lst *env_lst, t_data *data, char **args);
 
 int			ft_redirect(t_data *data, t_env_lst *env_lst, int **fd_pipes, int index);
 int			ft_heredoc(char *limiter, int *hd_pipe, t_data *data, t_env_lst *env_lst);

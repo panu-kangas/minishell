@@ -19,7 +19,7 @@ char	*get_var_value(char *environ_var)
 		len++;
 	var_value = malloc(len + 1);
 	if (var_value == NULL)
-		return (MALLOC_ERR);
+		return (NULL);
 	i = value_start_i;
 	j = 0;
 	while (environ_var[i] != '\0')
@@ -44,7 +44,7 @@ char	*get_var_name(char *environ_var)
 	}
 	var_name = malloc(len + 1);
 	if (var_name == NULL)
-		return (MALLOC_ERR);
+		return (NULL);
 	i = 0;
 	j = 0;
 	while (environ_var[i] != '=' && environ_var[i] != '\0')
@@ -53,34 +53,92 @@ char	*get_var_name(char *environ_var)
 	return (var_name);
 }
 
+int	process_shlvl(t_env_lst *env_lst)
+{
+	t_env_lst	*shlvl;
+	int			value;
+
+	shlvl = check_if_var_exist(env_lst, "SHLVL");
+	if (shlvl == NULL)
+	{
+		shlvl = get_global_env_node("SHLVL=1");
+		if (shlvl == NULL)
+			return (1);
+		shlvl->next = env_lst->next;
+		env_lst->next = shlvl;
+	}
+	else
+	{
+		value = ft_atoi(shlvl->value);
+		value++;
+		if (value < 0)
+			value = 0;
+		free(shlvl->value);
+		shlvl->value = ft_itoa(value);
+		if (shlvl->value == NULL)
+			return (1);
+	}
+	return (0);
+}
+
+int	make_pwd_variables(t_env_lst *env_lst)
+{
+	t_env_lst	*temp;
+	char		*cur_dir;
+	char		*pwd;
+
+	temp = env_lst;
+	while (temp->next != NULL)
+		temp = temp->next;
+	if (check_if_var_exist(env_lst, "OLDPWD") == NULL)
+	{
+		temp->next = get_null_value_env_node("OLDPWD");
+		if (temp->next == NULL)
+			return (1);
+		temp = temp->next;
+	}
+	if (check_if_var_exist(env_lst, "PWD") == NULL)
+	{
+		cur_dir = getcwd(NULL, 0);
+		if (cur_dir == NULL)
+			return (1);
+		pwd = ft_strjoin("PWD=", cur_dir);
+		free(cur_dir);
+		if (pwd == NULL)
+			return (1);
+		temp->next = get_global_env_node(pwd);
+		free(pwd);
+		if (temp->next == NULL)
+			return (1);
+	}
+	return (0);
+}
+
 t_env_lst	*save_env_list(char **environ)
 {
 	int			i;
 	t_env_lst	*env_lst;
 	t_env_lst	*temp;
 
-	// IF environ == NULL
-	// env_lst = make_empty_node(), which allocates a node but sets all values to NULL
-	// Later in the program we must always check if env_lst->name = NULL
 	env_lst = NULL;
 	if (environ != NULL && environ[0] != NULL)
 		env_lst = get_global_env_node(environ[0]);
+	else
+		env_lst = get_null_value_env_node("OLDPWD");
 	if (env_lst == NULL)
-		return (MALLOC_ERR);
+		return (NULL);
 	temp = env_lst;
 	i = 1;
-	while (environ != NULL && environ[i] != NULL)
+	while (environ != NULL && environ[0] != NULL && environ[i] != NULL)
 	{
 		temp->next = get_global_env_node(environ[i++]);
 		temp = temp->next;
 		if (temp == NULL)
-			return (MALLOC_ERR);
+			return (NULL);
 	}
-	if (check_if_var_exist(env_lst, "OLDPWD") == NULL) // DO THIS SAME TO PWD!! We definitely need it
-	{
-		temp->next = get_null_value_env_node("OLDPWD");
-		if (temp->next == NULL)
-			return (MALLOC_ERR);
-	}
+	if (make_pwd_variables(env_lst) == 1)
+		return (NULL);
+	if (process_shlvl(env_lst) == 1)
+		return (NULL);
 	return (env_lst);
 }
