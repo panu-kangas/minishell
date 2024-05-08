@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/07 16:33:51 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/08 12:30:44 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,13 @@ int	parse_com_and_args(t_token *new, char **tokenarr, int i)
 	{
 		new->args = make_args_arr(tokenarr, j, i);
 		if (!new->args)
+		{
+
 			return (-1);
+		}
 	}
+	else
+		new->args[0] = NULL;
 	return (i);
 }
 
@@ -93,11 +98,7 @@ int	add_new_token(t_data *data, char **tokenarr, int exit_status)
 static int	parse_single_token(char *str, t_data *data, int exit_status)
 {
 	char	**tokenarr;
-//	int		i; --> are these needed?
-//	int		filecount; --> are these needed?
 
-//	i = 0; --> are these needed?
-//	filecount = 0; --> are these needed?
 	tokenarr = ft_pipex_split(str, ' ');
 	if (!tokenarr)
 		return (write_sys_error("malloc failed"));
@@ -127,7 +128,7 @@ static int	parse_input(t_data *data, int exit_status)
 		{
 			ft_free_double(inputarr);
 			free(temp);
-			return (write_sys_error("malloc failed")); // is malloc the only thing that might fail in ft_strtrim?
+			return (write_sys_error("malloc failed")); // is malloc the only thing that might fail in ft_strtrim? YES
 		}
 		exit_status = parse_single_token(inputarr[data->proc_count], data, exit_status);
 		if (exit_status != 0)
@@ -136,11 +137,23 @@ static int	parse_input(t_data *data, int exit_status)
 			free(temp);
 			return (exit_status);
 		}
-		free(temp);
+		free(temp);	//check does this leak
 		data->proc_count++;
 	}
 	ft_free_double(inputarr);
 	return (0);
+}
+
+int parsing_pipeline(t_data *data, t_env_lst *env_lst)
+{
+	(void)env_lst;
+	int exit_status;
+
+	exit_status = 0;
+	exit_status = parse_input(data, 0);  //make again error handling in here and check leaks
+	exit_status = parse_out_quotes(data, exit_status);
+	exit_status = parse_expansions(data, env_lst); //check leaks
+	return(exit_status);
 }
 
 int	parsing(void)
@@ -153,7 +166,7 @@ int	parsing(void)
 	exit_status = 0;
 	env_lst = save_env_list(environ);
 	if (env_lst == NULL)
-		write_sys_error("env_var malloc failed");
+		return (write_sys_error("env_var malloc failed")); // is it bad that the program ends here...?
 	while (1)
 	{
 		alter_termios(0);
@@ -162,7 +175,7 @@ int	parsing(void)
 		if (!data)
 			return (write_sys_error("malloc failed"));
 		init_data(data, exit_status);
-		data->input = readline("Minishell: ");
+		data->input = readline("minishell-1.1$: ");
 		alter_termios(1);
 		if (!data->input)
 		{
@@ -173,15 +186,15 @@ int	parsing(void)
 		if (ft_strlen(data->input) != 0)
 		{
 			add_history(data->input);
-			exit_status = parse_input(data, 0);
-			exit_status = parse_out_quotes(data, exit_status);
+			exit_status = parsing_pipeline(data, env_lst);
+			//ft_lstiter_ms(data->tokens, printnode);
 			if (exit_status == 0)
 				exit_status = make_processes(data, env_lst); // should system errors like "malloc fail" lead to whole program's termination...?
-		//	ft_lstiter_ms(data->tokens, printnode);
 		}
 		ft_free_data(data, 0);
 	}
 	free_env_lst(env_lst);
 	ft_free_data(data, 0);
+	//rl_clear_history();
 	return (exit_status);
 }
