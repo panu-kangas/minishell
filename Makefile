@@ -6,7 +6,7 @@
 #    By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/05/08 15:25:40 by pkangas          ###   ########.fr        #
+#    Updated: 2024/05/10 15:54:24 by pkangas          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 CC = clang
 RM = rm -rf
-CFLAGS =  -g -Wall -Wextra -Werror # remove the -g flag eventually ??
+CFLAGS =  -g -Wall -Wextra -Werror -fsanitize=address # remove the -g flag eventually ??
 #FSFLAGS =-fsanitize=address
 LIBFT = libft/libft.a
 # Koulussa tää --> -I /Users/$(USER)/.brew/opt/readline/include ||| Panun kotona --> -I /usr/local/Cellar/readline/8.2.10/include

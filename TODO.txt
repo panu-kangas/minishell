@@ -3,6 +3,7 @@ NOT DONE:
 Timo:
 
 - Quote handling (remove quotes from commands, args and files, EXCEPT here_doc limiter)
+- Remove quotes from files (example: > "file 1" should create a file named file 1, so no quotes)
 - Handle $?
 - Env_var expansions with quotes: $PATH expands, "$PATH" expands, '$PATH' does not
 - Env_var expansions with redirect --> Read QUESTIONS-part below for more info
@@ -40,11 +41,13 @@ Panu:
 - HD: Move heredoc out of child processes!! Because SIGINT in a heredoc should stop the whole pipeline (example <<EOF cat | ls)
 - HD: Here_doc env_var expanding (Panu)
 - HD: implement also EOF vs "EOF"
-- HD: Minishell: <extra.c << EOF cat | grep helo --> When stopped with SIGINT, minishell produces an extra NL for some reason
-- HD: Travelling cursor, when termios is altered --> Is this fixed if i change read to readline...?
 - Non global env var --> if command has = and there are no args, process_non_global_env_var
 	--> Additionally: You can change global env var value without export!!!! So after export TEST=testi, you can just say TEST=festi, and it changes
-XX SHLVL --> do SHLVL++ in save_env_lst
+- Fix pwd: if folder has been removed, behaviour is different. Check bash (and notes in .c file)
+- export "PANU"=jee --> quotes get trimmed
+- Double check signal handling with a single built-in (so for things that happens inside the parent process)
+
+?? HD: Travelling cursor, when termios is altered --> FIXED, just needs testing when quot parsing is done 
 
 ?? Check SHLVL edge case values (int_min, int_max, negative)
 	--> if SHLVL is >= INT_MAX but <= LONG_MAX, new shell has SHLVL value 0 (no error)
@@ -58,13 +61,14 @@ XX SHLVL --> do SHLVL++ in save_env_lst
 
 	--> One option is to implement the error messsage and some generic value (0 or 1) if you have a weird value
 
+
+
+XX HD: Minishell: <extra.c << EOF cat | grep helo --> When stopped with SIGINT, minishell produces an extra NL for some reason
+XX SHLVL --> do SHLVL++ in save_env_lst
 XX Unset doesn't work on _=/usr/bin/env 
 XX declare -x _="./a.out" --> this can be seen with env, but not with export
 XX Exit-built_in arguments: check int_max, int_min , negative etc
 
-- export "PANU"=jee --> quotes get trimmed
-
-- Double check signal handling with a single built-in (so for things that happens inside the parent process)
 
 
 QUESTIONS:

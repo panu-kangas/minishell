@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expansion.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:20:40 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/08 12:43:14 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/10 15:15:48 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ int ft_char_counter(char *str, char c)
 	int i;
 	int ctr;
 
+	if (str == NULL)
+		return (0);
 	ctr = 0;
 	i = -1;
 	while(str[++i] != 0)
@@ -150,7 +152,7 @@ int expand_args(t_token *current, int exit_status, t_env_lst *env_lst)
 	char *newstr;
 
 	i = 0;
-	while (current->args[i] != 0)
+	while (current->args != NULL && current->args[i] != NULL)
 	{
 		newstr = expand_str(current->args[i], env_lst);
 		if (!newstr)

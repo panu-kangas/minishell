@@ -47,7 +47,7 @@ int	fork_heredoc(char *limiter, t_data *data, t_env_lst *env_lst, int **fd_pipes
 		signal(SIGINT, SIG_DFL); // SIGACTION ??
 		signal(SIGQUIT, SIG_IGN); // SIGACTION ??
 		alter_termios(0);
-		exit_code = ft_heredoc(limiter, hd_pipe_fd, data, env_lst);
+		exit_code = ft_heredoc(limiter, hd_pipe_fd);
 		free_env_lst(env_lst);
 		ft_free_data(data, 0);
 		exit(exit_code);
@@ -62,10 +62,7 @@ int	fork_heredoc(char *limiter, t_data *data, t_env_lst *env_lst, int **fd_pipes
 	else if (WIFSIGNALED(stat_loc) == 1)
 	{
 		if (WTERMSIG(stat_loc) == 2)
-		{
-			ft_putendl_fd("", 1);
 			exit_code = 1;
-		}
 	}
 	
 	if (exit_code == 0)

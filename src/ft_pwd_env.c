@@ -5,6 +5,8 @@ int	ft_pwd(void)
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
+	// if someone removes folder when we're in it, getcwd will return NULL, so we get a faulty message.
+	// Bash remembers the folder even if it has been removed
 	if (pwd == NULL)
 		return (write_sys_error("malloc failed"));
 	ft_printf("%s\n", pwd);
