@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/08 15:24:53 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/16 14:43:06 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	parse_com_and_args(t_token *new, char **tokenarr, int i)
 	j = i;
 	while (tokenarr[i] != NULL)
 	{
-		if (check_redir(tokenarr[i]) >= 0)//tsekkaa taa
+		if (check_redir(tokenarr[i]) >= 0)
 			break ;
 		i++;
 	}
@@ -35,10 +35,7 @@ int	parse_com_and_args(t_token *new, char **tokenarr, int i)
 	{
 		new->args = make_args_arr(tokenarr, j, i);
 		if (!new->args)
-		{
-
-			return (-1);
-		}
+			return (1);
 	}
 	else
 		new->args[0] = NULL;
@@ -112,7 +109,7 @@ static int	parse_single_token(char *str, t_data *data, int exit_status)
 	return (0);
 }
 
-static int	parse_input(t_data *data, int exit_status)
+static int	lexer_input(t_data *data, int exit_status)
 {
 	char	**inputarr;
 	char	*temp;
@@ -150,9 +147,8 @@ int parsing_pipeline(t_data *data, t_env_lst *env_lst)
 	int exit_status;
 
 	exit_status = 0;
-	exit_status = parse_input(data, 0);  //make again error handling in here and check leaks
-	exit_status = parse_out_quotes(data, exit_status);
-	exit_status = parse_expansions(data, env_lst); //check leaks
+	exit_status = lexer_input(data, 0);  //make again error handling in here and check leaks
+	exit_status = parse_expansions(data, env_lst); //this removes now also quotes
 	return(exit_status);
 }
 
@@ -194,7 +190,7 @@ int	parsing(void)
 		ft_free_data(data, 0);
 	}
 	free_env_lst(env_lst);
-	ft_free_data(data, 0);
+	//ft_free_data(data, 0);
 	//rl_clear_history();
 	return (exit_status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/10 15:57:39 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/16 09:54:19 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ typedef struct	s_file
 	struct s_file *next;
 }	t_file;
 
-
 typedef struct	s_token
 {
 	char	*com;
@@ -62,6 +61,7 @@ typedef struct	s_token
 	struct	s_token *next;
 } t_token;
 
+
 typedef struct	s_data
 {
 	char	*input;
@@ -70,7 +70,12 @@ typedef struct	s_data
 	int		prev_exit_status;
 } t_data;
 
-
+typedef struct s_parse
+{
+	char			*str;
+	int				isexpand;
+	struct s_parse	*next;
+}				t_parse;
 
 typedef struct s_env_lst
 {
@@ -80,7 +85,6 @@ typedef struct s_env_lst
 	struct s_env_lst	*next;
 }				t_env_lst;
 
-
 //free
 void	ft_free_double(char **arr);
 int		ft_free_data(t_data *data, int code);
@@ -89,6 +93,7 @@ int		ft_free_data(t_data *data, int code);
 void	init_data(t_data *data, int exit_status);
 void	init_file(t_file *new);
 void	init_token(t_token *new);
+void	init_parse(t_parse *new);
 
 //parsing
 int		parsing(void);
@@ -96,9 +101,22 @@ int 	parse_expansions(t_data *data, t_env_lst *env_lst);
 char	**ft_split_minishell(const char *so);
 void	split_redir_and_pipes(t_data *data);
 char	**ft_pipex_split(char const *s, char c);
+char	**ft_split_expand(const char *s, char c, int firstis);
 int		handle_no_file(char **tokenarr, int i, int exit_status);
 int		parse_out_quotes(t_data *data, int exit_status);
+int		ft_char_counter(char *str, char c);
 
+//parse split quotes to nodes
+int		handle_substrings(char *str, t_parse **head);
+
+//expand node utils
+int		ft_lstiter_and_expand(t_parse *lst, t_env_lst *env_lst);
+char	*ft_lstiter_and_make_new_str(t_parse *lst);
+t_parse	*new_node(char *str, int isexpand);
+void	ft_lstadd_back_parse(t_parse **lst, t_parse *new);
+
+//expand
+char	*expand_str(char *str, t_env_lst *env_lst);
 //parse_utils
 char	**make_args_arr(char **tokenarr, int j, int i);
 int		add_files_to_token(t_token *new, char **tokenarr);
@@ -114,6 +132,8 @@ void	ft_lstiter2_ms(t_file *files, void (*f)(t_file *));
 void	ft_lstiter_ms(t_token *tokens, void (*f)(t_token *));
 void	printnode(t_token *token);
 void	printfile(t_file *node);
+void ft_lstiter_parse(t_parse *lst, void (*f)(t_parse *));
+void printparse(t_parse *node);
 
 
 

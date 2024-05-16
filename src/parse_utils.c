@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 09:39:53 by tsaari            #+#    #+#             */
-/*   Updated: 2024/04/29 18:04:17 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/15 11:21:54 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	check_redir(char *str)
 		return (-1);
 }
 
-int	handle_no_file(char **tokenarr, int i, int exit_status) // Sorry Timo for messing up with your function!! I'll fix this later! =D
+int	handle_no_file(char **tokenarr, int i, int exit_status) // Sorry Timo for messing up with your function!! I'll fix this later! =D That is totally OK :D Timo
 {
 	if (check_redir(tokenarr[i]) == -2)
 	{
@@ -115,6 +115,7 @@ int	handle_no_file(char **tokenarr, int i, int exit_status) // Sorry Timo for me
 	// Is exit status always 258? We need to investigate!
 	return (exit_status);
 }
+
 
 static t_file	*add_file_single(t_file *temp, char **tokenarr, int i)
 {

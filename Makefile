@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+         #
+#    By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/05/10 15:54:24 by pkangas          ###   ########.fr        #
+#    Updated: 2024/05/16 15:11:48 by tsaari           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-CC = clang
+CC = cc
 RM = rm -rf
 CFLAGS =  -g -Wall -Wextra -Werror -fsanitize=address # remove the -g flag eventually ??
 #FSFLAGS =-fsanitize=address
@@ -21,13 +21,15 @@ LIBFT = libft/libft.a
 HEADERS = -I includes -I /Users/$(USER)/.brew/opt/readline/include
 
 SRC_DIR = src/
-SRCS = main.c parsing.c parse_utils.c parse_quotes.c node_utils.c ft_pipex_split.c free_and_error.c init.c \
+SRCS = main.c parsing.c parse_utils.c parse_node_utils.c ft_pipex_split.c free_and_error.c parse_init.c \
+	parse_expansion.c parse_split_quotes.c parse_expand.c parse_exp_node_utils.c \
 	ft_cd.c ft_echo.c ft_empty_export.c ft_pwd_env.c ft_unset_export.c \
 	env_lst_utils.c expand_env_var.c get_env_node.c make_env_node.c save_env_list.c \
 	execute_command.c get_paths.c make_env_var_array.c \
 	ft_heredoc.c ft_redirect.c ft_exit.c \
 	write_error.c check_for_built_in.c execute_built_in.c handle_command.c \
-	pids_and_pipes.c make_processes.c ft_open_functions.c signal_handling.c parse_expansion.c
+	pids_and_pipes.c make_processes.c ft_open_functions.c signal_handling.c extras.c \
+
 OBJS	= $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
 OBJ_DIR = obj

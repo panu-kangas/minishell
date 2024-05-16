@@ -3,195 +3,142 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expansion.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:20:40 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/10 15:15:48 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/16 14:45:32 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char *check_env_list(char *str, t_env_lst *env_lst)
+int ft_lst_iter_remove_quotes(t_parse *lst)
 {
-	if (ft_strncmp(env_lst->name, str, ft_strlen(str) + 1) == 0)
-			return (env_lst->value);
-	return (NULL);
-}
-
-
-int ft_char_counter(char *str, char c)
-{
-	int i;
-	int ctr;
-
-	if (str == NULL)
-		return (0);
-	ctr = 0;
-	i = -1;
-	while(str[++i] != 0)
-		if (str[i] == c)
-			ctr++;
-	return (ctr);
-}
-
-char *make_str(char **arr, char *str, char *temp, int j)
-{
-	int k;
-	int i;
-
-	k = 0;
-	while(k < j)
+	char *stret;
+	while (lst)
 	{
-		i = 0;
-		while(str[i] != '$')
-			i++;
-		str[i] = 0;
-		temp = ft_strjoin(temp, str);
-		if(!temp)
-			return(NULL);
-		temp = ft_strjoin(temp, arr[k]);
-		if(!temp)
-			return(NULL);
-		while(ft_isalnum(str[i]) == 1)
-			i++;
-		str += i;
-		k++;
+		if (lst->str[0] == '\'')
+		{
+			stret = ft_strtrim(lst->str, "'");
+			if (!stret)
+				return (1);
+			free(lst->str);
+			lst->str = stret;
+		}
+		else if (lst->str[0] == '"')
+		{
+			stret = ft_strtrim(lst->str, "\"");
+			if (!stret)
+				return (1);
+			free(lst->str);
+			lst->str = stret;
+		}
+		lst = lst->next;
 	}
-	temp = ft_strjoin(temp, str);
+	return (0);
+}
+
+
+static int expand_com(t_token *current, t_env_lst *env_lst, int exit_status)
+{
+	t_parse *head;
+	char *temp;
+
+	head = NULL;
+	exit_status = handle_substrings(current->com, &head);
+	if (exit_status != 0)
+		return (exit_status);
+	ft_lstiter_and_expand(head, env_lst);
+	ft_lst_iter_remove_quotes(head);
+	temp = ft_lstiter_and_make_new_str(head);
 	if (!temp)
-		return (NULL);
-	return (temp);
+		return (-1);
+	free(current->com);
+	current->com = temp;
+	free(head);
+
+	return (0);
 }
 
-char *make_expanded_str(char **arr, char *str)
+static int expand_args(t_token *current, t_env_lst *env_lst, int exit_status)
 {
-	int j;
-	int k;
-	char *temp;
-
-	j = 0;
-	k = 0;
-	j = ft_char_counter(str, '$');
-	temp = ft_strdup("");
-	if(!temp)
-			return(NULL);
-	temp = make_str(arr, str, temp, j);
-	if (!temp)
-		return (NULL);
-	return (temp);
-}
-
-char *expand(char *str, char **expandable, t_env_lst *env_lst)
-{
-	int i;
-	char *temp;
-
-	i = 1;
-	while (ft_isalnum(str[i]) == 1)
-		i++;
-	*expandable = ft_substr(str, 1, i - 1);
-	if (*expandable == NULL)
-		return (NULL);
-	if (expand_env_var(env_lst, *expandable) != NULL)
-	{
-		temp = *expandable;
-		*expandable = ft_strdup (expand_env_var(env_lst, *expandable));
-		free (temp);
-	}
-	else
-	{
-		temp = *expandable;
-		*expandable = ft_strdup("");
-		free (temp);
-	}
-	if (*expandable == NULL)
-		return (NULL);
-	return (*expandable);
-}
-
-char *expand_str(char *str, t_env_lst *env_lst)
-{
-	char *expandable;
+	(void)env_lst;
+	t_parse *head;
 	char *temp;
 	int i;
-	int j;
-	char **arr;
 
 	i = 0;
-	arr = (char **)malloc(sizeof(char *) * i + 1);
-	if (!arr)
-		return (NULL);
-	j = 0;
-	expandable = NULL;
-	while(str[i] != 0)
+	while (current->args[i] != 0)
 	{
-		if (str[i] == '$')
-		{
-			expandable = expand(str + i, &expandable, env_lst);
-			if (!expandable)
-			{
-				ft_free_double(arr);
-				return(NULL);
-			}
-			arr[j] = expandable;
-			j++;
-		}
-		i++;
-	}
-	arr[j] = 0;
-	temp = make_expanded_str(arr, str);
-	if (temp == NULL)
-		return (NULL);
-	return (temp);
-}
-
-int expand_args(t_token *current, int exit_status, t_env_lst *env_lst)
-{
-	int i;
-	char *newstr;
-
-	i = 0;
-	while (current->args != NULL && current->args[i] != NULL)
-	{
-		newstr = expand_str(current->args[i], env_lst);
-		if (!newstr)
-			return (write_sys_error("malloc failed")); // if malloc fails do I need to handle rest of args
-		else
-		{
-				if (current->args[i])
-					free(current->args[i]);
-				current->args[i] = newstr;
-		}
+		head = NULL;
+		exit_status = handle_substrings(current->args[i], &head);
+		if (exit_status != 0)
+			return (-1);
+		ft_lstiter_and_expand(head, env_lst);
+		ft_lst_iter_remove_quotes(head);
+		temp = ft_lstiter_and_make_new_str(head);
+		if (!temp)
+			return (-1);
+		free(current->args[i]);
+		current->args[i] = temp;
 		i++;
 	}
 	return (exit_status);
+
 }
 
+static int expand_files(t_token *current, t_env_lst *env_lst, int exit_status)
+{
+	(void)env_lst;
+	t_file	*tempfile;
+	t_parse *head;
+	char *temp;
+
+	tempfile = current->files;
+	while(tempfile != NULL)
+	{
+		head = NULL;
+
+		exit_status = handle_substrings(current->files->filename, &head);
+		if (exit_status != 0)
+			return (-1);
+		ft_lstiter_and_expand(head, env_lst);
+		ft_lst_iter_remove_quotes(head);
+		temp = ft_lstiter_and_make_new_str(head);
+		if (!temp)
+			return(-1);
+		free(tempfile->filename);
+		tempfile->filename = temp;
+		tempfile = tempfile->next;
+	}
+	return (0);
+}
+
+
+static int expand_token(t_token *current, t_env_lst *env_lst, int exit_status)
+{
+	if(expand_com(current, env_lst, exit_status) != 0)
+		return (-1);
+	if(expand_args(current, env_lst, exit_status) != 0)
+		return (-1);
+	if(expand_files(current, env_lst, exit_status) != 0)
+		return (-1);
+	return (0);
+}
 
 int parse_expansions(t_data *data, t_env_lst *env_lst)
 {
 	t_token	*temp_token;
-	char	*newstr;
-	int exit_status;
+	(void)env_lst;
 
+	int exit_status;
 	exit_status = 0;
 	temp_token = data->tokens;
 	while (temp_token != NULL)
 	{
-		if (ft_char_counter(temp_token->com, '$') > 0)
-		{
-			newstr = expand_str(temp_token->com, env_lst);
-			if (!newstr)
-				return (write_sys_error("malloc failed"));
-			else
-			{
-				if (temp_token->com)
-					free(temp_token->com);
-				temp_token->com = newstr;
-			}
-		}
-		exit_status = expand_args(temp_token, exit_status, env_lst); //what to do if there is a malloc fail, do we handle yhe rest
+		exit_status = expand_token(temp_token, env_lst, exit_status);
+		if (exit_status != 0)
+			return (write_sys_error("malloc error"));
 		temp_token = temp_token->next;
 	}
 	return (exit_status);
