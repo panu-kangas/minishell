@@ -118,7 +118,7 @@ static int expand_args(t_token *current, t_env_lst *env_lst, t_data *data)
 	int i;
 
 	i = 0;
-	while (current->args[i] != 0)
+	while (current->args != NULL && current->args[i] != 0)
 	{
 		head = NULL;
 		if (handle_substrings(current->args[i], &head) != 0)

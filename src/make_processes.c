@@ -72,7 +72,9 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 	int			exit_status;
 	int			std_fd[2];
 
-	if (data->tokens->args != NULL && ft_strncmp(data->tokens->args[0], "$?", 3) == 0) // ONLY FOR TESTING !!! REMOVE THIS!!!
+	exit_status = 0;
+
+	if (data->tokens->args != NULL && ft_strncmp(data->tokens->args[0], "stat", 5) == 0) // ONLY FOR TESTING !!! REMOVE THIS!!!
 	{
 		ft_printf("%d\n", data->prev_exit_status);
 		return (0);
@@ -81,7 +83,16 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 	signal(SIGINT, SIG_DFL); // USE SIGACTION && ask about this from someone: what should signal setting be in built-in (parent process)?
 	signal(SIGQUIT, SIG_DFL); // USE SIGACTION && ask about this from someone: what should signal setting be in built-in (parent process)?
 
+	// check for '=' in command if only one token (= process) is found. 
+	if (data->tokens->com != NULL && ft_strchr(data->tokens->com, '=') != NULL \
+	&& data->tokens->next ==  NULL)
+	{
+		exit_status = handle_command(data, env_lst, 0);
+		if (exit_status != 2)
+			return (exit_status);
+	}
 
+	// check for lone built-in
 	if (data->tokens->next == NULL && \
 	check_for_built_in(data->tokens->com) == 1)
 	{

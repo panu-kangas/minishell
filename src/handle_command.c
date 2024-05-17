@@ -59,6 +59,41 @@ char	**get_execve_args(char *cmd, char **args)
 	return (new_args);
 }
 
+int	change_command(t_token *cur_token)
+{
+	int	i;
+
+	free(cur_token->com);
+	cur_token->com = cur_token->args[0];
+	if (cur_token->args[1] == NULL)
+	{
+		cur_token->args[0] = NULL;
+		return (2);
+	}
+	i = 0;
+	while (cur_token->args[i + 1] != NULL)
+	{
+		cur_token->args[i] = cur_token->args[i + 1];
+		i++;
+	}
+	cur_token->args[i] = NULL;
+	return (2);
+}
+
+int	check_for_env_var(t_token *cur_token, t_env_lst *env_lst) // IN PROCESS
+{
+	int	exit_status;
+
+	exit_status = 0;
+	if (cur_token->com[0] == '=')
+		return (2);
+	else if (cur_token->args != NULL && *cur_token->args != NULL)
+		return (change_command(cur_token));
+	else
+		exit_status = process_non_global_env_node(env_lst, cur_token->com);
+	return (exit_status);
+}
+
 int	handle_command(t_data *data, t_env_lst *env_lst, int index)
 {
 	int		exit_status;
@@ -66,6 +101,13 @@ int	handle_command(t_data *data, t_env_lst *env_lst, int index)
 	t_token	*cur_token;
 
 	cur_token = get_cur_token(data, index);
+
+	if (cur_token->com != NULL && ft_strchr(cur_token->com, '=') != NULL) // IN PROCESS
+	{
+		exit_status = check_for_env_var(cur_token, env_lst);
+		if (exit_status != 2)
+			return (exit_status);
+	}
 
 	if (check_for_built_in(cur_token->com) == 1)
 		exit_status = execute_built_in(env_lst, data, cur_token->com, cur_token->args);
