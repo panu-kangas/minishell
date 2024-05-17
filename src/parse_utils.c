@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 09:39:53 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/15 11:21:54 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/17 10:34:54 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int	handle_no_file(char **tokenarr, int i, int exit_status) // Sorry Timo for me
 			exit_status = 258;
 		}
 	}
-	// Is exit status always 258? We need to investigate!
+	// Is exit status always 258? We need to investigate! >> I think it is.
 	return (exit_status);
 }
 

@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+
+
 int	env_lstsize(t_env_lst *lst)
 {
 	int	size;
@@ -72,7 +74,7 @@ int	ft_empty_export(t_env_lst *env_lst)
 	char		**alph_order;
 	int			i;
 	t_env_lst	*temp;
-	
+
 	alph_order = NULL;
 	alph_order = get_env_var_alph_order(env_lst, alph_order);
 	if (alph_order == NULL)
