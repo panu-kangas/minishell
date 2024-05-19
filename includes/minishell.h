@@ -21,7 +21,7 @@
 # include <signal.h>
 # include <termios.h>
 # include <sys/stat.h>
-# include <errno.h>
+# include <errno.h> // is this needed ?
 # include <limits.h> // can we use this ?
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -68,6 +68,7 @@ typedef struct	s_data
 	t_token	*tokens;
 	int		proc_count;
 	int		prev_exit_status;
+	char	current_directory[256];
 } t_data;
 
 typedef struct s_parse
@@ -90,7 +91,7 @@ void	ft_free_double(char **arr);
 int		ft_free_data(t_data *data, int code);
 
 //init
-void	init_data(t_data *data, int exit_status);
+void	init_data(t_data *data, int exit_status, char *parsing_cur_dir);
 void	init_file(t_file *new);
 void	init_token(t_token *new);
 void	init_parse(t_parse *new);
@@ -144,9 +145,9 @@ t_env_lst	*save_env_list(char **environ);
 int			ft_unset(t_env_lst *env_lst, char *var_name);
 int			ft_export(t_env_lst *env_lst, char *new_env_var);
 int			ft_empty_export(t_env_lst *env_lst);
-int			ft_pwd(void);
+int			ft_pwd(t_data *data);
 void		ft_env(t_env_lst *env_lst);
-int			ft_cd(t_env_lst *env_lst, char *path);
+int			ft_cd(t_data *data, t_env_lst *env_lst, char *path);
 void		ft_echo(int flag, char **args);
 int			ft_exit(t_env_lst *env_lst, t_data *data, char **args);
 
@@ -203,5 +204,8 @@ t_token		*get_cur_token(t_data *data, int index);
 void		process_signal_main(void);
 void		process_signal_commands(void);
 void		alter_termios(int flag);
+
+void		copy_cur_dir_to_data(t_data *data, char *cur_dir);
+
 
 #endif

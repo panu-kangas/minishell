@@ -57,11 +57,11 @@ int	execute_built_in(t_env_lst *env_lst, t_data *data, char *cmd, char **args)
 	else if (ft_strncmp(cmd, "export", ft_strlen(cmd) + 1) == 0)
 		exit_status = handle_export(env_lst, args);
 	else if (ft_strncmp(cmd, "cd", ft_strlen(cmd) + 1) == 0)
-		exit_status = ft_cd(env_lst, args[0]);
+		exit_status = ft_cd(data, env_lst, args[0]);
 	else if (ft_strncmp(cmd, "unset", ft_strlen(cmd) + 1) == 0)
 		exit_status = handle_unset(env_lst, args);
 	else if (is_pwd(cmd) == 1)
-		exit_status = ft_pwd();
+		exit_status = ft_pwd(data);
 	else if (is_env(cmd) == 1)
 		ft_env(env_lst); // Do we handle env arguments...? With an error? Probably not... example --> env: hehe: No such file or directory
 	else if (ft_strncmp(cmd, "exit", ft_strlen(cmd) + 1) == 0)

@@ -64,7 +64,17 @@ int	change_dir_to_home(t_env_lst *home)
 	return (flag);
 }
 
-int	ft_cd(t_env_lst *env_lst, char *path)
+void	copy_cur_dir_to_data(t_data *data, char *cur_dir)
+{
+	int	i;
+
+	i = -1;
+	while (cur_dir[++i] != '\0')
+		data->current_directory[i] = cur_dir[i];
+	data->current_directory[i] = '\0';
+}
+
+int	ft_cd(t_data *data, t_env_lst *env_lst, char *path)
 {
 	t_env_lst	*home;
 	int			flag;
@@ -72,6 +82,8 @@ int	ft_cd(t_env_lst *env_lst, char *path)
 
 	if (path != NULL && path[0] == '\0')
 		return (0);
+	if (ft_strlen(path) >= 256)
+		return (write_error("cd", path, "File name too long"));
 	if (check_valid_path(path) == ERR_STAT)
 		return (ERR_STAT);
 	home = check_if_var_exist(env_lst, "HOME");
@@ -87,6 +99,7 @@ int	ft_cd(t_env_lst *env_lst, char *path)
 	cur_dir = getcwd(NULL, 0);
 	if (cur_dir == NULL)
 		return (write_sys_error("malloc failed"));
+	copy_cur_dir_to_data(data, cur_dir);
 	if (update_pwd_env_var(env_lst, cur_dir) == 1)
 	{
 		free(cur_dir);

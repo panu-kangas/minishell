@@ -1,14 +1,18 @@
 #include "minishell.h"
 
-int	ft_pwd(void)
+int	ft_pwd(t_data *data)
 {
 	char	*pwd;
 
+	errno = 0;
 	pwd = getcwd(NULL, 0);
-	// if someone removes folder when we're in it, getcwd will return NULL, so we get a faulty message.
-	// Bash remembers the folder even if it has been removed
-	if (pwd == NULL)
+	if (pwd == NULL && errno == ENOMEM)
 		return (write_sys_error("malloc failed"));
+	else if (pwd == NULL && errno == ENOENT)
+	{
+		ft_printf("%s\n", data->current_directory);
+		return (0);
+	}
 	ft_printf("%s\n", pwd);
 	free(pwd);
 	return (0);

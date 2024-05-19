@@ -152,14 +152,26 @@ int parsing_pipeline(t_data *data, t_env_lst *env_lst)
 	return(exit_status);
 }
 
+void	copy_cur_dir_from_data(t_data *data, char *parsing_cur_dir)
+{
+	int	i;
+
+	i = -1;
+	while (data->current_directory[++i] != '\0')
+		parsing_cur_dir[i] = data->current_directory[i];
+	parsing_cur_dir[i] = '\0';
+}
+
 int	parsing(void)
 {
 	t_data		*data;
 	t_env_lst 	*env_lst;
 	extern char **environ;
 	int			exit_status;
+	char		parsing_cur_dir[256];
 
 	exit_status = 0;
+	parsing_cur_dir[0] = '\0';
 	env_lst = save_env_list(environ);
 	if (env_lst == NULL)
 		write_sys_error("setting up env_var not successful (malloc failure)");
@@ -170,7 +182,7 @@ int	parsing(void)
 		data = (t_data *)malloc(sizeof (t_data));
 		if (!data)
 			return (write_sys_error("malloc failed"));
-		init_data(data, exit_status);
+		init_data(data, exit_status, parsing_cur_dir);
 		data->input = readline("minishell-1.1$: ");
 		alter_termios(1);
 		if (!data->input)
@@ -187,6 +199,7 @@ int	parsing(void)
 			if (exit_status == 0)
 				exit_status = make_processes(data, env_lst); // should system errors like "malloc fail" lead to whole program's termination...?
 		}
+		copy_cur_dir_from_data(data, parsing_cur_dir);
 		ft_free_data(data, 0);
 	}
 	free_env_lst(env_lst);
