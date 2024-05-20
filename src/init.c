@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:01:29 by tsaari            #+#    #+#             */
-/*   Updated: 2024/04/23 15:15:53 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/20 16:05:37 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 
 // IS THIS FILE USELESS ???
-
+/*
 
 void	init_data(t_data *data, int exit_status, char *parsing_cur_dir)
 {
@@ -42,3 +42,5 @@ void	init_token(t_token *new)
 	new->next = NULL;
 	new->filecount = 0;
 }
+
+*/

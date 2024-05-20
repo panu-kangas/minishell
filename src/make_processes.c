@@ -74,13 +74,23 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 	int			std_fd[2];
 
 	exit_status = 0;
+	std_fd[0] = dup(0); // error handling
+	std_fd[1] = dup(1); // error handling
 
-	signal(SIGINT, SIG_DFL); // signal handler for changing the global var
+	signal(SIGINT, &sig_handler_hd); // sigaction ??
 
 	exit_status = process_heredoc(data, env_lst, 0);
 
-	if (exit_status != 0) // check also the value of g_signal_marker
+	if (exit_status != 0)
+	{
+		if (g_signal_marker == 2)
+		{
+			if (dup2(std_fd[0], 0) < 0)
+				return (write_sys_error("dup2 failed"));
+			g_signal_marker = 0;
+		}
 		return (exit_status);
+	}
 
 	signal(SIGINT, SIG_DFL); // USE SIGACTION && ask about this from someone: what should signal setting be in built-in (parent process)?
 	signal(SIGQUIT, SIG_DFL); // USE SIGACTION && ask about this from someone: what should signal setting be in built-in (parent process)?
@@ -99,8 +109,6 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 	if (data->tokens->next == NULL && \
 	check_for_built_in(data->tokens->com) == 1)
 	{
-		std_fd[0] = dup(0); // error handling
-		std_fd[1] = dup(1); // error handling
 		exit_status = ft_redirect(data, NULL, 0);
 		if (exit_status == 0)
 			exit_status = handle_command(data, env_lst, 0);

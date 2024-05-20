@@ -1,21 +1,24 @@
 #include "minishell.h"
 
-int	write_hd(char *hd_str, char *limiter, int *hd_pipe_fd)
+int	write_hd(char *hd_str, char *read_line, char *limiter, int *hd_pipe_fd)
 {
 	int	fd;
 	int	str_len;
 	int	limit_len;
 
-	if (hd_str == NULL)
-		return (0);
 	if (pipe(hd_pipe_fd) < 0)
 		return (write_sys_error("pipe failed"));
 	fd = hd_pipe_fd[1];
+	if (hd_str == NULL)
+	{
+		write(fd, "\0", 1);
+		return (0);
+	}
 	str_len = ft_strlen(hd_str);
 	limit_len = ft_strlen(limiter);
-	if (limit_len == 0)
+	if (limit_len == 0 && read_line != NULL)
 		hd_str[str_len - 1] = '\0';
-	else if (limit_len != 0)
+	else if (limit_len != 0 && read_line != NULL)
 		hd_str[str_len - limit_len - 1] = '\0';
 	else if (str_len == 1 && limit_len == 0)
 		hd_str[0] = '\0';
@@ -107,8 +110,10 @@ int	ft_heredoc(t_env_lst *env_lst, char *limiter, int *hd_pipe_fd)
 		if (check_limiter(hd_str, limiter, line_len) == 1)
 			break ;
 	}
+	if (g_signal_marker == 2)
+		return (1);
 	expand_hd_content(env_lst, hd_str);  // NOT DONE
-	return (write_hd(hd_str, limiter, hd_pipe_fd));
+	return (write_hd(hd_str, read_line, limiter, hd_pipe_fd));
 }
 
 

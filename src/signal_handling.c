@@ -14,6 +14,16 @@ void	alter_termios(int flag)
 	tcsetattr(0, TCSANOW, &term);  // error handling ??
 }
 
+void	sig_handler_hd(int signum)
+{
+	if (signum == 2)
+	{
+		ft_putendl_fd("", 1);
+		close(STDIN_FILENO);
+		g_signal_marker = 2;
+	}
+}
+
 void	sig_handler_main(int signum)
 {
 	if (signum == 2)

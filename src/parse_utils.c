@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 09:39:53 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 15:43:06 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/20 16:13:25 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_file	*add_file(char *str, int is_append, int is_infile)
 
 int check_redir(char *str)
 {
-	size_t len = strlen(str);
+	size_t len = ft_strlen(str);
 
 	if (len >= 3 && (strncmp(str, ">>>", 3) == 0 || strncmp(str, "<<<", 3) == 0))
 		return (-2);

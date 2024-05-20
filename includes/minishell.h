@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 15:45:32 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/20 16:40:42 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,7 @@ t_token		*get_cur_token(t_data *data, int index);
 
 void		process_signal_main(void);
 void		process_signal_commands(void);
+void		sig_handler_hd(int signum);
 void		alter_termios(int flag);
 
 void		copy_cur_dir_to_data(t_data *data, char *cur_dir);
