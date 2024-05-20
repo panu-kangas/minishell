@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/16 09:54:19 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/20 12:22:17 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct	s_data
 	t_token	*tokens;
 	int		proc_count;
 	int		prev_exit_status;
+	int		special_case;
 	char	current_directory[256];
 } t_data;
 

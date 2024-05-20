@@ -6,7 +6,7 @@
 #    By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/05/16 15:11:48 by tsaari           ###   ########.fr        #
+#    Updated: 2024/05/20 12:28:54 by tsaari           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,10 +15,10 @@ NAME = minishell
 CC = cc
 RM = rm -rf
 CFLAGS =  -g -Wall -Wextra -Werror # remove the -g flag eventually ??
-#FSFLAGS =-fsanitize=address
+FSFLAGS =-fsanitize=address
 LIBFT = libft/libft.a
 # Koulussa tää --> -I /Users/$(USER)/.brew/opt/readline/include ||| Panun kotona --> -I /usr/local/Cellar/readline/8.2.10/include
-HEADERS = -I includes -I /usr/local/Cellar/readline/8.2.10/include
+HEADERS = -I includes -I /Users/$(USER)/.brew/opt/readline/include
 
 SRC_DIR = src/
 SRCS = main.c parsing.c parse_utils.c parse_node_utils.c ft_pipex_split.c free_and_error.c parse_init.c \
@@ -48,7 +48,7 @@ $(LIBFT):
 
 # Koulussa tää --> -L /Users/$(USER)/.brew/opt/readline/lib  |||  Panun kotona --> -L /usr/local/Cellar/readline/8.2.10/lib
 $(NAME):  $(OBJ_DIR) $(OBJS) $(LIBFT)
-	@$(CC) $(OBJS) $(CFLAGS) -lreadline -L /usr/local/Cellar/readline/8.2.10/lib $(LIBFT) $(FSFLAGS) -o $(NAME)
+	@$(CC) $(OBJS) $(CFLAGS) -lreadline -L /Users/$(USER)/.brew/opt/readline/lib $(LIBFT) $(FSFLAGS) -o $(NAME)
 	@echo "\033[1;32mMinishell compile success!\n\033[0m"
 
 clean:

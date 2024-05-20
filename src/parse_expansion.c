@@ -6,11 +6,38 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:20:40 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/17 10:22:02 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/20 12:22:49 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int handle_special_cases(t_parse *head, t_data *data)
+{
+	t_parse *temp;
+	int i;
+
+	temp = head;
+	while(temp != NULL)
+	{
+		i = 0;
+		while(temp->str[i] != 0)
+		{
+			if (temp->str[i] != ' ')
+			{
+				data->special_case = 1;
+			}
+			else
+			{
+				data->special_case = 0;
+				return (0);
+			}
+			i++;
+		}
+		temp = temp->next;
+	}
+	return (0);
+}
 
 char *expand_exit_str(char *str, t_data *data, int i)
 {
@@ -96,6 +123,8 @@ static int expand_com(t_token *current, t_env_lst *env_lst, t_data *data)
 	head = NULL;
 	if (handle_substrings(current->com, &head) != 0)
 		return (-1);
+	if (handle_special_cases(head, data) != 0)
+		return(-1);
 	if (expand_prev_exit_code(head, data) != 0)
 		return (-1);
 	if (ft_lstiter_and_expand(head, env_lst) != 0)
@@ -191,7 +220,7 @@ int parse_expansions(t_data *data, t_env_lst *env_lst)
 	{
 		exit_status = expand_token(temp_token, env_lst, data);
 		if (exit_status != 0)
-			return (write_sys_error("malloc error"));
+			return (-1);
 		temp_token = temp_token->next;
 	}
 	return (exit_status);
