@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 12:29:57 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/20 15:20:13 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	g_signal_marker;
+
 int parse_com_and_args(t_token *new, char **tokenarr, int i)
 {
 	int j;
@@ -216,11 +219,12 @@ int	parsing(void)
 
 	exit_status = 0;
 	parsing_cur_dir[0] = '\0';
+	g_signal_marker = 0;
 	env_lst = save_env_list(environ);
 	if (env_lst == NULL)
-		write_sys_error("setting up env_var not successful (malloc failure)");
+		write_sys_error("setting up env_var not successful (malloc failure)"); // maybe exit here ??
 	while (1)
-	{
+	{		
 		alter_termios(0);
 		process_signal_main();
 		data = (t_data *)malloc(sizeof (t_data));
@@ -228,6 +232,13 @@ int	parsing(void)
 			return (write_sys_error("malloc failed"));
 		init_data(data, exit_status, parsing_cur_dir);
 		data->input = readline("minishell-1.1$: ");
+		
+		if (g_signal_marker == 2)
+		{
+			data->prev_exit_status = 1;
+			g_signal_marker = 0;
+		}
+
 		alter_termios(1);
 		if (!data->input)
 		{
@@ -239,7 +250,7 @@ int	parsing(void)
 		{
 			add_history(data->input); // error handling ??
 			exit_status = parsing_pipeline(data, env_lst);
-			//ft_lstiter_ms(data->tokens, printnode);
+			// ft_lstiter_ms(data->tokens, printnode);
 			if (exit_status == 0 && data->special_case != 0)
 				exit_status = make_processes(data, env_lst); // should system errors like "malloc fail" lead to whole program's termination...?
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 12:22:17 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/20 14:34:50 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct	s_file
 	int		is_infile;
 	int		is_append;
 	int		no_filename;
+	int		hd_pipe[2];
 	struct s_file *next;
 }	t_file;
 
@@ -139,6 +140,11 @@ void printparse(t_parse *node);
 
 
 
+// GLOBAL VAR
+
+extern int	g_signal_marker;
+
+
 // PANU's FUNCTIONS
 
 t_env_lst	*save_env_list(char **environ);
@@ -152,8 +158,10 @@ int			ft_cd(t_data *data, t_env_lst *env_lst, char *path);
 void		ft_echo(int flag, char **args);
 int			ft_exit(t_env_lst *env_lst, t_data *data, char **args);
 
-int			ft_redirect(t_data *data, t_env_lst *env_lst, int **fd_pipes, int index);
-int			ft_heredoc(char *limiter, int *hd_pipe);
+int			ft_redirect(t_data *data, int **fd_pipes, int index);
+int			ft_heredoc(t_env_lst *env_lst, char *limiter, int *hd_pipe_fd);
+int			process_heredoc(t_data *data, t_env_lst *env_lst, int exit_status);
+void		close_hd_pipes(t_data *data);
 
 char		*get_var_name(char *environ_var);
 char		*get_var_value(char *environ_var);
@@ -194,7 +202,8 @@ int			is_env(char *cmd);
 int			make_processes(t_data *data, t_env_lst *env_lst);
 pid_t		*get_pids(int proc_count);
 int			**get_pipes(int pipe_cnt);
-void		close_all_pipes(int **fd_pipes, int pipe_cnt);
+void		close_all_pipes(t_data *data, int **fd_pipes, int pipe_cnt);
+void		close_and_init_fd(int *fd);
 
 int			open_infile(char *file);
 int			open_outfile(char *file);

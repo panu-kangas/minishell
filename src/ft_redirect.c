@@ -19,79 +19,13 @@ t_token	*get_cur_token(t_data *data, int index)
 	}
 }
 
-int	fork_heredoc(char *limiter, t_data *data, t_env_lst *env_lst, int **fd_pipes)
-{
-	pid_t	hd_pid;
-	int		exit_code;
-	int		hd_pipe_fd[2];
-	int		stat_loc;
-
-
-	signal(SIGINT, SIG_IGN); // SIGACTION ?? Is this good place for this ?
-	signal(SIGQUIT, SIG_IGN); // SIGACTION ?? Is this good place for this ?
-	
-	exit_code = 0;
-	if (pipe(hd_pipe_fd) == -1)
-		return (write_sys_error("pipe failed"));
-	hd_pid = fork();
-	if (hd_pid < 0)
-	{
-		close(hd_pipe_fd[0]);
-		close(hd_pipe_fd[1]);
-		write_sys_error("fork failed");
-	}
-	else if (hd_pid == 0)
-	{
-		close_all_pipes(fd_pipes, (data->proc_count - 1));
-		ft_free_int_doubleptr(fd_pipes);
-		signal(SIGINT, SIG_DFL); // SIGACTION ??
-		signal(SIGQUIT, SIG_IGN); // SIGACTION ??
-		alter_termios(0);
-		exit_code = ft_heredoc(limiter, hd_pipe_fd);
-		free_env_lst(env_lst);
-		ft_free_data(data, 0);
-		exit(exit_code);
-	}
-
-
-	close(hd_pipe_fd[1]);
-	waitpid(hd_pid, &stat_loc, 0); // IS ERROR HANDLING NEEDED ??
-
-	if (WIFEXITED(stat_loc) == 1)
-		exit_code = WEXITSTATUS(stat_loc);
-	else if (WIFSIGNALED(stat_loc) == 1)
-	{
-		if (WTERMSIG(stat_loc) == 2)
-			exit_code = 1;
-	}
-	
-	if (exit_code == 0)
-	{
-		if (dup2(hd_pipe_fd[0], 0) == -1)
-		{
-			close(hd_pipe_fd[0]);
-			return (write_sys_error("dup2 failed"));
-		}
-	}
-	close(hd_pipe_fd[0]);	
-
-	signal(SIGINT, SIG_DFL); // SIGACTION ?? Is this good place for this ?
-	signal(SIGQUIT, SIG_DFL); // SIGACTION ?? Is this good place for this ?
-
-	return (exit_code);
-}
-
-int	process_infile(t_token *cur_token, t_data *data, t_env_lst *env_lst, int **fd_pipes)
+int	process_infile(t_token *cur_token)
 {
 	t_file	*file;
 	int		exit_code;
-	int		old_stdin;
 
 	file = cur_token->files;
 	exit_code = 0;
-	old_stdin = dup(STDIN_FILENO);
-	if (old_stdin == -1)
-		return (write_sys_error("dup failed"));
 
 	while (file != NULL)
 	{
@@ -101,16 +35,14 @@ int	process_infile(t_token *cur_token, t_data *data, t_env_lst *env_lst, int **f
 				exit_code = open_infile(file->filename);
 			else if (file->is_append == 1)
 			{
-				if (dup2(old_stdin, 0) == -1)
+				if (dup2(file->hd_pipe[0], 0) == -1)
 					return (write_sys_error("dup2 failed"));
-				exit_code = fork_heredoc(file->filename, data, env_lst, fd_pipes);
 			}
 			if (exit_code != 0)
 				break ;
 		}
 		file = file->next;
 	}
-
 	return (exit_code);
 }
 
@@ -190,7 +122,7 @@ int	dup_pipe_in(int **fd_pipes, int index)
 	return (0);
 }
 
-int	ft_redirect(t_data *data, t_env_lst *env_lst, int **fd_pipes, int index)
+int	ft_redirect(t_data *data, int **fd_pipes, int index)
 {
 	int		exit_code;
 	int		ofile_count;
@@ -203,11 +135,11 @@ int	ft_redirect(t_data *data, t_env_lst *env_lst, int **fd_pipes, int index)
 	if (index != 0 && cur_token->files == NULL)
 		exit_code = dup_pipe_in(fd_pipes, index);
 	else
-		exit_code = process_infile(cur_token, data, env_lst, fd_pipes);
+		exit_code = process_infile(cur_token);
 
 	if (exit_code != 0)
 	{
-		close_all_pipes(fd_pipes, (data->proc_count - 1));
+		close_all_pipes(data, fd_pipes, (data->proc_count - 1));
 		ft_free_int_doubleptr(fd_pipes);
 		return (exit_code);
 	}
@@ -234,7 +166,7 @@ int	ft_redirect(t_data *data, t_env_lst *env_lst, int **fd_pipes, int index)
 			exit_code = open_outfile_append(file->filename);
 	}
 
-	close_all_pipes(fd_pipes, (data->proc_count - 1));
+	close_all_pipes(data, fd_pipes, (data->proc_count - 1));
 	ft_free_int_doubleptr(fd_pipes);
 	return (exit_code);
 }

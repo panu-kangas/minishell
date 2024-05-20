@@ -46,10 +46,7 @@ Panu:
 - HD: Move heredoc out of child processes!! Because SIGINT in a heredoc should stop the whole pipeline (example <<EOF cat | ls)
 - HD: Here_doc env_var expanding (Panu)
 - HD: implement also EOF vs "EOF"
-- Fix pwd: if folder has been removed, behaviour is different. Check bash (and notes in .c file)
 - Double check signal handling with a single built-in (so for things that happens inside the parent process)
-
-?? HD: Travelling cursor, when termios is altered --> FIXED, just needs testing when quot parsing is done 
 
 ?? SHLVL with characters as value
 ?? Check SHLVL edge case values (int_min, int_max, negative)
@@ -67,12 +64,14 @@ Panu:
 
 
 XX HD: Minishell: <extra.c << EOF cat | grep helo --> When stopped with SIGINT, minishell produces an extra NL for some reason
+XX HD: Travelling cursor, when termios is altered --> FIXED, just needs testing when quot parsing is done 
 XX SHLVL --> do SHLVL++ in save_env_lst
 XX Unset doesn't work on _=/usr/bin/env 
 XX declare -x _="./a.out" --> this can be seen with env, but not with export
 XX Exit-built_in arguments: check int_max, int_min , negative etc
 XX Non global env var --> if command has = and there are no args, process_non_global_env_var
 XX Also: You can change global env var value without export!!!! So after export TEST=testi, you can just say TEST=festi, and it changes
+XX Fix pwd: if folder has been removed, behaviour is different. Check bash (and notes in .c file)
 
 
 

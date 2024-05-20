@@ -7,7 +7,7 @@ void	close_and_init_fd(int *fd)
 	*fd = -2;
 }
 
-void	close_all_pipes(int **fd_pipes, int pipe_cnt)
+void	close_all_pipes(t_data *data, int **fd_pipes, int pipe_cnt)
 {
 	int	k;
 
@@ -21,6 +21,7 @@ void	close_all_pipes(int **fd_pipes, int pipe_cnt)
 			k++;
 		}
 	}
+	close_hd_pipes(data);
 }
 
 int	free_close_wait(pid_t *pids, int **fd_pipes, t_data *data)
@@ -31,7 +32,7 @@ int	free_close_wait(pid_t *pids, int **fd_pipes, t_data *data)
 
 	i = 0;
 	exit_status = 0;
-	close_all_pipes(fd_pipes, (data->proc_count - 1));
+	close_all_pipes(data, fd_pipes, (data->proc_count - 1));
 	while (i < data->proc_count)
 		waitpid(pids[i++], &stat_loc, 0);  // status code needed here! Change the waitpid.
 	free(pids);
@@ -56,7 +57,7 @@ int	free_close_wait(pid_t *pids, int **fd_pipes, t_data *data)
 
 int	fork_exit(int **fd_pipes, int index, pid_t *pids, t_data *data)
 {
-	close_all_pipes(fd_pipes, (data->proc_count - 1));
+	close_all_pipes(data, fd_pipes, (data->proc_count - 1));
 	while (--index != -1)
 		waitpid(pids[index], NULL, 0); // DO WE NEED ERROR HANDLING ?? A basic check for -1
 	free(pids);
@@ -74,14 +75,16 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 
 	exit_status = 0;
 
-	if (data->tokens->args != NULL && ft_strncmp(data->tokens->args[0], "stat", 5) == 0) // ONLY FOR TESTING !!! REMOVE THIS!!!
-	{
-		ft_printf("%d\n", data->prev_exit_status);
-		return (0);
-	}
+	signal(SIGINT, SIG_DFL); // signal handler for changing the global var
+
+	exit_status = process_heredoc(data, env_lst, 0);
+
+	if (exit_status != 0) // check also the value of g_signal_marker
+		return (exit_status);
 
 	signal(SIGINT, SIG_DFL); // USE SIGACTION && ask about this from someone: what should signal setting be in built-in (parent process)?
 	signal(SIGQUIT, SIG_DFL); // USE SIGACTION && ask about this from someone: what should signal setting be in built-in (parent process)?
+
 
 	// check for '=' in command if only one token (= process) is found. 
 	if (data->tokens->com != NULL && ft_strchr(data->tokens->com, '=') != NULL \
@@ -98,7 +101,7 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 	{
 		std_fd[0] = dup(0); // error handling
 		std_fd[1] = dup(1); // error handling
-		exit_status = ft_redirect(data, env_lst, NULL, 0);
+		exit_status = ft_redirect(data, NULL, 0);
 		if (exit_status == 0)
 			exit_status = handle_command(data, env_lst, 0);
 		dup2(std_fd[0], 0); // error handling
@@ -120,11 +123,6 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 	signal(SIGINT, SIG_IGN); // Ignore these in parent, so they can be set in child && USE SIGACTION
 	signal(SIGQUIT, SIG_IGN); // Ignore these in parent, so they can be set in child && USE SIGACTION0
 
-	/*
-	HEREDOC NEEDS TO BE HERE
-	and all the info needs to be written in a pipe (stored in the data-struct ??) that is passed to child processes.
-	*/
-
 	index = 0;
 	while (index < data->proc_count)
 	{
@@ -136,7 +134,7 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 			signal(SIGINT, SIG_DFL); // Ignore these in parent, so they can be set in child && USE SIGACTION
 			signal(SIGQUIT, SIG_DFL); // Ignore these in parent, so they can be set in child && USE SIGACTION
 			free(pids);
-			exit_status = ft_redirect(data, env_lst, fd_pipes, index);
+			exit_status = ft_redirect(data, fd_pipes, index);
 			if (exit_status == 0)
 				exit_status = handle_command(data, env_lst, index);
 			free_env_lst(env_lst);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:01:29 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 12:23:15 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/20 14:05:16 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	init_file(t_file *new)
 	new->is_append = 0;
 	new->is_infile = 0;
 	new->no_filename = 0;
+	new->hd_pipe[0] = -2;
+	new->hd_pipe[1] = -2;
 	new->next = NULL;
 }
 

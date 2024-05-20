@@ -22,6 +22,7 @@ void	sig_handler_main(int signum)
 		rl_on_new_line(); // do we have to check for return value ??
 		rl_replace_line("", 0); // do we have to check for return value ??
 		rl_redisplay(); // do we have to check for return value ??
+		g_signal_marker = 2;
 	}
 }
 

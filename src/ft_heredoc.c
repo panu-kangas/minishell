@@ -1,20 +1,26 @@
 #include "minishell.h"
 
-int	write_hd(char *str, char *limiter, int line_len, int *hd_pipe_fd)
+int	write_hd(char *hd_str, char *limiter, int *hd_pipe_fd)
 {
 	int	fd;
 	int	str_len;
+	int	limit_len;
 
+	if (hd_str == NULL)
+		return (0);
+	if (pipe(hd_pipe_fd) < 0)
+		return (write_sys_error("pipe failed"));
 	fd = hd_pipe_fd[1];
-	str_len = ft_strlen(str);
-	if (ft_strlen(limiter) == 0 && line_len != 0)
-		str[str_len - 1] = '\0';
-	else if (line_len != 0)
-		str[str_len - ft_strlen(limiter) - 1] = '\0';
-	write(fd, str, ft_strlen(str));
-	free(str);
-	close(hd_pipe_fd[1]);
-	close(hd_pipe_fd[0]);
+	str_len = ft_strlen(hd_str);
+	limit_len = ft_strlen(limiter);
+	if (limit_len == 0)
+		hd_str[str_len - 1] = '\0';
+	else if (limit_len != 0)
+		hd_str[str_len - limit_len - 1] = '\0';
+	else if (str_len == 1 && limit_len == 0)
+		hd_str[0] = '\0';
+	write(fd, hd_str, ft_strlen(hd_str));
+	free(hd_str);
 	return (0);
 }
 
@@ -51,7 +57,7 @@ char	*get_whole_hd_str(char *read_line, char *hd_str)
 	int		i;
 	int		j;
 	char	*temp;
-
+	
 	temp = malloc(ft_strlen(read_line) + ft_strlen(hd_str) + 2);
 	if (temp == NULL)
 	{
@@ -73,13 +79,15 @@ char	*get_whole_hd_str(char *read_line, char *hd_str)
 	return (temp);
 }
 
+void	expand_hd_content(t_env_lst *env_lst, char *hd_str) // NOT DONE
+{
+	if (hd_str == NULL)
+		return ;
+	if (ft_strchr(hd_str, '$'))
+		expand_env_var(env_lst, "USER");
+}
 
-// IMPORTANT NOTE !!
-// We need a "free all" -helper function here!
-// Because now we are in a separate process, so all needs to be freed if something fails.
-// For example: free data-struc, free env_var, close pipe
-
-int	ft_heredoc(char *limiter, int *hd_pipe_fd)
+int	ft_heredoc(t_env_lst *env_lst, char *limiter, int *hd_pipe_fd)
 {
 	char	*hd_str;
 	char	*read_line;
@@ -92,19 +100,44 @@ int	ft_heredoc(char *limiter, int *hd_pipe_fd)
 		read_line = readline("> ");
 		line_len = ft_strlen(read_line);
 		if (read_line == NULL) // With crtl + D, one extra line gets produced (compare to bash)
-			break ;
+			break ;		
 		hd_str = get_whole_hd_str(read_line, hd_str);
 		if (hd_str == NULL)
 			return (write_sys_error("malloc failed"));
-		if (check_limiter(hd_str, limiter, line_len) == 1 || \
-		(line_len == 0 && hd_str[0] == '\n' && hd_str[1] == '\0'))
+		if (check_limiter(hd_str, limiter, line_len) == 1)
 			break ;
 	}
-	return (write_hd(hd_str, limiter, line_len, hd_pipe_fd));
+	expand_hd_content(env_lst, hd_str);  // NOT DONE
+	return (write_hd(hd_str, limiter, hd_pipe_fd));
 }
 
 
+int	process_heredoc(t_data *data, t_env_lst *env_lst, int exit_status)
+{
+	t_token *cur_token;
+	t_file	*cur_file;
 
+	alter_termios(0);
+	cur_token = data->tokens;
+	while (cur_token != NULL)
+	{
+		cur_file = cur_token->files;
+		while (cur_file != NULL)
+		{
+			if (cur_file->is_infile == 1 && cur_file->is_append == 1)
+				exit_status = ft_heredoc(env_lst, cur_file->filename, cur_file->hd_pipe);
+			if (exit_status != 0)
+			{
+				alter_termios(1);
+				return (exit_status);
+			}
+			cur_file = cur_file->next;
+		}
+		cur_token = cur_token->next;
+	}
+	alter_termios(1);
+	return (0);
+}
 
 
 /*
