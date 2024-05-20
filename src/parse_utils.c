@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 09:39:53 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/17 10:34:54 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/20 15:43:06 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_file	*add_file(char *str, int is_append, int is_infile)
 	new = (t_file *)malloc (sizeof(t_file));
 	if (!new)
 		return (NULL);
+	init_file(new);
 	if (!str)
 	{
 		new->no_filename = -1;
@@ -36,25 +37,27 @@ t_file	*add_file(char *str, int is_append, int is_infile)
 	return (new);
 }
 
-int	check_redir(char *str)
+int check_redir(char *str)
 {
-	if (ft_strncmp(str, ">>>", 3) == 0 || ft_strncmp(str, "<<<", 3) == 0)
+	size_t len = strlen(str);
+
+	if (len >= 3 && (strncmp(str, ">>>", 3) == 0 || strncmp(str, "<<<", 3) == 0))
 		return (-2);
-	else if (ft_strncmp(str, "<", 1) == 0 && ft_strlen(str) == 1)
+	else if (len == 1 && strncmp(str, "<", 1) == 0)
 		return (1);
-	else if (ft_strncmp(str, ">", 1) == 0 && ft_strlen(str) == 1)
+	else if (len == 1 && strncmp(str, ">", 1) == 0)
 		return (2);
-	else if (ft_strncmp(str, "<<", 2) == 0 && ft_strlen(str) == 2)
+	else if (len == 2 && strncmp(str, "<<", 2) == 0)
 		return (3);
-	else if (ft_strncmp(str, ">>", 2) == 0 && ft_strlen(str) == 2)
+	else if (len == 2 && strncmp(str, ">>", 2) == 0)
 		return (4);
-	else if (str[0] == '<' && str[1] == '<')
+	else if (len >= 2 && str[0] == '<' && str[1] == '<')
 		return (5);
-	else if (str[0] == '>' && str[1] == '>')
+	else if (len >= 2 && str[0] == '>' && str[1] == '>')
 		return (6);
-	else if (str[0] == '<')
+	else if (len >= 1 && str[0] == '<')
 		return (7);
-	else if (str[0] == '>')
+	else if (len >= 1 && str[0] == '>')
 		return (8);
 	else
 		return (-1);

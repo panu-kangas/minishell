@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 15:20:13 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/20 15:41:57 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,24 @@
 
 int	g_signal_marker;
 
-int parse_com_and_args(t_token *new, char **tokenarr, int i)
+int	skip_file(char **tokenarr, int i)
 {
-	int j;
+	if (check_redir(tokenarr[i]) > 0 && check_redir(tokenarr[i]) < 5)
+		return (2);
+	else if (check_redir(tokenarr[i]) > 4)
+		return (1);
+	return (0);
+}
+
+int	parse_com_and_args(t_token *new, char **tokenarr, int i)
+{
+	int	j;
 
 	j = 0;
 	while (tokenarr[++i] != NULL)
 	{
 		while (tokenarr[i] != NULL && check_redir(tokenarr[i]) != -1)
-			i++;
+			i += skip_file(tokenarr, i);
 		if (tokenarr[i] == NULL)
 			break;
 		if (new->com == NULL && check_redir(tokenarr[i]) == -1)
@@ -105,21 +114,20 @@ int	add_new_token(t_data *data, char **tokenarr)
 char *check_non_spaced_files(char *str)
 {
 	int i;
-	int len;
 	int j;
 	char *result;
 	char *ret;
 
 	j = 0;
 	i = 0;
-	len = strlen(str);
-	result = (char *)malloc(len * 2);
+	result = (char *)malloc(strlen(str) * 2);
 	if (!result)
 		return NULL;
 	while (str[i] != '\0')
 	{
 		if ((str[i] == '<' || str[i] == '>') && \
-		(i == 0 || (str[i - 1] != ' ' && str[i - 1] != '<' && str[i - 1] != '>')))
+		(i == 0 || (str[i - 1] != ' ' && str[i - 1] != '<' \
+		&& str[i - 1] != '>')))
 			result[j++] = ' ';
 		result[j++] = str[i++];
 	}
@@ -143,12 +151,6 @@ static int	parse_single_token(char *str, t_data *data)
 	tokenarr = ft_pipex_split(str, ' ');
 	if (!tokenarr)
 		return (-1);
-	while(tokenarr[i] != 0)
-	{
-		if (!tokenarr[i])
-			return (-1);
-		i++;
-	}
 	if (add_new_token(data, tokenarr) != 0)
 	{
 		ft_free_double(tokenarr);
@@ -224,7 +226,7 @@ int	parsing(void)
 	if (env_lst == NULL)
 		write_sys_error("setting up env_var not successful (malloc failure)"); // maybe exit here ??
 	while (1)
-	{		
+	{
 		alter_termios(0);
 		process_signal_main();
 		data = (t_data *)malloc(sizeof (t_data));
@@ -232,7 +234,7 @@ int	parsing(void)
 			return (write_sys_error("malloc failed"));
 		init_data(data, exit_status, parsing_cur_dir);
 		data->input = readline("minishell-1.1$: ");
-		
+
 		if (g_signal_marker == 2)
 		{
 			data->prev_exit_status = 1;

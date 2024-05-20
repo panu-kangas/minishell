@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:20:40 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 12:22:49 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/20 15:52:39 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,9 @@ static int expand_files(t_token *current, t_env_lst *env_lst, t_data *data)
 	while(tempfile != NULL)
 	{
 		head = NULL;
+		if (tempfile->is_append == 1 && tempfile->is_infile == 1 \
+		&& (tempfile->filename[0] == '"' || tempfile->filename[0] == '\''))
+			tempfile->quoted_heredoc = 1;
 		if (handle_substrings(tempfile->filename, &head) != 0)
 			return (-1);
 		if (expand_prev_exit_code(head, data) != 0)

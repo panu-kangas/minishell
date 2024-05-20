@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 10:59:20 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/16 13:40:32 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/20 15:43:25 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@ static int get_quoted_string(char *str, int i, char **substring, char quote)
         return (j - i + 1);
     }
     else
-    {
-		write_sys_error("syntax error, invalid amount of quotes");
-        exit (258);
-    }
+        return (-2);
 }
 
 static int handle_quoted_substring(char *str, int i, t_parse **head)

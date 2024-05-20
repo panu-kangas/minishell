@@ -3,36 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse_quotes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 10:27:14 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/06 16:08:44 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/20 15:44:12 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-
-/*this doestn work yet in case where inside argument there is several
- single quotes and inside them several double quotes, for example
- echo 'hello '''""""'''world', which should print out hello world, and
- echo 'hello '''"""'''world' should wait for one more " sign
- I am not even sure should we do that*/
-
-int count_quotes(char *str, char c, char end)
-{
-	int i;
-	int ctr;
-
-	i = -1;
-	ctr = 0;
-	while(str[++i] != end)
-		if (str[i] == c)
-			ctr++;
-	return(ctr);
-}
-
-int remove_quotes_com(t_data *data, char c, char d) 
+int remove_quotes_com(t_data *data, char c, char d)
 {
 	int i;
 	int j;
@@ -70,7 +50,7 @@ int remove_quotes_com(t_data *data, char c, char d)
 	return (0);
 }
 
-int remove_quotes_args(t_data *data, int k, char c, char d) 
+int remove_quotes_args(t_data *data, int k, char c, char d)
 {
 	int i;
 	int j;
@@ -111,7 +91,7 @@ int remove_quotes_args(t_data *data, int k, char c, char d)
 int check_quotes_args(t_data *data, int i, char c, char d)
 {
 	int exit_status;
-	
+
 	exit_status = 0;
 	if (count_quotes(data->tokens->args[i], c, '\0') % 2 != 0)
 	{
@@ -130,7 +110,7 @@ int check_quotes_args(t_data *data, int i, char c, char d)
 int check_quotes_com(t_data *data, char c, char d)
 {
 	int exit_status;
-	
+
 	exit_status = 0;
 	if (count_quotes(data->tokens->com, c, '\0') % 2 != 0)
 	{
@@ -177,7 +157,7 @@ int parse_args_quotes(t_data *data, int exit_status)
 int parse_com_quotes(t_data *data, int exit_status)
 {
 	int j;
-	
+
 	j = 0;
 	while(data->tokens->com != NULL && data->tokens->com[j] != 0)
 	{
