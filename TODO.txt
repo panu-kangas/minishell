@@ -46,8 +46,10 @@ XX Minishell: echo hello>file1 --> should be parsed to echo hello > file1, now i
 Panu:
 
 - CHECK PHONE NOTES !!
-- HD: Here_doc env_var expanding (Panu) --> EOF vs "EOF"
-- HD: Extra NL with ctrl-D
+- Should we handle $0 (bash), $1 etc numbers?
+- check "Ambiguous redirect" inside ft_redirect!!
+
+
 - Double check signal handling with a single built-in (so for things that happens inside the parent process)
 
 ?? SHLVL with characters as value
@@ -69,6 +71,7 @@ XX HD: Minishell: <extra.c << EOF cat | grep helo --> When stopped with SIGINT, 
 XX HD: Travelling cursor, when termios is altered --> FIXED, just needs testing when quot parsing is done
 XX HD: Move heredoc out of child processes!! Because SIGINT in a heredoc should stop the whole pipeline (example <<EOF cat | ls)
 XX HD: Current line gets deleted with ctrl-C
+XX HD: Here_doc env_var expanding (Panu) --> EOF vs "EOF"
 XX SHLVL --> do SHLVL++ in save_env_lst
 XX Unset doesn't work on _=/usr/bin/env 
 XX declare -x _="./a.out" --> this can be seen with env, but not with export

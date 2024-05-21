@@ -6,7 +6,7 @@
 #    By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/05/20 16:00:25 by pkangas          ###   ########.fr        #
+#    Updated: 2024/05/21 16:07:59 by pkangas          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRCS = main.c parsing.c parse_utils.c parse_node_utils.c ft_pipex_split.c free_a
 	ft_heredoc.c ft_redirect.c ft_exit.c \
 	write_error.c check_for_built_in.c execute_built_in.c handle_command.c \
 	pids_and_pipes.c make_processes.c ft_open_functions.c signal_handling.c extras.c \
+	expand_heredoc_env_var.c
 
 OBJS	= $(SRCS:%.c=$(OBJ_DIR)/%.o)
 

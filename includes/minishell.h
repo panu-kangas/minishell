@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 16:40:42 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/21 16:29:52 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,8 +160,8 @@ void		ft_echo(int flag, char **args);
 int			ft_exit(t_env_lst *env_lst, t_data *data, char **args);
 
 int			ft_redirect(t_data *data, int **fd_pipes, int index);
-int			ft_heredoc(t_env_lst *env_lst, char *limiter, int *hd_pipe_fd);
 int			process_heredoc(t_data *data, t_env_lst *env_lst, int exit_status);
+int			write_expanded_hd(t_env_lst *env_lst, char *hd_str, char *limiter, int fd);
 void		close_hd_pipes(t_data *data);
 
 char		*get_var_name(char *environ_var);

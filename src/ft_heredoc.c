@@ -1,14 +1,10 @@
 #include "minishell.h"
 
-int	write_hd(char *hd_str, char *read_line, char *limiter, int *hd_pipe_fd)
+int	write_hd(char *hd_str, char *read_line, char *limiter, int fd)
 {
-	int	fd;
 	int	str_len;
 	int	limit_len;
 
-	if (pipe(hd_pipe_fd) < 0)
-		return (write_sys_error("pipe failed"));
-	fd = hd_pipe_fd[1];
 	if (hd_str == NULL)
 	{
 		write(fd, "\0", 1);
@@ -82,15 +78,7 @@ char	*get_whole_hd_str(char *read_line, char *hd_str)
 	return (temp);
 }
 
-void	expand_hd_content(t_env_lst *env_lst, char *hd_str) // NOT DONE
-{
-	if (hd_str == NULL)
-		return ;
-	if (ft_strchr(hd_str, '$'))
-		expand_env_var(env_lst, "USER");
-}
-
-int	ft_heredoc(t_env_lst *env_lst, char *limiter, int *hd_pipe_fd)
+int	ft_heredoc(t_env_lst *env_lst, char *limiter, int *hd_pipe_fd, int flag)
 {
 	char	*hd_str;
 	char	*read_line;
@@ -102,7 +90,7 @@ int	ft_heredoc(t_env_lst *env_lst, char *limiter, int *hd_pipe_fd)
 	{
 		read_line = readline("> ");
 		line_len = ft_strlen(read_line);
-		if (read_line == NULL) // With crtl + D, one extra line gets produced (compare to bash)
+		if (read_line == NULL)
 			break ;		
 		hd_str = get_whole_hd_str(read_line, hd_str);
 		if (hd_str == NULL)
@@ -112,8 +100,12 @@ int	ft_heredoc(t_env_lst *env_lst, char *limiter, int *hd_pipe_fd)
 	}
 	if (g_signal_marker == 2)
 		return (1);
-	expand_hd_content(env_lst, hd_str);  // NOT DONE
-	return (write_hd(hd_str, read_line, limiter, hd_pipe_fd));
+	if (pipe(hd_pipe_fd) < 0)
+		return (write_sys_error("pipe failed"));
+	if (hd_str != NULL && ft_strchr(hd_str, '$') != NULL && flag == 0)
+		return (write_expanded_hd(env_lst, hd_str, limiter, hd_pipe_fd[1]));
+	else
+		return (write_hd(hd_str, read_line, limiter, hd_pipe_fd[1]));
 }
 
 
@@ -130,7 +122,10 @@ int	process_heredoc(t_data *data, t_env_lst *env_lst, int exit_status)
 		while (cur_file != NULL)
 		{
 			if (cur_file->is_infile == 1 && cur_file->is_append == 1)
-				exit_status = ft_heredoc(env_lst, cur_file->filename, cur_file->hd_pipe);
+			{
+				exit_status = ft_heredoc(env_lst, cur_file->filename, \
+				cur_file->hd_pipe, cur_file->quoted_heredoc);
+			}
 			if (exit_status != 0)
 			{
 				alter_termios(1);
