@@ -93,16 +93,16 @@ int	check_no_filename(char **tokenarr, int i, int exit_status)
 
 int	add_new_token(t_data *data, char **tokenarr)
 {
-	int		i;
+//	int		i; --> Is this needed ?
 	t_token	*new;
-	int exit_status;
+//	int exit_status; --> Is this needed ?
 
-	exit_status = 0;
+//	exit_status = 0; --> Is this needed ?
 	new = (t_token *)malloc(sizeof(t_token));
 	if (!new)
 		return (-1);
 	init_token(new);
-	i = 0;
+//	i = 0; --> Is this needed ?
 	if (allocate_com_and_args(new, tokenarr) != 0)
 		return (free_token(new, -1));
 	ft_lstadd_back_ms(&data->tokens, new);
@@ -142,9 +142,9 @@ char *check_non_spaced_files(char *str)
 static int	parse_single_token(char *str, t_data *data)
 {
 	char	**tokenarr;
-	int		i;
+//	int		i; --> Is this needed ?
 
-	i = 0;
+//	i = 0; --> Is this needed ?
 	str = check_non_spaced_files(str);
 	if (!str)
 		return (-1);

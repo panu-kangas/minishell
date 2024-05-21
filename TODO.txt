@@ -2,10 +2,6 @@ NOT DONE:
 
 Timo:
 
-- Quote handling (remove quotes from commands, args and files, EXCEPT here_doc limiter)
-- Remove quotes from files (example: > "file 1" should create a file named file 1, so no quotes)
-- Handle $?
-- Env_var expansions with quotes: $PATH expands, "$PATH" expands, '$PATH' does not
 - Env_var expansion with special char: if we have an env_var TIMO=best, and you run $TIMO:jee, eventual result should be best:jee
 	--> This means that the env_var is searched only until a special char is found, and then the expanding happens only to the part
 		before special char! And in the end, the expansion is concatonated to the rest of the string.
@@ -20,16 +16,19 @@ Timo:
 								jee    jee    jee 									--> EXCEPT if the env_var is inside double quotation
 
 
-Panu:
+XX Env_var expansions with quotes: $PATH expands, "$PATH" expands, '$PATH' does not
+XX Handle $?
+XX Remove quotes from files (example: > "file 1" should create a file named file 1, so no quotes)
+XX Quote handling (remove quotes from commands, args and files, EXCEPT here_doc limiter)
 
-- List of test cases (Panu can start doing this)
+
 
 
 NEEDS FIXING:
 
 Timo:
 
-- rl_clear_history in the end of program (and in exit function also) ??
+- minishell-1.1$: "echo"" """hello"" --> didn't do anything
 - Unclosed quot: error or let it be? Fix error message?
 - Minishell: echo hello | --> should have some sort of syntax error
 - Minishell: | --> solo pipe sign could maybe be a syntax error ?
@@ -46,8 +45,9 @@ XX Minishell: echo hello>file1 --> should be parsed to echo hello > file1, now i
 Panu:
 
 - CHECK PHONE NOTES !!
-- Should we handle $0 (bash), $1 etc numbers?
+- Should we handle $0 (bash), $1 etc numbers? --> NO, just LEAVE THEM BE
 - check "Ambiguous redirect" inside ft_redirect!!
+- Check for lone redirect in make_processes --> so that "> file1" will create the file
 - CD ISSUES:
 --> When trying "cd ." inside a deleted folder, bash message is --> cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
 --> When trying "cd ..", our minishell has a wrong message
@@ -98,6 +98,9 @@ QUESTIONS:
 						bash-3.2$ echo hello $PANU
 
 - Special case of 2>file1 (redirecting standard error) --> should we handle this? If yes, how?
+
+- rl_clear_history in the end of program (and in exit function also) ??
+
 
 CHECK THESE:
 
