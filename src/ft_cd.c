@@ -41,7 +41,7 @@ int	check_valid_path(char *path)
 
 	if (path == NULL)
 		return (0);
-	if (access(path, F_OK) == -1)
+	if (stat(path, &statbuf) == -1) // access or stat ???
 		return (write_error("cd", path, "No such file or directory"));
 	if (stat(path, &statbuf) == 0)
 	{

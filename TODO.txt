@@ -48,6 +48,9 @@ Panu:
 - CHECK PHONE NOTES !!
 - Should we handle $0 (bash), $1 etc numbers?
 - check "Ambiguous redirect" inside ft_redirect!!
+- CD ISSUES:
+--> When trying "cd ." inside a deleted folder, bash message is --> cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+--> When trying "cd ..", our minishell has a wrong message
 
 
 - Double check signal handling with a single built-in (so for things that happens inside the parent process)

@@ -8,7 +8,7 @@ int	ft_pwd(t_data *data)
 	pwd = getcwd(NULL, 0);
 	if (pwd == NULL && errno == ENOMEM)
 		return (write_sys_error("malloc failed"));
-	else if (pwd == NULL && errno == ENOENT)
+	else if (pwd == NULL)
 	{
 		ft_printf("%s\n", data->current_directory);
 		return (0);
