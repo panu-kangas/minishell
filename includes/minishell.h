@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/22 09:47:32 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/22 11:47:00 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ typedef struct s_parse
 {
 	char			*str;
 	int				isexpand;
+	int 			istrim;
 	struct s_parse	*next;
 }				t_parse;
 
@@ -117,9 +118,9 @@ int		handle_only_spaces(t_data *data);
 int		handle_substrings(char *str, t_parse **head);
 
 //expand node utils
-int		ft_lstiter_and_expand(t_parse *lst, t_env_lst *env_lst, t_data *data);
+int		ft_lstiter_and_expand(t_parse *lst, t_env_lst *env_lst, t_data *data, int exit_status);
 char	*ft_lstiter_and_make_new_str(t_parse *lst);
-t_parse	*new_node(char *str, int isexpand);
+t_parse *new_node(char *str,  int isexpand, int istrim);
 void	ft_lstadd_back_parse(t_parse **lst, t_parse *new);
 
 //expand

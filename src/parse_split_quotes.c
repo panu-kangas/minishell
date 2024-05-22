@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 10:59:20 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 15:43:25 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/22 11:41:21 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static int handle_quoted_substring(char *str, int i, t_parse **head)
 	int length;
 	char quote;
 	int expand;
+	t_parse *new;
 
 	quote = str[i];
 	if (quote == '\'')
@@ -46,7 +47,7 @@ static int handle_quoted_substring(char *str, int i, t_parse **head)
 	length = get_quoted_string(str, i, &substring, quote);
 	if (length > 0)
 	{
-		t_parse *new = new_node(substring, expand);
+		new = new_node(substring, expand, 0);
 		if (!new)
 		{
 			free(substring);
@@ -62,6 +63,7 @@ static int handle_non_quoted_substring(char *str, int i, t_parse **head)
 {
 	int j;
 	char *substring;
+	t_parse *new;
 
 	j = i;
 	while (str[j] != '\0' && str[j] != '\'' && str[j] != '"')
@@ -69,7 +71,7 @@ static int handle_non_quoted_substring(char *str, int i, t_parse **head)
 	substring = ft_substr(str, i, j - i);
 	if (!substring)
 		return (-1);
-	t_parse *new = new_node(substring, 1);
+	new = new_node(substring, 1, 1);
 	if (!new)
 	{
 		free(substring);

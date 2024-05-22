@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/22 09:59:41 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/22 12:41:22 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void ft_lstadd_back_parse(t_parse **lst, t_parse *new)
 	head->next = new;
 }
 
-t_parse *new_node(char *str,  int isexpand)
+t_parse *new_node(char *str,  int isexpand, int istrim)
 {
 	t_parse *new;
 
@@ -88,6 +88,7 @@ t_parse *new_node(char *str,  int isexpand)
 		return NULL;
 	init_parse(new);
 	new->str = str;
+	new->istrim = istrim;
 	new->isexpand = isexpand;
 	new->next = NULL;
 	return new;
@@ -111,13 +112,55 @@ char *ft_lstiter_and_make_new_str(t_parse *lst)
 	return (new);
 }
 
-int ft_lstiter_and_expand(t_parse *lst, t_env_lst *env_lst, t_data *data)
+char *trimmed_str(char *str, int in_word, int j, int i)
+{
+	char temp[ft_strlen(str)];
+
+	while (str[i] != '\0')
+	{
+		if (str[i] != ' ')
+		{
+			temp[j++] = str[i++];
+			in_word = 1;
+		}
+		else
+		{
+			while (str[i] == ' ')
+				i++;
+			if (in_word && str[i] != '\0')
+				temp[j++] = ' ';
+			in_word = 0;
+		}
+	}
+	temp[j] = 0;
+	return(ft_strdup(temp));
+}
+
+
+char *trim_str(char *str)
+{
+	char *temp;
+	int i;
+	int j;
+	int in_word;
+
+	if (!str)
+		return (NULL);
+ 	i = 0;
+	j = 0;
+	in_word = 0;
+	while (str[i] == ' ')
+		i++;
+	temp = trimmed_str(str, in_word, j, i);
+	return(temp);
+}
+
+
+int ft_lstiter_and_expand(t_parse *lst, t_env_lst *env_lst, t_data *data, int exit_status)
 {
 	char *temp;
 	t_parse *head;
-	int exit_status;
 
-	exit_status =  0;
 	head = lst;
 	exit_status = expand_prev_exit_code(head, data);
 	if (exit_status != 0)
@@ -128,7 +171,10 @@ int ft_lstiter_and_expand(t_parse *lst, t_env_lst *env_lst, t_data *data)
 		{
 			if (*(ft_strchr(head->str, '$') + 1) == ' ' || *(ft_strchr(head->str, '$') + 1) == 0)
 				break ;
-			temp = expand_str(head->str, env_lst);
+			if (head->istrim != 0)
+				temp = trim_str(expand_str(head->str, env_lst));
+			else
+				temp = expand_str(head->str, env_lst);
 			if (!temp)
 				return (write_sys_error("malloc error"));
 			free(head->str);

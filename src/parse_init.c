@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:01:29 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/21 08:50:50 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/22 11:41:41 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	init_token(t_token *new)
 void	init_parse(t_parse *new)
 {
 	new->str = NULL;
+	new->isexpand = 0;
 	new->isexpand = 0;
 	new->next = NULL;
 }

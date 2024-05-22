@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:20:40 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/22 09:15:33 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/22 11:47:49 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int expand_com(t_token *current, t_env_lst *env_lst, t_data *data, int ex
 	exit_status = handle_substrings(current->com, &head);
 	if (exit_status != 0)
 		return (exit_status);
-	exit_status = ft_lstiter_and_expand(head, env_lst, data);
+	exit_status = ft_lstiter_and_expand(head, env_lst, data, exit_status);
 	if (exit_status != 0)
 		return (exit_status);
 	exit_status = ft_lst_iter_remove_quotes(head);
@@ -77,7 +77,7 @@ static int expand_args(t_token *current, t_env_lst *env_lst, t_data *data, int e
 		exit_status = handle_substrings(current->args[i], &head);
 		if (exit_status != 0)
 			return (exit_status);
-		exit_status = ft_lstiter_and_expand(head, env_lst, data);
+		exit_status = ft_lstiter_and_expand(head, env_lst, data, exit_status);
 		if (exit_status != 0)
 			return (exit_status);
 		exit_status = ft_lst_iter_remove_quotes(head);
@@ -109,7 +109,7 @@ static int expand_files(t_token *current, t_env_lst *env_lst, t_data *data, int 
 		exit_status = handle_substrings(tempfile->filename, &head);
 		if (exit_status != 0)
 			return (exit_status);
-		exit_status = ft_lstiter_and_expand(head, env_lst, data);
+		exit_status = ft_lstiter_and_expand(head, env_lst, data, exit_status);
 		if (exit_status != 0)
 			return (exit_status);
 		exit_status = ft_lst_iter_remove_quotes(head);
