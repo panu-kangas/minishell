@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/21 16:29:52 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/22 09:47:32 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ typedef struct	s_token
 	t_file	*files;
 	int		filecount;
 	char	**args;
+	int comcount;
+	int arg_count;
 	struct	s_token *next;
 } t_token;
 
@@ -109,12 +111,13 @@ char	**ft_split_expand(const char *s, char c, int firstis);
 int		handle_no_file(char **tokenarr, int i, int exit_status);
 int		parse_out_quotes(t_data *data, int exit_status);
 int		ft_char_counter(char *str, char c);
+int		handle_only_spaces(t_data *data);
 
 //parse split quotes to nodes
 int		handle_substrings(char *str, t_parse **head);
 
 //expand node utils
-int		ft_lstiter_and_expand(t_parse *lst, t_env_lst *env_lst);
+int		ft_lstiter_and_expand(t_parse *lst, t_env_lst *env_lst, t_data *data);
 char	*ft_lstiter_and_make_new_str(t_parse *lst);
 t_parse	*new_node(char *str, int isexpand);
 void	ft_lstadd_back_parse(t_parse **lst, t_parse *new);

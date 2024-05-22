@@ -3,14 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 09:39:53 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 16:13:25 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/21 11:46:43 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int handle_only_spaces(t_data *data)
+{
+	int i;
+
+	i = 0;
+	while(data->input[i] != 0)
+	{
+		if (data->input[i] != ' ')
+		{
+			data->special_case = 1;
+			return (0);
+		}
+		else
+		{
+			data->special_case = 0;
+		}
+		i++;
+	}
+	return (1);
+}
+
 
 t_file	*add_file(char *str, int is_append, int is_infile)
 {
@@ -39,17 +61,19 @@ t_file	*add_file(char *str, int is_append, int is_infile)
 
 int check_redir(char *str)
 {
-	size_t len = ft_strlen(str);
+	size_t len;
 
-	if (len >= 3 && (strncmp(str, ">>>", 3) == 0 || strncmp(str, "<<<", 3) == 0))
+	len = ft_strlen(str);
+
+	if (len >= 3 && (ft_strncmp(str, ">>>", 3) == 0 || ft_strncmp(str, "<<<", 3) == 0))
 		return (-2);
-	else if (len == 1 && strncmp(str, "<", 1) == 0)
+	else if (len == 1 && ft_strncmp(str, "<", 1) == 0)
 		return (1);
-	else if (len == 1 && strncmp(str, ">", 1) == 0)
+	else if (len == 1 && ft_strncmp(str, ">", 1) == 0)
 		return (2);
-	else if (len == 2 && strncmp(str, "<<", 2) == 0)
+	else if (len == 2 && ft_strncmp(str, "<<", 2) == 0)
 		return (3);
-	else if (len == 2 && strncmp(str, ">>", 2) == 0)
+	else if (len == 2 && ft_strncmp(str, ">>", 2) == 0)
 		return (4);
 	else if (len >= 2 && str[0] == '<' && str[1] == '<')
 		return (5);
@@ -69,12 +93,12 @@ int	handle_no_file(char **tokenarr, int i, int exit_status) // Sorry Timo for me
 	{
 		if (tokenarr[i][2] == '>')
 		{
-			ft_putendl_fd ("syntax error near unexpected token `>'", 2);
+			ft_putendl_fd ("minishell: syntax error near unexpected token `>'", 2);
 			exit_status = 258;
 		}
 		else
 		{
-			ft_putendl_fd ("syntax error near unexpected token `newline'", 2);
+			ft_putendl_fd ("minishell: syntax error near unexpected token `newline'", 2);
 			exit_status = 258;
 		}
 	}
@@ -88,7 +112,7 @@ int	handle_no_file(char **tokenarr, int i, int exit_status) // Sorry Timo for me
 		}
 		else if (tokenarr[i + 1][0] == '>')
 		{
-			ft_putendl_fd ("syntax error near unexpected token `>'", 2);
+			ft_putendl_fd ("minishell: syntax error near unexpected token `>'", 2);
 			exit_status = 258;
 		}
 		else if (tokenarr[i + 1][0] == '<')
@@ -98,7 +122,7 @@ int	handle_no_file(char **tokenarr, int i, int exit_status) // Sorry Timo for me
 		}
 		else if (tokenarr[i + 1][0] == '|')
 		{
-			ft_putendl_fd ("syntax error near unexpected token `|'", 2);
+			ft_putendl_fd ("minishell: syntax error near unexpected token `|'", 2);
 			exit_status = 258;
 		}
 	}
@@ -106,16 +130,16 @@ int	handle_no_file(char **tokenarr, int i, int exit_status) // Sorry Timo for me
 	{
 		if (tokenarr[i + 1][2] == '>')
 		{
-			ft_putendl_fd ("syntax error near unexpected token `>'", 2);
+			ft_putendl_fd ("minishell: syntax error near unexpected token `>'", 2);
 			exit_status = 258;
 		}
 		else if (tokenarr[i + 1][2] == '<')
 		{
-			ft_putendl_fd ("syntax error near unexpected token `<'", 2);
+			ft_putendl_fd ("minishell: syntax error near unexpected token `<'", 2);
 			exit_status = 258;
 		}
 	}
-	// Is exit status always 258? We need to investigate! >> I think it is.
+	// Is exit status always 258? We need to investigate! >> I think it is - Timo.
 	return (exit_status);
 }
 
@@ -159,7 +183,7 @@ int	add_files_to_token(t_token *new, char **tokenarr)
 		else if (check_redir(tokenarr[i]) == 8)
 			temp = add_file(&tokenarr[i][1], -1, -1);
 		if (!temp)
-			return (-1);
+			return (write_sys_error("malloc error"));
 		ft_lstadd_file_ms(&new->files, temp);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:27 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 15:46:43 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/22 10:31:58 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,66 +29,43 @@ int ft_char_counter(char *str, char c)
 	}
 	return (ctr);
 }
-
 static char *expand_substr(char *str, t_env_lst *env_lst)
 {
 	int i;
 	char *temp;
-	char *expandable;
 
+	if (!str || !env_lst)
+		return(NULL);
 	i = 0;
-	while (ft_isalnum(str[i]) == 1)
-		i++;
-	expandable = ft_substr(str, 0, i);
-	if (expandable == NULL)
-		return (NULL);
-	if (expand_env_var(env_lst, expandable) != NULL)
-	{
-		temp = expandable;
-		expandable = ft_strdup(expand_env_var(env_lst, expandable));
-		free(temp);
-	}
+	if (expand_env_var(env_lst, str) != NULL)
+		temp = ft_strdup(expand_env_var(env_lst, str));
 	else
-	{
-		temp = expandable;
-		expandable = ft_strdup("");
-		free (temp);
-	}
-	if (expandable == NULL)
-		return (NULL);
-	return (expandable);
+		temp = ft_strdup("");
+	return (temp);
 }
 
 char *expand_str(char *str, t_env_lst *env_lst)
 {
-	char *new;
+	char new[ft_strlen(str) + 1];
 	char *temp;
 	int i;
 	int j;
 
 	i = 0;
 	j = 0;
-	new = NULL;
 	while (str[i] != 0 && str[i] != '$')
 		i++;
-	new = ft_substr(str, j, i - j);
-	if (!new)
-		return (NULL);
+	ft_strlcpy(new, str, i - j + 1);
 	j = i + 1;
 	i++;
 	while (ft_isalnum(str[i]) == 1 && str[i] != 0)
 		i++;
-
-	temp = ft_substr(str, j , i - j);
-	new = ft_strjoin(new, expand_substr(temp, env_lst));
-	if(!new)
+	temp = ft_strjoin(new, expand_substr(ft_substr(str, j , i - j), env_lst));
+	if(!temp)
 		return (NULL);
-	free(temp);
+	j = i;
 	while (str[i] != 0)
 		i++;
-	temp = ft_substr(str, i - j + 1, i);
-	new = ft_strjoin(new, temp);
-	free (temp);
-	return (new);
-
+	temp = ft_strjoin(temp, ft_substr(str + j, 0, i));
+	return (temp);
 }

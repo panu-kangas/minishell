@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 10:27:14 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 15:44:12 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/22 09:18:54 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,7 @@ int remove_quotes_args(t_data *data, int k, char c, char d)
 			while(temp[i] == c)
 				i++;
 			if (temp[i] == d && temp [i + 1] != 0)
-			{
 				ctr = count_quotes((temp + i), d, c);
-			}
 		}
 		if (ctr % 2 != 0)
 		{
