@@ -24,11 +24,6 @@ int	check_cmd_path(char *cmd)
 		write_error(NULL, cmd, "No such file or directory");
 		return (127);
 	}
-	if (access(cmd, X_OK) == -1)
-	{
-		write_error(NULL, cmd, "Permission denied");
-		return (126);
-	}
 	if (stat(cmd, &statbuf) == 0)
 	{
 		if (S_ISDIR(statbuf.st_mode) == 1)
@@ -36,6 +31,11 @@ int	check_cmd_path(char *cmd)
 			write_error(NULL, cmd, "is a directory");
 			return (126);
 		}
+	}
+	if (access(cmd, X_OK) == -1)
+	{
+		write_error(NULL, cmd, "Permission denied");
+		return (126);
 	}
 	return (0);
 }

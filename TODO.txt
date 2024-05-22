@@ -2,10 +2,6 @@ NOT DONE:
 
 Timo:
 
-- Env_var expansion with special char: if we have an env_var TIMO=best, and you run $TIMO:jee, eventual result should be best:jee
-	--> This means that the env_var is searched only until a special char is found, and then the expanding happens only to the part
-		before special char! And in the end, the expansion is concatonated to the rest of the string.
-- Env_var expansions with redirect --> Read QUESTIONS-part below for more info
 - Env_var expansions with blank spaces
 	--> Example:				bash-3.2$ export PANU="   jee    jee    jee   "		--> value has blank spaces
 								bash-3.2$ env | grep PANU
@@ -20,6 +16,9 @@ XX Env_var expansions with quotes: $PATH expands, "$PATH" expands, '$PATH' does 
 XX Handle $?
 XX Remove quotes from files (example: > "file 1" should create a file named file 1, so no quotes)
 XX Quote handling (remove quotes from commands, args and files, EXCEPT here_doc limiter)
+XX Env_var expansion with special char: if we have an env_var TIMO=best, and you run $TIMO:jee, eventual result should be best:jee
+	--> This means that the env_var is searched only until a special char is found, and then the expanding happens only to the part
+		before special char! And in the end, the expansion is concatonated to the rest of the string.
 
 
 
@@ -28,18 +27,20 @@ NEEDS FIXING:
 
 Timo:
 
-- minishell-1.1$: "echo"" """hello"" --> didn't do anything
+XX minishell-1.1$: "echo"" """hello"" --> didn't do anything
 - Unclosed quot: error or let it be? Fix error message?
 - Minishell: echo hello | --> should have some sort of syntax error
 - Minishell: | --> solo pipe sign could maybe be a syntax error ?
-- Edge-case of redirect			bash-3.2$ >""
+
+
+?? Edge-case of redirect			bash-3.2$ >""
 								bash: : No such file or directory
-- "<< EOF" or " " will result in 'minishell: : command not found', but bash doesn't
 
 
 XX Edge-case for parsing			bash-3.2$ file1<cat 	
 								bash: cat: No such file or directory	--> our minishell says "minishell: file1<cat: command not found"
 XX Minishell: echo hello>file1 --> should be parsed to echo hello > file1, now it echoes "hello>file1"
+XX "<< EOF" or " " will result in 'minishell: : command not found', but bash doesn't
 
 
 Panu:
@@ -48,6 +49,7 @@ Panu:
 - Should we handle $0 (bash), $1 etc numbers? --> NO, just LEAVE THEM BE
 - check "Ambiguous redirect" inside ft_redirect!!
 - Check for lone redirect in make_processes --> so that "> file1" will create the file
+- HD: does the limiter expand ??
 - CD ISSUES:
 --> When trying "cd ." inside a deleted folder, bash message is --> cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
 --> When trying "cd ..", our minishell has a wrong message
@@ -104,7 +106,7 @@ QUESTIONS:
 
 CHECK THESE:
 
-- single and double quotations won't show in env-listed value. I mean:  export TEST='hello world' --> TEST=hello world in variable list (wth env-command)
-- export PATH=$PATH:something
+XX single and double quotations won't show in env-listed value. I mean:  export TEST='hello world' --> TEST=hello world in variable list (wth env-command)
+XX export PATH=$PATH:something
 - Panu: is OS given PATH superior to user given path? Or does it execute the first path it finds (example: ls-executable in work folder, work folder added to PATH)
 - lsof -c minishell
