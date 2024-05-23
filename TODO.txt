@@ -1,15 +1,21 @@
-NOT DONE:
 
-Timo:
+TIMO:
 
-- Env_var expansions with blank spaces
-	--> Example:				bash-3.2$ export PANU="   jee    jee    jee   "		--> value has blank spaces
-								bash-3.2$ env | grep PANU
-								PANU=   jee    jee    jee							--> They are stored in env_list
-								bash-3.2$ echo $PANU
-								jee jee jee											--> BUT they are trimmed away when expanding
-								bash-3.2$ echo "$PANU"
-								jee    jee    jee 									--> EXCEPT if the env_var is inside double quotation
+
+- Unclosed quot: I think this could be just a syntax error! with error message like:
+		minishell: syntax error: unclosed quotation
+- Minishell: echo hello | --> should have some sort of syntax error
+- Minishell: | --> solo pipe sign could maybe be a syntax error ?
+- Heredoc: limiter (in our logic, filename of heredoc) does not expand at all!
+- Parsing of file names: if a file name is non_expandable env_var, leave it be! I need it later in program
+- Env_var expansion bug: _ is a valid character in env_var. So PANU_KANGAS should be one variable
+		---> Our parsing would only expand PANU and then concat it to _KANGAS
+- Env_var expansion / parsing: if we do solo expansion of env_var that has spaces in it, they should be parsed
+		--> example:
+		--> bash-3.2$ export PANU="echo hello"
+		--> bash-3.2$ $PANU
+		--> hello				--> so the "echo hello" got parsed into a command and arg
+
 
 
 XX Env_var expansions with quotes: $PATH expands, "$PATH" expands, '$PATH' does not
@@ -19,37 +25,31 @@ XX Quote handling (remove quotes from commands, args and files, EXCEPT here_doc 
 XX Env_var expansion with special char: if we have an env_var TIMO=best, and you run $TIMO:jee, eventual result should be best:jee
 	--> This means that the env_var is searched only until a special char is found, and then the expanding happens only to the part
 		before special char! And in the end, the expansion is concatonated to the rest of the string.
-
-
-
-
-NEEDS FIXING:
-
-Timo:
-
-XX minishell-1.1$: "echo"" """hello"" --> didn't do anything
-- Unclosed quot: error or let it be? Fix error message?
-- Minishell: echo hello | --> should have some sort of syntax error
-- Minishell: | --> solo pipe sign could maybe be a syntax error ?
-
-
-?? Edge-case of redirect			bash-3.2$ >""
+XX Edge-case of redirect			bash-3.2$ >""
 								bash: : No such file or directory
-
-
 XX Edge-case for parsing			bash-3.2$ file1<cat 	
 								bash: cat: No such file or directory	--> our minishell says "minishell: file1<cat: command not found"
 XX Minishell: echo hello>file1 --> should be parsed to echo hello > file1, now it echoes "hello>file1"
 XX "<< EOF" or " " will result in 'minishell: : command not found', but bash doesn't
+XX minishell-1.1$: "echo"" """hello"" --> didn't do anything
+XX Env_var expansions with blank spaces
+	--> Example:				bash-3.2$ export PANU="   jee    jee    jee   "		--> value has blank spaces
+								bash-3.2$ env | grep PANU
+								PANU=   jee    jee    jee							--> They are stored in env_list
+								bash-3.2$ echo $PANU
+								jee jee jee											--> BUT they are trimmed away when expanding
+								bash-3.2$ echo "$PANU"
+								jee    jee    jee 									--> EXCEPT if the env_var is inside double quotation
 
 
-Panu:
+
+------------------------------------
+
+
+PANU:
 
 - CHECK PHONE NOTES !!
-- Should we handle $0 (bash), $1 etc numbers? --> NO, just LEAVE THEM BE
 - check "Ambiguous redirect" inside ft_redirect!!
-- Check for lone redirect in make_processes --> so that "> file1" will create the file
-- HD: does the limiter expand ??
 - CD ISSUES:
 --> When trying "cd ." inside a deleted folder, bash message is --> cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
 --> When trying "cd ..", our minishell has a wrong message
@@ -71,7 +71,6 @@ Panu:
 	--> One option is to implement the error messsage and some generic value (0 or 1) if you have a weird value
 
 
-
 XX HD: Minishell: <extra.c << EOF cat | grep helo --> When stopped with SIGINT, minishell produces an extra NL for some reason
 XX HD: Travelling cursor, when termios is altered --> FIXED, just needs testing when quot parsing is done
 XX HD: Move heredoc out of child processes!! Because SIGINT in a heredoc should stop the whole pipeline (example <<EOF cat | ls)
@@ -84,7 +83,11 @@ XX Exit-built_in arguments: check int_max, int_min , negative etc
 XX Non global env var --> if command has = and there are no args, process_non_global_env_var
 XX Also: You can change global env var value without export!!!! So after export TEST=testi, you can just say TEST=festi, and it changes
 XX Fix pwd: if folder has been removed, behaviour is different. Check bash (and notes in .c file)
+XX Check for lone redirect in make_processes --> so that "> file1" will create the file
 
+
+
+------------------------------------
 
 
 QUESTIONS:
@@ -102,6 +105,9 @@ QUESTIONS:
 - Special case of 2>file1 (redirecting standard error) --> should we handle this? If yes, how?
 
 - rl_clear_history in the end of program (and in exit function also) ??
+
+
+------------------------------------
 
 
 CHECK THESE:

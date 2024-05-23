@@ -125,7 +125,7 @@ int	add_new_token(t_data *data, char **tokenarr)
 	if (!new)
 		return (write_sys_error("malloc error"));
 	init_token(new);
-	exit_status = explore_tokenarr(new, tokenarr) != 0;
+	exit_status = explore_tokenarr(new, tokenarr);
 	if (exit_status != 0)
 	{
 		free (new);
@@ -181,10 +181,10 @@ char *check_non_spaced_files(char *str)
 static int	parse_single_token(char *str, t_data *data, int exit_status)
 {
 	char	**tokenarr;
-	int		i;
+//	int		i; // --> is this needed ??
 	(void)data;
 
-	i = 0;
+//	i = 0; // --> is this needed ??
 	str = check_non_spaced_files(str);
 	if (!str)
 		return (write_sys_error("malloc error"));
@@ -219,7 +219,7 @@ static int	lexer_input(t_data *data, int exit_status)
 			ft_free_double(inputarr);
 			return (write_sys_error("malloc error"));
 		}
-		exit_status =parse_single_token(inputarr[data->proc_count], data, exit_status);
+		exit_status = parse_single_token(inputarr[data->proc_count], data, exit_status);
 		if (exit_status != 0)
 			return (exit_status);
 		data->proc_count++;
@@ -289,7 +289,7 @@ int	parsing(void)
 		if (!data->input)
 		{
 			free(data);
-			ft_putstr_fd("exit\n", 2); // this now appears on a new line, even though it should be on the same line as our prompt
+			ft_putstr_fd("exit\n", 2);
 			return (0);
 		}
 		if (ft_strlen(data->input) != 0)

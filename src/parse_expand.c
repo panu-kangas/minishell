@@ -31,12 +31,12 @@ int ft_char_counter(char *str, char c)
 }
 static char *expand_substr(char *str, t_env_lst *env_lst)
 {
-	int i;
+//	int i; --> Is this needed?
 	char *temp;
 
 	if (!str || !env_lst)
 		return(NULL);
-	i = 0;
+//	i = 0; --> Is this needed?
 	if (expand_env_var(env_lst, str) != NULL)
 		temp = ft_strdup(expand_env_var(env_lst, str));
 	else

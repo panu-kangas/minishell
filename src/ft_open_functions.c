@@ -54,6 +54,8 @@ int	open_outfile(char *file)
 	int			file_fd;
 	struct stat statbuf;
 
+	if (file != NULL && file[0] == '\0')
+		return (write_error(NULL, "", "No such file or directory"));
 	if (access(file, F_OK) == 0)
 	{
 		if (stat(file, &statbuf) == 0)
