@@ -69,12 +69,25 @@ int	process_shlvl(t_env_lst *env_lst)
 	}
 	else
 	{
-		value = ft_atoi(shlvl->value);
+		if (shlvl->value == NULL || shlvl->value[0] == '\0')
+			value = 0;
+		else
+			value = ft_atoi(shlvl->value);
 		value++;
 		if (value < 0)
 			value = 0;
+		else if (value > 1000)
+		{
+			ft_putstr_fd("minishell: warning: shell level (", 2);
+			ft_putnbr_fd(value, 2);
+			ft_putendl_fd(") too high, resetting to 1", 2);
+			value = 1;
+		}
 		free(shlvl->value);
-		shlvl->value = ft_itoa(value);
+		if (value == 1000)
+			shlvl->value = ft_strdup("");
+		else	
+			shlvl->value = ft_itoa(value);
 		if (shlvl->value == NULL)
 			return (1);
 	}

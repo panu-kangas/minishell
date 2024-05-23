@@ -50,6 +50,7 @@ PANU:
 
 - CHECK PHONE NOTES !!
 - check "Ambiguous redirect" inside ft_redirect!!
+- Signals during solo built_in (DFL vs IGN)
 - CD ISSUES:
 --> When trying "cd ." inside a deleted folder, bash message is --> cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
 --> When trying "cd ..", our minishell has a wrong message
@@ -57,18 +58,7 @@ PANU:
 
 - Double check signal handling with a single built-in (so for things that happens inside the parent process)
 
-?? SHLVL with characters as value
-?? Check SHLVL edge case values (int_min, int_max, negative)
-	--> if SHLVL is >= INT_MAX but <= LONG_MAX, new shell has SHLVL value 0 (no error)
-	--> if SHLVL is > LONG_MAX, new shell has SHLVL value 1 (no error)
-	--> Okay, this is VERY complicated and I think also unnecessary... might just give up :D
 
-	--> if SHLVL == 1000 when starting shell, the value is empty (SHLVL=)
-	--> if SHLVL is > 1000 and < INT_MAX when starting shell, we get error message:
-		bash: warning: shell level (1001) too high, resetting to 1 
-		(tested with 1001 as start value)
-
-	--> One option is to implement the error messsage and some generic value (0 or 1) if you have a weird value
 
 
 XX HD: Minishell: <extra.c << EOF cat | grep helo --> When stopped with SIGINT, minishell produces an extra NL for some reason
@@ -84,7 +74,15 @@ XX Non global env var --> if command has = and there are no args, process_non_gl
 XX Also: You can change global env var value without export!!!! So after export TEST=testi, you can just say TEST=festi, and it changes
 XX Fix pwd: if folder has been removed, behaviour is different. Check bash (and notes in .c file)
 XX Check for lone redirect in make_processes --> so that "> file1" will create the file
-
+XX SHLVL with characters as value
+XX Check SHLVL edge case values (int_min, int_max, negative)
+	--> if SHLVL is >= INT_MAX but <= LONG_MAX, new shell has SHLVL value 0 (no error)
+	--> if SHLVL is > LONG_MAX, new shell has SHLVL value 1 (no error)
+	--> Okay, this is VERY complicated and I think also unnecessary... might just give up :D
+	--> if SHLVL == 1000 when starting shell, the value is empty (SHLVL=)
+	--> if SHLVL is > 1000 and < INT_MAX when starting shell, we get error message:
+		bash: warning: shell level (1001) too high, resetting to 1 
+		(tested with 1001 as start value)
 
 
 ------------------------------------

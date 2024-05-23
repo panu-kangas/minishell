@@ -268,7 +268,7 @@ int	parsing(void)
 	g_signal_marker = 0;
 	env_lst = save_env_list(environ);
 	if (env_lst == NULL)
-		write_sys_error("setting up env_var not successful (malloc failure)"); // maybe exit here ??
+		write_sys_error("environmental variable set up unsuccessful"); // maybe exit here ??
 	while (1)
 	{
 		alter_termios(0);
