@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/22 11:47:00 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/24 14:17:55 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,8 @@ char		*expand_env_var(t_env_lst *env_lst, char *var_name);
 int			write_error(char *cmd, char *specifier, char *err_str);
 int			write_export_error(char *cmd, char *specifier, char *err_str);
 int			write_sys_error(char *err_str);
+int			write_syntax_error(char *err_str);
+int			write_weird_cd_error(char *err_str);
 
 char		**get_paths(t_env_lst *env_lst);
 char		**make_env_var_array(t_env_lst *env_lst);
@@ -222,6 +224,12 @@ void		sig_handler_hd(int signum);
 void		alter_termios(int flag);
 
 void		copy_cur_dir_to_data(t_data *data, char *cur_dir);
+
+int			check_pipe_syntax(t_data *data);
+int			check_quot_syntax(t_data *data);
+
+int			analyze_path(char *path, t_data *data);
+int			check_valid_path(char *path);
 
 
 #endif

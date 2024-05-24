@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 09:39:53 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/21 11:46:43 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/24 11:04:55 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ int handle_only_spaces(t_data *data)
 	i = 0;
 	while(data->input[i] != 0)
 	{
-		if (data->input[i] != ' ')
+		if (data->input[i] != '\t' || data->input[i] != '\n' \
+		|| data->input[i] != '\v' || data->input[i] != '\f' \
+		|| data->input[i] != '\r' || data->input[i] != ' ')
 		{
 			data->special_case = 1;
 			return (0);
@@ -87,59 +89,34 @@ int check_redir(char *str)
 		return (-1);
 }
 
-int	handle_no_file(char **tokenarr, int i, int exit_status) // Sorry Timo for messing up with your function!! I'll fix this later! =D That is totally OK :D Timo
+int	handle_no_file(char **tokenarr, int i, int exit_status)
 {
 	if (check_redir(tokenarr[i]) == -2)
 	{
 		if (tokenarr[i][2] == '>')
-		{
-			ft_putendl_fd ("minishell: syntax error near unexpected token `>'", 2);
-			exit_status = 258;
-		}
+			return (write_syntax_error(">"));
 		else
-		{
-			ft_putendl_fd ("minishell: syntax error near unexpected token `newline'", 2);
-			exit_status = 258;
-		}
+			return (write_syntax_error("newline"));
 	}
 	else if (check_redir(tokenarr[i]) > 0 && check_redir(tokenarr[i]) \
 	< 9 && ft_strlen(tokenarr[i]) < 3)
 	{
 		if (tokenarr[i + 1] == NULL)
-		{
-			ft_putendl_fd("syntax error near unexpected token `newline'", 2);
-			exit_status = 258;
-		}
+			return (write_syntax_error("newline"));
 		else if (tokenarr[i + 1][0] == '>')
-		{
-			ft_putendl_fd ("minishell: syntax error near unexpected token `>'", 2);
-			exit_status = 258;
-		}
+			return (write_syntax_error(">"));
 		else if (tokenarr[i + 1][0] == '<')
-		{
-			ft_putendl_fd("syntax error near unexpected token `<'", 2);
-			exit_status = 258;
-		}
+			return (write_syntax_error("<"));
 		else if (tokenarr[i + 1][0] == '|')
-		{
-			ft_putendl_fd ("minishell: syntax error near unexpected token `|'", 2);
-			exit_status = 258;
-		}
+			return (write_syntax_error("|"));
 	}
 	else if (check_redir(tokenarr[i]) > 4 && check_redir(tokenarr[i]) < 9)
 	{
 		if (tokenarr[i + 1][2] == '>')
-		{
-			ft_putendl_fd ("minishell: syntax error near unexpected token `>'", 2);
-			exit_status = 258;
-		}
+			return (write_syntax_error(">"));
 		else if (tokenarr[i + 1][2] == '<')
-		{
-			ft_putendl_fd ("minishell: syntax error near unexpected token `<'", 2);
-			exit_status = 258;
-		}
+			return (write_syntax_error("<"));
 	}
-	// Is exit status always 258? We need to investigate! >> I think it is - Timo.
 	return (exit_status);
 }
 

@@ -1,11 +1,14 @@
 
 TIMO:
 
-
-- Unclosed quot: I think this could be just a syntax error! with error message like:
-		minishell: syntax error: unclosed quotation
-- Minishell: echo hello | --> should have some sort of syntax error
-- Minishell: | --> solo pipe sign could maybe be a syntax error ?
+- Syntax error: these don't work yet or have wrong message:
+		--> >>>>>
+		--> ><
+		--> <>
+		--> >><
+		--> <<>
+		--> >>|
+		--> <<<<<<<
 - Heredoc: limiter (in our logic, filename of heredoc) does not expand at all!
 - Parsing of file names: if a file name is non_expandable env_var, leave it be! I need it later in program
 - Env_var expansion bug: _ is a valid character in env_var. So PANU_KANGAS should be one variable
@@ -46,6 +49,7 @@ XX Env_var expansions with blank spaces
 ------------------------------------
 
 
+
 PANU:
 
 - CHECK PHONE NOTES !!
@@ -54,10 +58,6 @@ PANU:
 - CD ISSUES:
 --> When trying "cd ." inside a deleted folder, bash message is --> cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
 --> When trying "cd ..", our minishell has a wrong message
-
-
-- Double check signal handling with a single built-in (so for things that happens inside the parent process)
-
 
 
 
@@ -83,6 +83,10 @@ XX Check SHLVL edge case values (int_min, int_max, negative)
 	--> if SHLVL is > 1000 and < INT_MAX when starting shell, we get error message:
 		bash: warning: shell level (1001) too high, resetting to 1 
 		(tested with 1001 as start value)
+XX Minishell: echo hello | --> should have some sort of syntax error
+XX Minishell: | --> solo pipe sign could maybe be a syntax error ?
+XX Unclosed quot: I think this could be just a syntax error! with error message like:
+		minishell: syntax error: unclosed quotation
 
 
 ------------------------------------

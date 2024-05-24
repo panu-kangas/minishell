@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/22 10:54:01 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/24 11:33:54 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,8 +234,8 @@ int parsing_pipeline(t_data *data, t_env_lst *env_lst)
 	int exit_status;
 
 	exit_status = 0;
-	if (handle_only_spaces(data) != 0)
-		return(0);
+	if (check_quot_syntax(data) != 0 || check_pipe_syntax(data) != 0)
+		return (258);
 	exit_status = lexer_input(data, exit_status);
 	if (exit_status != 0)
 		return (exit_status); //check leaks
@@ -268,7 +268,7 @@ int	parsing(void)
 	g_signal_marker = 0;
 	env_lst = save_env_list(environ);
 	if (env_lst == NULL)
-		write_sys_error("environmental variable set up unsuccessful"); // maybe exit here ??
+		return (write_sys_error("environmental variable set up unsuccessful")); // maybe exit here ??
 	while (1)
 	{
 		alter_termios(0);
@@ -292,7 +292,7 @@ int	parsing(void)
 			ft_putstr_fd("exit\n", 2);
 			return (0);
 		}
-		if (ft_strlen(data->input) != 0)
+		if (ft_strlen(data->input) != 0 && handle_only_spaces(data) == 0)
 		{
 			add_history(data->input); // error handling ??
 			exit_status = parsing_pipeline(data, env_lst);
