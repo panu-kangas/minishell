@@ -12,9 +12,15 @@ int	is_relative_path(char *path)
 char	*get_absolute_path(char *new_path, t_data *data)
 {
 	if (ft_strncmp(new_path, ".", 2) == 0 || ft_strncmp(new_path, "./", 3) == 0)
+	{
+		free(new_path);
 		return (ft_strdup(data->current_directory));
+	}
 	else
+	{
+		free(new_path);
 		return (0); // WE NEED PARENT DIRECTORY, so full path - last dir
+	}
 }
 
 char	*extract_directory(char *path, int counter, t_data *data)
@@ -118,7 +124,7 @@ int	check_valid_path(char *path)
 
 	if (path == NULL)
 		return (0);
-	if (stat(path, &statbuf) == -1)
+	if (access(path, F_OK) == -1)
 		return (1); // (write_error("cd", path, "No such file or directory"));
 	if (stat(path, &statbuf) == 0)
 	{
@@ -150,6 +156,6 @@ int	analyze_path(char *orig_path, t_data *data)
 	if (path == NULL)
 		return (write_sys_error("malloc failed"));
 
-	flag = check_all_permissions(path, data);
+	flag = check_all_permissions(path, data); // THIS IS IN PROCESS !!!
 	return (flag);
 }
