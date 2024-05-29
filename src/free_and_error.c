@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_and_error.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 10:56:58 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 15:31:45 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/29 08:43:44 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,19 @@ int	ft_free_data(t_data *data, int code)
 		free(data->input);
 	free (data);
 	return (code);
+}
+
+int	ft_free_parse(t_parse *head)
+{
+	t_parse *temp;
+
+	temp = head;
+	while (temp != NULL)
+	{
+		free(temp->str);
+		temp = temp->next;
+		free(head);
+		head = temp;
+	}
+	return (0);
 }

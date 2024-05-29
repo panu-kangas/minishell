@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/24 14:17:55 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/29 09:52:07 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ typedef struct s_env_lst
 //free
 void	ft_free_double(char **arr);
 int		ft_free_data(t_data *data, int code);
+int 	ft_free_parse(t_parse *head);
 
 //init
 void	init_data(t_data *data, int exit_status, char *parsing_cur_dir);
@@ -119,12 +120,16 @@ int		handle_substrings(char *str, t_parse **head);
 
 //expand node utils
 int		ft_lstiter_and_expand(t_parse *lst, t_env_lst *env_lst, t_data *data, int exit_status);
+int		ft_lstiter_and_expand_com(t_parse *lst, t_env_lst *env_lst, t_data *data, t_token *current);
+int		ft_lstiter_and_expand_files(t_parse *lst, t_env_lst *env_lst, t_data *data, int exit_status);
+char 	*expand_str_com(char *str, t_env_lst *env_lst, t_token *current);
 char	*ft_lstiter_and_make_new_str(t_parse *lst);
-t_parse *new_node(char *str,  int isexpand, int istrim);
+t_parse	*new_node(char *str,  int isexpand, int istrim);
 void	ft_lstadd_back_parse(t_parse **lst, t_parse *new);
 
 //expand
 char	*expand_str(char *str, t_env_lst *env_lst);
+
 //parse_utils
 char	**make_args_arr(char **tokenarr, int j, int i);
 int		add_files_to_token(t_token *new, char **tokenarr);
@@ -140,10 +145,11 @@ void	ft_lstiter2_ms(t_file *files, void (*f)(t_file *));
 void	ft_lstiter_ms(t_token *tokens, void (*f)(t_token *));
 void	printnode(t_token *token);
 void	printfile(t_file *node);
-void ft_lstiter_parse(t_parse *lst, void (*f)(t_parse *));
-void printparse(t_parse *node);
+void	ft_lstiter_parse(t_parse *lst, void (*f)(t_parse *));
+void	printparse(t_parse *node);
 
-
+// error
+int		write_amb_error(char *err_str);
 
 // GLOBAL VAR
 

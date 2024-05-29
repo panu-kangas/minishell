@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/22 12:41:22 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/29 10:08:06 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,39 @@ char *trim_str(char *str)
 }
 
 
+
+
+
+int ft_lstiter_and_expand_com(t_parse *lst, t_env_lst *env_lst, t_data *data, t_token *current)
+{
+	char *temp;
+	t_parse *head;
+	int exit_status;
+
+	head = lst;
+	exit_status = expand_prev_exit_code(head, data);
+	if (exit_status != 0)
+		return (exit_status);
+	while (head)
+	{
+		while (head->isexpand == 1 && ft_char_counter(head->str, '$') > 0)
+		{
+			if (*(ft_strchr(head->str, '$') + 1) == ' ' || *(ft_strchr(head->str, '$') + 1) == 0)
+				break ;
+			if (head->istrim != 0)
+				temp = trim_str(expand_str_com(head->str, env_lst, current));
+			else
+				temp = expand_str_com(head->str, env_lst, current);
+			if (!temp)
+				return (write_sys_error("malloc error"));
+			free(head->str);
+			head->str = temp;
+		}
+		head = head->next;
+	}
+	return (0);
+}
+
 int ft_lstiter_and_expand(t_parse *lst, t_env_lst *env_lst, t_data *data, int exit_status)
 {
 	char *temp;
@@ -183,4 +216,56 @@ int ft_lstiter_and_expand(t_parse *lst, t_env_lst *env_lst, t_data *data, int ex
 		head = head->next;
 	}
 	return (0);
+}
+
+int	check_file_name(char *temp, char *orig)
+{
+	char	**split;
+	int		len;
+	int		exit_status;
+
+	len = 0;
+	exit_status = 0;
+	split = ft_split(temp, ' ');
+	while(split[len] != NULL)
+		len++;
+	if (len > 1)
+	{
+		write_amb_error(orig);
+		exit_status = 1;
+	}
+	ft_free_doubleptr(split);
+	return (exit_status);
+}
+
+int ft_lstiter_and_expand_files(t_parse *lst, t_env_lst *env_lst, t_data *data, int exit_status)
+{
+	char *temp;
+	t_parse *head;
+
+	head = lst;
+	exit_status = expand_prev_exit_code(head, data);
+	if (exit_status != 0)
+		return (exit_status);
+	while (head)
+	{
+		while (head->isexpand == 1 && ft_char_counter(head->str, '$') > 0)
+		{
+			if (*(ft_strchr(head->str, '$') + 1) == ' ' || *(ft_strchr(head->str, '$') + 1) == 0)
+				break ;
+			if (head->istrim != 0)
+				temp = trim_str(expand_str(head->str, env_lst));
+			else
+				temp = expand_str(head->str, env_lst);
+			if (!temp)
+				return (write_sys_error("malloc error"));
+			exit_status = check_file_name(temp, head->str);
+			if (exit_status != 0)
+				return (exit_status);
+			free(head->str);
+			head->str = temp;
+		}
+		head = head->next;
+	}
+	return (exit_status);
 }

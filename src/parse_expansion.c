@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:20:40 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/22 11:47:49 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/29 10:27:25 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int expand_com(t_token *current, t_env_lst *env_lst, t_data *data, int ex
 	exit_status = handle_substrings(current->com, &head);
 	if (exit_status != 0)
 		return (exit_status);
-	exit_status = ft_lstiter_and_expand(head, env_lst, data, exit_status);
+	exit_status = ft_lstiter_and_expand_com(head, env_lst, data, current);
 	if (exit_status != 0)
 		return (exit_status);
 	exit_status = ft_lst_iter_remove_quotes(head);
@@ -102,6 +102,7 @@ static int expand_files(t_token *current, t_env_lst *env_lst, t_data *data, int 
 	tempfile = current->files;
 	while(tempfile != NULL)
 	{
+		if (tempf)
 		head = NULL;
 		if (tempfile->is_append == 1 && tempfile->is_infile == 1 \
 		&& (tempfile->filename[0] == '"' || tempfile->filename[0] == '\''))
@@ -109,18 +110,28 @@ static int expand_files(t_token *current, t_env_lst *env_lst, t_data *data, int 
 		exit_status = handle_substrings(tempfile->filename, &head);
 		if (exit_status != 0)
 			return (exit_status);
-		exit_status = ft_lstiter_and_expand(head, env_lst, data, exit_status);
+		exit_status = ft_lstiter_and_expand_files(head, env_lst, data, exit_status);
 		if (exit_status != 0)
+		{
+			ft_free_parse(head);
 			return (exit_status);
+		}
 		exit_status = ft_lst_iter_remove_quotes(head);
 		if (exit_status != 0)
+		{
+			ft_free_parse(head);
 			return (exit_status);
+		}
 		temp = ft_lstiter_and_make_new_str(head);
 		if (!temp)
+		{
+			ft_free_parse(head);
 			return(write_sys_error("malloc error"));
+		}
 		free(tempfile->filename);
 		tempfile->filename = temp;
 		tempfile = tempfile->next;
+		//ft_free_parse(head);
 	}
 	return (0);
 }
