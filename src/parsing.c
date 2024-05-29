@@ -264,11 +264,13 @@ int	parsing(void)
 	char		parsing_cur_dir[256];
 
 	exit_status = 0;
-	parsing_cur_dir[0] = '\0';
+	get_parsing_cur_dir(parsing_cur_dir);
+	if (parsing_cur_dir[0] == 0)
+		write_sys_error("malloc error; working directory storage set up failed"); // should we exit...?
 	g_signal_marker = 0;
 	env_lst = save_env_list(environ);
 	if (env_lst == NULL)
-		return (write_sys_error("environmental variable set up unsuccessful")); // maybe exit here ??
+		return (write_sys_error("environmental variable set up unsuccessful"));
 	while (1)
 	{
 		alter_termios(0);

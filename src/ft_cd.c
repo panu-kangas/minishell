@@ -57,19 +57,56 @@ void	copy_cur_dir_to_data(t_data *data, char *cur_dir)
 	data->current_directory[i] = '\0';
 }
 
-int	ft_cd(t_data *data, t_env_lst *env_lst, char *path)
+int	get_absolute_parent_path(t_data *data, t_token *token)
+{
+	int		i;
+	char	*path;
+
+	free(token->args[0]);
+	token->args[0] = ft_strdup(data->current_directory);
+	if (token->args[0] == NULL)
+		return (-1);
+	path = token->args[0];
+	i = ft_strlen(path) - 1;
+	while (1)
+	{
+		if (path[i] == '/') // is there a problem with root folder (name just /)
+		{
+			if (path[i + 1] != '\0' && path[i + 1] != '/')
+				break ;
+		}
+		i--;
+		if (i == 0)
+			break ;
+	}
+	if (i != 0)
+		path[i] = '\0';
+	return (0);
+}
+
+int	ft_cd(t_data *data, t_env_lst *env_lst, t_token *token)
 {
 	t_env_lst	*home;
 	int			flag;
+	char		*path;
 	char		*cur_dir;
 
+	path = token->args[0];
 	if (path != NULL && path[0] == '\0')
 		return (0);
 	if (ft_strlen(path) >= 256)
 		return (write_error("cd", path, "File name too long"));
+
 	flag = analyze_path(path, data);
-	if (flag != -1)
+	if (flag >= 0)
 		return (flag);
+	else if (flag == -2)
+	{
+		if (get_absolute_parent_path(data, token) == -1)
+			return (write_sys_error("malloc failed"));
+		path = token->args[0];
+	}
+	
 	home = check_if_var_exist(env_lst, "HOME");
 	if (path == NULL && home == NULL)
 		return (write_error(NULL, "cd", "HOME not set"));
