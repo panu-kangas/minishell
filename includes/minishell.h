@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/29 09:52:07 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/29 14:17:54 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int		parse_out_quotes(t_data *data, int exit_status);
 int		ft_char_counter(char *str, char c);
 int		handle_only_spaces(t_data *data);
 
+
 //parse split quotes to nodes
 int		handle_substrings(char *str, t_parse **head);
 
@@ -126,15 +127,21 @@ char 	*expand_str_com(char *str, t_env_lst *env_lst, t_token *current);
 char	*ft_lstiter_and_make_new_str(t_parse *lst);
 t_parse	*new_node(char *str,  int isexpand, int istrim);
 void	ft_lstadd_back_parse(t_parse **lst, t_parse *new);
+void	change_expand_status(t_parse *head);
+int		ft_lst_iter_remove_quotes(t_parse *lst);
 
 //expand
 char	*expand_str(char *str, t_env_lst *env_lst);
+char	*expand_str_file(char *str, t_env_lst *env_lst);
 
 //parse_utils
 char	**make_args_arr(char **tokenarr, int j, int i);
 int		add_files_to_token(t_token *new, char **tokenarr);
 t_file	*add_file(char *str, int is_append, int is_infile);
 int		check_redir(char *str);
+int ft_lstiter_and_expand_arg(t_parse *lst, t_env_lst *env_lst, t_data *data, int exit_status);
+int expand_prev_exit_code(t_parse *lst, t_data *data);
+char *trim_str(char *str);
 
 //nodes
 void	ft_lstadd_back_ms(t_token **tokens, t_token *newnode);

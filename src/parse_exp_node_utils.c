@@ -6,93 +6,11 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/29 10:08:06 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/29 14:07:28 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char *expand_exit_str(char *str, t_data *data, int i)
-{
-	char *temp;
-	char *new;
-
-	new = ft_substr(str, 0, i);
-	if (!new)
-		return (NULL);
-	temp = new;
-	new = ft_strjoin(new, (ft_itoa(data->prev_exit_status)));
-	if (!new)
-		return(NULL);
-	free (temp);
-	temp = new;
-	i += 2;
-	new = ft_strjoin(new, str + i);
-	free (temp);
-	if (!str)
-		return (NULL);
-	return (new);
-}
-
-
-int expand_prev_exit_code(t_parse *lst, t_data *data)
-{
-	char *temp;
-	t_parse *head;
-	int i;
-
-	i = 0;
-	head = lst;
-	while (head)
-	{
-		while (head->str[i] != 0)
-		{
-			if (head->str[i] == '$' && head->str[i + 1] == '?')
-			{
-				temp = head->str;
-				head->str = expand_exit_str(head->str, data, i);
-				if (!head->str)
-					return (-1);
-				free (temp);
-				i = 0;
-				continue ;
-			}
-			i++;
-		}
-		head = head->next;
-	}
-	return (0);
-}
-
-void ft_lstadd_back_parse(t_parse **lst, t_parse *new)
-{
-	t_parse *head;
-
-	if (*lst == NULL)
-	{
-		*lst = new;
-		return;
-	}
-	head = *lst;
-	while (head->next != NULL)
-		head = head->next;
-	head->next = new;
-}
-
-t_parse *new_node(char *str,  int isexpand, int istrim)
-{
-	t_parse *new;
-
-	new = (t_parse *)malloc(sizeof(t_parse));
-	if (!new)
-		return NULL;
-	init_parse(new);
-	new->str = str;
-	new->istrim = istrim;
-	new->isexpand = isexpand;
-	new->next = NULL;
-	return new;
-}
 
 char *ft_lstiter_and_make_new_str(t_parse *lst)
 {
@@ -155,117 +73,41 @@ char *trim_str(char *str)
 	return(temp);
 }
 
-
-
-
-
-int ft_lstiter_and_expand_com(t_parse *lst, t_env_lst *env_lst, t_data *data, t_token *current)
+void change_expand_status(t_parse *head)
 {
-	char *temp;
-	t_parse *head;
-	int exit_status;
+	t_parse *temp;
 
-	head = lst;
-	exit_status = expand_prev_exit_code(head, data);
-	if (exit_status != 0)
-		return (exit_status);
-	while (head)
+	temp = head;
+
+	while(temp != NULL)
 	{
-		while (head->isexpand == 1 && ft_char_counter(head->str, '$') > 0)
+		temp->isexpand = 0;
+		temp = temp->next;
+	}
+}
+
+int ft_lst_iter_remove_quotes(t_parse *lst)
+{
+	char *stret;
+	while (lst)
+	{
+		if (lst->str[0] == '\'')
 		{
-			if (*(ft_strchr(head->str, '$') + 1) == ' ' || *(ft_strchr(head->str, '$') + 1) == 0)
-				break ;
-			if (head->istrim != 0)
-				temp = trim_str(expand_str_com(head->str, env_lst, current));
-			else
-				temp = expand_str_com(head->str, env_lst, current);
-			if (!temp)
-				return (write_sys_error("malloc error"));
-			free(head->str);
-			head->str = temp;
+			stret = ft_strtrim(lst->str, "'");
+			if (!stret)
+				return (-1);
+			free(lst->str);
+			lst->str = stret;
 		}
-		head = head->next;
+		else if (lst->str[0] == '"')
+		{
+			stret = ft_strtrim(lst->str, "\"");
+			if (!stret)
+				return (-1);
+			free(lst->str);
+			lst->str = stret;
+		}
+		lst = lst->next;
 	}
 	return (0);
-}
-
-int ft_lstiter_and_expand(t_parse *lst, t_env_lst *env_lst, t_data *data, int exit_status)
-{
-	char *temp;
-	t_parse *head;
-
-	head = lst;
-	exit_status = expand_prev_exit_code(head, data);
-	if (exit_status != 0)
-		return (exit_status);
-	while (head)
-	{
-		while (head->isexpand == 1 && ft_char_counter(head->str, '$') > 0)
-		{
-			if (*(ft_strchr(head->str, '$') + 1) == ' ' || *(ft_strchr(head->str, '$') + 1) == 0)
-				break ;
-			if (head->istrim != 0)
-				temp = trim_str(expand_str(head->str, env_lst));
-			else
-				temp = expand_str(head->str, env_lst);
-			if (!temp)
-				return (write_sys_error("malloc error"));
-			free(head->str);
-			head->str = temp;
-		}
-		head = head->next;
-	}
-	return (0);
-}
-
-int	check_file_name(char *temp, char *orig)
-{
-	char	**split;
-	int		len;
-	int		exit_status;
-
-	len = 0;
-	exit_status = 0;
-	split = ft_split(temp, ' ');
-	while(split[len] != NULL)
-		len++;
-	if (len > 1)
-	{
-		write_amb_error(orig);
-		exit_status = 1;
-	}
-	ft_free_doubleptr(split);
-	return (exit_status);
-}
-
-int ft_lstiter_and_expand_files(t_parse *lst, t_env_lst *env_lst, t_data *data, int exit_status)
-{
-	char *temp;
-	t_parse *head;
-
-	head = lst;
-	exit_status = expand_prev_exit_code(head, data);
-	if (exit_status != 0)
-		return (exit_status);
-	while (head)
-	{
-		while (head->isexpand == 1 && ft_char_counter(head->str, '$') > 0)
-		{
-			if (*(ft_strchr(head->str, '$') + 1) == ' ' || *(ft_strchr(head->str, '$') + 1) == 0)
-				break ;
-			if (head->istrim != 0)
-				temp = trim_str(expand_str(head->str, env_lst));
-			else
-				temp = expand_str(head->str, env_lst);
-			if (!temp)
-				return (write_sys_error("malloc error"));
-			exit_status = check_file_name(temp, head->str);
-			if (exit_status != 0)
-				return (exit_status);
-			free(head->str);
-			head->str = temp;
-		}
-		head = head->next;
-	}
-	return (exit_status);
 }

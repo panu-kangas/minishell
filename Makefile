@@ -6,7 +6,7 @@
 #    By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/05/29 10:12:30 by tsaari           ###   ########.fr        #
+#    Updated: 2024/05/29 11:47:33 by tsaari           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ HEADERS = -I includes -I /Users/$(USER)/.brew/opt/readline/include
 SRC_DIR = src/
 SRCS = main.c parsing.c parse_utils.c parse_node_utils.c ft_pipex_split.c free_and_error.c parse_init.c \
 	parse_expansion.c parse_split_quotes.c parse_expand.c parse_exp_node_utils.c \
+	parse_expand_file.c parse_expand_args.c parse_expand_com.c parse_exp_node_utils2.c \
 	ft_cd.c ft_echo.c ft_empty_export.c ft_pwd_env.c ft_unset_export.c \
 	env_lst_utils.c expand_env_var.c get_env_node.c make_env_node.c save_env_list.c \
 	execute_command.c get_paths.c make_env_var_array.c \

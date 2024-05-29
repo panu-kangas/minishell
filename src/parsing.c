@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/24 11:33:54 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/29 13:44:58 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 int	g_signal_marker;
+
 int	skip_file(char **tokenarr, int i)
 {
 	if (check_redir(tokenarr[i]) > 0 && check_redir(tokenarr[i]) < 5)
@@ -181,10 +182,8 @@ char *check_non_spaced_files(char *str)
 static int	parse_single_token(char *str, t_data *data, int exit_status)
 {
 	char	**tokenarr;
-//	int		i; // --> is this needed ??
 	(void)data;
 
-//	i = 0; // --> is this needed ??
 	str = check_non_spaced_files(str);
 	if (!str)
 		return (write_sys_error("malloc error"));
