@@ -12,6 +12,26 @@
 
 #include "../includes/minishell.h"
 
+void	get_parsing_cur_dir(char *parsing_cur_dir)
+{
+	char	*temp;
+	int		i;
+	int		j;
+
+	temp = getcwd(NULL, 0);
+	if (temp == NULL)
+	{
+		parsing_cur_dir[0] = '\0';
+		return ;
+	}
+	i = 0;
+	j = 0;
+	while (temp[i] != '\0')
+		parsing_cur_dir[j++] = temp[i++];
+	parsing_cur_dir[j] = '\0';
+}
+
+
 void	init_data(t_data *data, int exit_status, char *parsing_cur_dir)
 {
 	data->input = NULL;

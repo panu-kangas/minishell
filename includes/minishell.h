@@ -165,7 +165,7 @@ int			ft_export(t_env_lst *env_lst, char *new_env_var);
 int			ft_empty_export(t_env_lst *env_lst);
 int			ft_pwd(t_data *data);
 void		ft_env(t_env_lst *env_lst);
-int			ft_cd(t_data *data, t_env_lst *env_lst, char *path);
+int			ft_cd(t_data *data, t_env_lst *env_lst, t_token *token);
 void		ft_echo(int flag, char **args);
 int			ft_exit(t_env_lst *env_lst, t_data *data, char **args);
 
@@ -205,7 +205,7 @@ char		**make_env_var_array(t_env_lst *env_lst);
 
 int			handle_command(t_data *data, t_env_lst *env_lst, int index);
 int			execute_command(char *cmd, char **args, t_env_lst *env_lst, t_data *data);
-int			execute_built_in(t_env_lst *env_lst, t_data *data, char *cmd, char **args);
+int			execute_built_in(t_env_lst *env_lst, t_data *data, t_token *cur_token);
 
 int			check_for_built_in(char *cmd);
 int			is_echo(char *cmd);
@@ -236,6 +236,7 @@ int			check_quot_syntax(t_data *data);
 
 int			analyze_path(char *path, t_data *data);
 int			check_valid_path(char *path);
+void		get_parsing_cur_dir(char *parsing_cur_dir);
 
 
 #endif
