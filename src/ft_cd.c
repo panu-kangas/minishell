@@ -1,11 +1,13 @@
 #include "minishell.h"
 
-int	update_pwd_env_var(t_env_lst *env_lst, char *cur_dir)
+int	update_pwd_env_var(t_data *data, t_env_lst *env_lst, char *cur_dir)
 {
 	t_env_lst	*pwd;
 	t_env_lst	*old_pwd;
 	char		*env_var;
 
+	if (cur_dir == NULL)
+		cur_dir = data->current_directory;
 	pwd = check_if_var_exist(env_lst, "PWD");
 	old_pwd = check_if_var_exist(env_lst, "OLDPWD");
 
@@ -57,6 +59,22 @@ void	copy_cur_dir_to_data(t_data *data, char *cur_dir)
 	data->current_directory[i] = '\0';
 }
 
+void	add_path_to_data_cur_dir(t_data *data, char *path)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (data->current_directory[i] != '\0')
+		i++;
+	if (i > 0 && data->current_directory[i - 1] != '/')
+		data->current_directory[i++] = '/';
+	while (path[j] != '\0')
+		data->current_directory[i++] = path[j++];
+	data->current_directory[i] = '\0';
+}
+
 int	get_absolute_parent_path(t_data *data, t_token *token)
 {
 	int		i;
@@ -68,7 +86,7 @@ int	get_absolute_parent_path(t_data *data, t_token *token)
 		return (-1);
 	path = token->args[0];
 	i = ft_strlen(path) - 1;
-	while (1)
+	while (i != 0)
 	{
 		if (path[i] == '/') // is there a problem with root folder (name just /)
 		{
@@ -76,8 +94,6 @@ int	get_absolute_parent_path(t_data *data, t_token *token)
 				break ;
 		}
 		i--;
-		if (i == 0)
-			break ;
 	}
 	if (i != 0)
 		path[i] = '\0';
@@ -120,12 +136,16 @@ int	ft_cd(t_data *data, t_env_lst *env_lst, t_token *token)
 	else
 		flag = chdir(path);
 	if (flag < 0)
-		return (1);
+		return (write_error("cd", path, "Permission denied"));
 	cur_dir = getcwd(NULL, 0);
 	if (cur_dir == NULL)
-		return (write_sys_error("malloc failed"));
-	copy_cur_dir_to_data(data, cur_dir);
-	if (update_pwd_env_var(env_lst, cur_dir) == 1)
+	{
+		write_sys_error("cd: error retrieving current directory: getcwd: cannot access parent directories");
+		add_path_to_data_cur_dir(data, path);
+	}
+	else
+		copy_cur_dir_to_data(data, cur_dir);
+	if (update_pwd_env_var(data, env_lst, cur_dir) == 1)
 	{
 		free(cur_dir);
 		return (1);

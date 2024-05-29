@@ -1,6 +1,9 @@
 
 TIMO:
 
+- rm "<" not working
+		--> there is maybe a extra space somewhere in the string
+		--> output "rm:  <: No such file or directory"
 - Syntax error: these don't work yet or have wrong message:
 		--> >>>>>
 		--> ><

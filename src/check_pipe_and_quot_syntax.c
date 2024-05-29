@@ -50,7 +50,7 @@ int	check_pipe_syntax(t_data *data)
 		while (input[i] == '\t' || input[i] == '\n' || input[i] == '\v' \
 		|| input[i] == '\f' || input[i] == '\r' || input[i] == ' ')
 			i++;
-		if (input[i] == '|' || input[i] == '\0')
+		if (input[i] == '|' || (ft_strchr(input, '|') != NULL && input[i] == '\0')) // check empty input (or only spaces)
 			return (write_syntax_error("|"));
 		else if (input[i] != '\0')
 		{
