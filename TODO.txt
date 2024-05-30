@@ -1,6 +1,13 @@
 
 TIMO:
 
+
+- if we have only non_found env_var expansion, nothing should happen. We now have the followinng error:
+	--> minishell-1.1$: $jaha
+	--> minishell: : command not found
+- rm "<" not working
+		--> there is maybe a extra space somewhere in the string
+		--> output "rm:  <: No such file or directory"
 - Syntax error: these don't work yet or have wrong message:
 		--> >>>>>
 		--> ><
@@ -55,12 +62,12 @@ PANU:
 - CHECK PHONE NOTES !!
 - check "Ambiguous redirect" inside ft_redirect!!
 - Signals during solo built_in (DFL vs IGN)
-- CD ISSUES:
---> When trying "cd ." inside a deleted folder, bash message is --> cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
---> When trying "cd ..", our minishell has a wrong message
 
 
 
+XX CD ISSUES:
+	--> When trying "cd ." inside a deleted folder, bash message is --> cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+	--> When trying "cd ..", our minishell has a wrong message
 XX HD: Minishell: <extra.c << EOF cat | grep helo --> When stopped with SIGINT, minishell produces an extra NL for some reason
 XX HD: Travelling cursor, when termios is altered --> FIXED, just needs testing when quot parsing is done
 XX HD: Move heredoc out of child processes!! Because SIGINT in a heredoc should stop the whole pipeline (example <<EOF cat | ls)
