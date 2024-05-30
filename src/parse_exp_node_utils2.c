@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/29 11:43:45 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 06:21:44 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,3 @@ t_parse *new_node(char *str,  int isexpand, int istrim)
 	new->next = NULL;
 	return new;
 }
-
-

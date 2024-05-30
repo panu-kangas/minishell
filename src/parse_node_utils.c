@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 08:09:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 15:44:36 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 09:52:54 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,6 @@ void	ft_lstadd_file_ms(t_file **files, t_file *new)
 		temp->next = new;
 		new->next = NULL;
 	}
-	temp = *files;
-	while (temp->next != NULL)
-		temp = temp->next;
 }
 
 void	ft_lstadd_back_ms(t_token **tokens, t_token *newnode)

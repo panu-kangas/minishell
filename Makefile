@@ -6,13 +6,13 @@
 #    By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/05/29 11:47:33 by tsaari           ###   ########.fr        #
+#    Updated: 2024/05/30 11:08:13 by tsaari           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-CC = cc
+CC = gcc
 RM = rm -rf
 CFLAGS =  -g -Wall -Wextra -Werror # remove the -g flag eventually ??
 #FSFLAGS =-fsanitize=address

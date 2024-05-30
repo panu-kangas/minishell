@@ -78,7 +78,6 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 	std_fd[1] = dup(1); // error handling
 
 	signal(SIGINT, &sig_handler_hd); // sigaction ??
-
 	exit_status = process_heredoc(data, env_lst, 0);
 
 	if (exit_status != 0)
@@ -96,7 +95,7 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 	signal(SIGQUIT, SIG_DFL); // USE SIGACTION && ask about this from someone: what should signal setting be in built-in (parent process)?
 
 
-	// check for '=' in command if only one token (= process) is found. 
+	// check for '=' in command if only one token (= process) is found.
 	if (data->tokens->com != NULL && ft_strchr(data->tokens->com, '=') != NULL \
 	&& data->tokens->next ==  NULL)
 	{

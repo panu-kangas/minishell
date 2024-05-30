@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:51:38 by tsaari            #+#    #+#             */
-/*   Updated: 2024/04/30 11:00:18 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/30 11:00:26 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ int	main(int argc, char **argv, char **envp)
 	{
 		return (parsing());
 	}
+	//system("leaks executablename");
 	return(0);
 }

@@ -122,6 +122,20 @@ int	dup_pipe_in(int **fd_pipes, int index)
 	return (0);
 }
 
+int	check_for_infile(t_token *cur_token)
+{
+	t_file	*temp;
+
+	temp = cur_token->files;
+	while (temp != NULL)
+	{
+		if (temp->is_infile == 1)
+			return (1);
+		temp = temp->next;
+	}
+	return (0);
+}
+
 int	ft_redirect(t_data *data, int **fd_pipes, int index)
 {
 	int		exit_code;
@@ -132,7 +146,7 @@ int	ft_redirect(t_data *data, int **fd_pipes, int index)
 	exit_code = 0;
 	cur_token = get_cur_token(data, index);
 
-	if (index != 0 && cur_token->files == NULL)
+	if (index != 0 && check_for_infile(cur_token) == 0)
 		exit_code = dup_pipe_in(fd_pipes, index);
 	else
 		exit_code = process_infile(cur_token);
