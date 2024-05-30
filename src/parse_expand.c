@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:27 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 12:43:35 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 14:52:33 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static char	*expand_substr_file(char *str, t_env_lst *env_lst)
 		temp = ft_strdup(expand_env_var(env_lst, str));
 	else
 	{
-		temp = ft_strdup(str);
+		temp = ft_strjoin("$", str);
 	}
 	return (temp);
 }
