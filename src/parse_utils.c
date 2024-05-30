@@ -6,59 +6,15 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 09:39:53 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 09:34:49 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 20:38:53 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int handle_only_spaces(t_data *data)
+int	check_redir(char *str)
 {
-	int i;
-
-	i = 0;
-	while(data->input[i] != 0)
-	{
-		if (data->input[i] != '\t' || data->input[i] != '\n' \
-		|| data->input[i] != '\v' || data->input[i] != '\f' \
-		|| data->input[i] != '\r' || data->input[i] != ' ')
-		{
-			return (0);
-		}
-		i++;
-	}
-	return (1);
-}
-
-
-t_file	*add_file(char *str, int is_append, int is_infile)
-{
-	t_file	*new;
-
-	new = (t_file *)malloc (sizeof(t_file));
-	if (!new)
-		return (NULL);
-	init_file(new);
-	if (!str)
-	{
-		new->no_filename = -1;
-		return (NULL);
-	}
-	new->filename = ft_strdup(str);
-	if (!new->filename)
-	{
-		free (new);
-		return (NULL);
-	}
-	new->is_append = is_append;
-	new->is_infile = is_infile;
-	new->next = NULL;
-	return (new);
-}
-
-int check_redir(char *str)
-{
-	size_t len;
+	size_t	len;
 
 	len = ft_strlen(str);
 
@@ -115,7 +71,6 @@ int	handle_no_file(char **tokenarr, int i, int exit_status)
 	return (exit_status);
 }
 
-
 static t_file	*add_file_single(t_file *temp, char **tokenarr, int i)
 {
 	if (check_redir(tokenarr[i]) == 1)
@@ -155,34 +110,9 @@ int	add_files_to_token(t_token *new, char **tokenarr)
 		else if (check_redir(tokenarr[i]) == 8)
 			temp = add_file(&tokenarr[i][1], -1, -1);
 		if (!temp)
-			return (write_sys_error("malloc error"));
+			return (1);
 		ft_lstadd_file_ms(&new->files, temp);
 		i++;
 	}
 	return (0);
-}
-
-char	**make_args_arr(char **tokenarr, int j, int i)
-{
-	char	**args;
-	int		k;
-
-	int arraysize = i - j + 2;
-	args = (char**)malloc(sizeof(char*) * arraysize);
-	if (args == NULL)
-		return (NULL);
-	k = 0;
-	while (j < i)
-	{
-		args[k] = ft_strdup(tokenarr[j]);
-		if (args[k] == NULL)
-		{
-			ft_free_double(args);
-			return (NULL);
-		}
-		j++;
-		k++;
-	}
-	args[k] = 0;
-	return (args);
 }

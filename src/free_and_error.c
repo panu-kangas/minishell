@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 10:56:58 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 07:32:17 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 19:45:52 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,13 @@ int	ft_free_parse(t_parse *head, int exit_status)
 		head = temp;
 	}
 	return (exit_status);
+}
+
+void	free_token(t_token *token)
+{
+	if (token->args != NULL)
+		ft_free_double(token->args);
+	if (token->com != NULL)
+		free(token->com);
+	free(token);
 }

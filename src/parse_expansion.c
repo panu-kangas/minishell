@@ -6,12 +6,11 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:20:40 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 08:17:04 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 21:15:41 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
 
 static int expand_com(t_token *current, t_env_lst *env_lst, t_data *data, int exit_status)
 {

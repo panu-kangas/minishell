@@ -5,9 +5,8 @@ TIMO:
 - if we have only non_found env_var expansion, nothing should happen. We now have the followinng error:
 	--> minishell-1.1$: $jaha
 	--> minishell: : command not found
-- rm "<" not working
-		--> there is maybe a extra space somewhere in the string
-		--> output "rm:  <: No such file or directory"
+	needs to be handled somehow in processes cause $jaha | ls should work too
+		do we need some kind of flag?
 - Syntax error: these don't work yet or have wrong message:
 		--> >>>>>
 		--> ><
@@ -16,11 +15,11 @@ TIMO:
 		--> <<>
 		--> >>|
 		--> <<<<<<<
-- Heredoc: limiter (in our logic, filename of heredoc) does not expand at all!
-- Parsing of file names: if a file name is non_expandable env_var, leave it be! I need it later in program
-- Env_var expansion bug: _ is a valid character in env_var. So PANU_KANGAS should be one variable
+MAYBE DONE    - Heredoc: limiter (in our logic, filename of heredoc) does not expand at all! SEGFAUL
+DONE 	- Parsing of file names: if a file name is non_expandable env_var, leave it be! I need it later in program
+I THINK THIS WORKS????    - Env_var expansion bug: _ is a valid character in env_var. So PANU_KANGAS should be one variable
 		---> Our parsing would only expand PANU and then concat it to _KANGAS
-- Env_var expansion / parsing: if we do solo expansion of env_var that has spaces in it, they should be parsed
+DONE     - Env_var expansion / parsing: if we do solo expansion of env_var that has spaces in it, they should be parsed
 		--> example:
 		--> bash-3.2$ export PANU="echo hello"
 		--> bash-3.2$ $PANU
@@ -58,6 +57,8 @@ XX Env_var expansions with blank spaces
 
 
 PANU:
+
+-HEREDOC SEGFAULT in get_execve_args handle_command.c:41
 
 - CHECK PHONE NOTES !!
 - check "Ambiguous redirect" inside ft_redirect!!

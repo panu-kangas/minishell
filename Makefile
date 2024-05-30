@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+         #
+#    By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/05/30 10:35:09 by pkangas          ###   ########.fr        #
+#    Updated: 2024/05/30 21:37:16 by tsaari           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-CC = gcc
+CC = cc
 RM = rm -rf
 CFLAGS =  -g -Wall -Wextra -Werror # remove the -g flag eventually ??
 FSFLAGS =-fsanitize=address
@@ -21,7 +21,8 @@ LIBFT = libft/libft.a
 HEADERS = -I includes -I /usr/local/Cellar/readline/8.2.10/include
 
 SRC_DIR = src/
-SRCS = main.c parsing.c parse_utils.c parse_node_utils.c ft_pipex_split.c free_and_error.c parse_init.c \
+SRCS = main.c parsing.c parse_utils.c parse_utils2.c parse_utils3.c parse_node_utils.c \
+	ft_pipex_split.c free_and_error.c parse_init.c \
 	parse_expansion.c parse_split_quotes.c parse_expand.c parse_exp_node_utils.c \
 	parse_expand_file.c parse_expand_args.c parse_expand_com.c parse_exp_node_utils2.c \
 	ft_cd.c ft_echo.c ft_empty_export.c ft_pwd_env.c ft_unset_export.c \
