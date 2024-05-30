@@ -58,5 +58,5 @@ int	write_amb_error(char *err_str)
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(err_str, 2);
 	ft_putstr_fd(": ambiguous redirect\n", 2);
-	return (ERR_STAT); // this is probably a bit different depending on failure? Needs research
+	return (1); // this is probably a bit different depending on failure? Needs research
 }

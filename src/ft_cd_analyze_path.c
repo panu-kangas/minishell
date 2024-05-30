@@ -8,14 +8,10 @@ int	is_relative_path(char *path)
 
 	if (path == NULL)
 		return (0);
-	if (ft_strncmp(path, ".", 2) == 0)
+	if (ft_strncmp(path, ".", 2) == 0 || ft_strncmp(path, "./", 3) == 0)
 		return (1);
-	else if (ft_strncmp(path, "..", 3) == 0)
+	else if (ft_strncmp(path, "..", 3) == 0 || ft_strncmp(path, "../", 4) == 0)
 		return (2);
-	else if (ft_strncmp(path, "./", 3) == 0)
-		return (3);
-	else if (ft_strncmp(path, "../", 4) == 0)
-		return (4);
 	else if (ft_strncmp(path, "./", 2) == 0)
 		return (5);
 	else if (ft_strncmp(path, "../", 3) == 0)
@@ -26,6 +22,8 @@ int	is_relative_path(char *path)
 		return (8);
 	else if (i > 1 && path[i - 2] == '/' && path[i - 1] == '.' && path[i] == '.')
 		return (7);
+	else if (path[0] != '/')
+		return (8);
 	return (0);
 }
 
@@ -131,7 +129,7 @@ int	check_parent_dir_permissions(char *path)
 	i = ft_strlen(temp) - 1;
 	while (i != 0)
 	{
-		if (temp[i] == '/') // is there a problem with root folder (name just /)
+		if (temp[i] == '/')
 		{
 			if (temp[i + 1] != '\0' && temp[i + 1] != '/')
 				break ;
@@ -183,64 +181,20 @@ char	*update_cur_dir(char *temp_cur_dir, char *path)
 	}
 }
 
-int	check_given_path_permissions(t_data *data, char **split_path)
-{
-	int		i;
-//	int		flag;
-	char	*temp_cur_dir;
-//	char	*temp;
-
-	i = 0;
-//	flag = 0;
-	temp_cur_dir = ft_strdup(data->current_directory);
-	if (temp_cur_dir == NULL)
-		return (-1);
-	while (split_path[i] != NULL)
-	{
-		errno = 0;
-
-		ft_printf("temp-cur-dir: %s\n", temp_cur_dir);
-
-		if (chdir(split_path[i]) != 0)
-		{
-			if (errno == EACCES)
-			{
-				if (split_path[i + 1] == NULL || \
-				is_relative_path(split_path[i + 1]) != 2)
-					return (3);
-				else if (is_relative_path(split_path[i]) != 2 && is_relative_path(split_path[i + 1]) == 2 \
-				&& is_relative_path(split_path[i + 2]) == 2)
-					return (3);
-				else if (is_relative_path(split_path[i]) == 2 && is_relative_path(split_path[i + 1]) == 2)
-					return (3);
-			}
-			else if (errno == ENOENT)
-			{
-				ft_printf("ENOENT");
-		//		if (is_relative_path(split_path[i]) == 2)
-		//			flag = check_complete_path(split_path); // not done
-		//		else
-		//			return (1);
-			}
-		}
-		temp_cur_dir = update_cur_dir(temp_cur_dir, split_path[i]);
-		if (temp_cur_dir == NULL)
-			return (-1);
-		i++;
-	}
-	// get the flag value here from temp_cur_dir --> MAYBE NOT NEEDED
-	free(temp_cur_dir);
-	// remember to return to actual cur_dir if something fails
-	return (0);
-}
+ // ONE EDGE CASE: if your deep in a "No such file", and wanna backtrack using ../../../ path or even ../../../../minishell
+ // SOLUTION: add a check: if cur_dir_flag == 1 && is_relative_path == 6
+ // make a function that builds the "final directory" using split_path.
+ // if final directory is valid --> return -1, else throw error
 
 int	analyze_path(char *path, t_data *data)
 {
 	int		valid_path_flag;
 	int		cur_dir_flag;
 	int		path_flag;
+	int		i;
 	char	**split_cur_dir;
 	char	**split_path;
+
 
 	valid_path_flag = check_valid_path(path);
 
@@ -255,7 +209,7 @@ int	analyze_path(char *path, t_data *data)
 	else if (valid_path_flag == 3)
 		return (write_error("cd", path, "Permission denied"));
 
-	split_cur_dir = ft_split(data->current_directory, '/');
+	split_cur_dir = ft_pipex_split(data->current_directory, '/');
 	if (split_cur_dir == NULL)
 		return (write_sys_error("malloc failed"));
 	cur_dir_flag = check_cur_dir_permissions(split_cur_dir);
@@ -276,18 +230,65 @@ int	analyze_path(char *path, t_data *data)
 		path_flag = check_parent_dir_permissions(data->current_directory);
 		if (path_flag == 0)
 			return (-2);
+	} // add edge check here !! 
+	else if (is_relative_path(path) > 6 && cur_dir_flag == 1)
+		return (write_error("cd", path, "No such file or directory"));
+	else if (is_relative_path(path) != 0 && (cur_dir_flag == 3 || cur_dir_flag == 1))
+	{
+		if (chdir(path) != 0)
+		{
+			if (cur_dir_flag == 1)
+				return (write_error("cd", path, "No such file or directory"));
+			else if (cur_dir_flag == 3)
+				return (write_error("cd", path, "Permission denied"));
+		}
+		else
+			return (-3);
 	}
-	else if (is_relative_path(path) > 4)
+	else if (cur_dir_flag == 0)
 	{
 		split_path = ft_split(path, '/');
 		if (split_path == NULL)
 			return (write_sys_error("malloc failed"));
-		path_flag = check_given_path_permissions(data, split_path);
-		if (path_flag < 0)
-			return (write_sys_error("malloc failed"));
-
-		ft_printf("FINAL FLAG: %d\n", path_flag);
-		// check flag value and act accordingly
+		i = 0;
+		errno = 0;
+		while (split_path[i] != NULL)
+		{			
+			if (chdir(split_path[i]) != 0)
+			{
+				if (errno == EACCES && is_relative_path(split_path[i + 1]) == 2)
+				{
+					errno = 0;
+					i++;
+				}
+				else if (errno == EACCES && is_relative_path(split_path[i + 1]) == 1)
+				{
+					free(split_path[i + 1]);
+					split_path[i + 1] = ft_strdup(split_path[i]);
+					if (split_path[i + 1] == NULL)
+						return (write_sys_error("malloc failed"));
+				}
+				else
+					break ;
+			}
+			i++;
+		}
+		if (split_path[i] != NULL)
+		{
+			ft_free_doubleptr(split_path);
+			if (errno == ENOENT)
+				path_flag = 1;
+			else if (errno == EACCES)
+				path_flag = 3;
+			if (chdir(data->current_directory) != 0)
+				return (write_sys_error("chdir failed"));
+			if (path_flag == 1)
+				return (write_error("cd", path, "No such file or directory"));
+			else if (path_flag == 3)
+				return (write_error("cd", path, "Permission denied"));
+		}
+		else
+			return (-3);
 	}
 
 	return (-1);
@@ -577,4 +578,69 @@ int	check_all_permissions(char **split_path, t_data *data) // THIS IS IN PROCESS
 	flag = check_valid_path(temp);
 	free(temp);
 	return (flag);
+} */
+
+
+
+/*	else if (is_relative_path(path) > 4)
+	{
+		split_path = ft_split(path, '/');
+		if (split_path == NULL)
+			return (write_sys_error("malloc failed"));
+		path_flag = check_given_path_permissions(data, split_path);
+		if (path_flag < 0)
+			return (write_sys_error("malloc failed"));
+		else if (path_flag == 4)
+			return (-3);
+		ft_printf("FINAL FLAG: %d\n", path_flag);
+		// check flag value and act accordingly
+	} */
+
+/*
+int	check_given_path_permissions(t_data *data, char **split_path)
+{
+	int		i;
+	int		flag;
+	char	*temp_cur_dir;
+//	char	*temp;
+
+	i = 0;
+	flag = 0;
+	temp_cur_dir = ft_strdup(data->current_directory);
+	if (temp_cur_dir == NULL)
+		return (-1);
+	while (split_path[i] != NULL)
+	{
+		errno = 0;
+
+		ft_printf("temp-cur-dir: %s\n", temp_cur_dir);
+
+		if (chdir(split_path[i]) != 0)
+		{
+			flag = 1;
+			if (errno == EACCES)
+			{
+				if (split_path[i + 1] == NULL || \
+				is_relative_path(split_path[i + 1]) != 2)
+					return (3);
+				else if (is_relative_path(split_path[i]) != 2 && is_relative_path(split_path[i + 1]) == 2 \
+				&& is_relative_path(split_path[i + 2]) == 2)
+					return (3);
+				else if (is_relative_path(split_path[i]) == 2 && is_relative_path(split_path[i + 1]) == 2)
+					return (3);
+			}
+			else if (errno == ENOENT) // just a test
+			{
+				ft_printf("ENOENT\n");
+			}
+		}
+		temp_cur_dir = update_cur_dir(temp_cur_dir, split_path[i]);
+		if (temp_cur_dir == NULL)
+			return (-1);
+		i++;
+	}
+	free(temp_cur_dir);
+	if (flag == 0)
+		return (4);
+	return (0);
 } */

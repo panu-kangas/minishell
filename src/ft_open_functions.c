@@ -5,6 +5,8 @@ int	ft_just_create_file(char *file)
 	int	file_fd;
 	struct stat statbuf;
 
+	if (file != NULL && file[0] == '$')
+		return (write_amb_error(file));
 	if (access(file, F_OK) == 0)
 	{
 		if (stat(file, &statbuf) == 0)
@@ -27,6 +29,10 @@ int	open_outfile_append(char *file)
 	int			file_fd;
 	struct stat statbuf;
 
+	if (file != NULL && file[0] == '\0')
+		return (write_error(NULL, "", "No such file or directory"));
+	if (file != NULL && file[0] == '$')
+		return (write_amb_error(file));
 	if (access(file, F_OK) == 0)
 	{
 		if (stat(file, &statbuf) == 0)
@@ -56,6 +62,8 @@ int	open_outfile(char *file)
 
 	if (file != NULL && file[0] == '\0')
 		return (write_error(NULL, "", "No such file or directory"));
+	if (file != NULL && file[0] == '$')
+		return (write_amb_error(file));
 	if (access(file, F_OK) == 0)
 	{
 		if (stat(file, &statbuf) == 0)
@@ -83,6 +91,8 @@ int	open_infile(char *file)
 {
 	int	file_fd;
 
+	if (file != NULL && file[0] == '$')
+		return (write_amb_error(file));
 	if (access(file, F_OK) == -1)
 		return (write_error(NULL, file, "No such file or directory"));
 	if (access(file, R_OK) == -1)

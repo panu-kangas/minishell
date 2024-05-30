@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:01:29 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/22 11:41:41 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 11:56:28 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	get_parsing_cur_dir(char *parsing_cur_dir)
 	while (temp[i] != '\0')
 		parsing_cur_dir[j++] = temp[i++];
 	parsing_cur_dir[j] = '\0';
+	free(temp);
 }
 
 
