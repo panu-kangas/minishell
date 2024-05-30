@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 09:35:27 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 12:47:29 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ int		ft_lst_iter_remove_quotes(t_parse *lst);
 //expand
 char	*expand_str(char *str, t_env_lst *env_lst);
 char	*expand_str_file(char *str, t_env_lst *env_lst);
+char	*ft_strjoin_free(char *s1, char *s2);
 
 //parse_utils
 char	**make_args_arr(char **tokenarr, int j, int i);

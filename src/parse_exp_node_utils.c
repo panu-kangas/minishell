@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 07:44:15 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 12:17:09 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ char *trim_str(char *str)
 	while (str[i] == ' ')
 		i++;
 	temp = trimmed_str(str, in_word, j, i);
+	free(str);
 	if (!temp)
 		return (NULL);
 	return(temp);

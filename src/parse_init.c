@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:01:29 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 09:35:22 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 11:57:48 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	get_parsing_cur_dir(char *parsing_cur_dir)
 	while (temp[i] != '\0')
 		parsing_cur_dir[j++] = temp[i++];
 	parsing_cur_dir[j] = '\0';
+	free(temp);
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:38:10 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/29 11:55:21 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 12:57:48 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,8 @@ int add_to_arg(t_token *current, char **arr)
 static char	*expand_substr_com(char *str, t_env_lst *env_lst, t_token *current)
 {
 	char	*temp;
-	int		len;
 	char	**split;
 
-	len = 0;
 	if (!str || !env_lst)
 		return(NULL);
 	if (expand_env_var(env_lst, str) != NULL)
@@ -90,6 +88,7 @@ static char	*expand_substr_com(char *str, t_env_lst *env_lst, t_token *current)
 		temp = ft_strdup(split[0]);
 	}
 	ft_free_doubleptr(split);
+	free(str);
 	return (temp);
 }
 
@@ -109,13 +108,13 @@ char *expand_str_com(char *str, t_env_lst *env_lst, t_token *current)
 	i++;
 	while (ft_isalnum(str[i]) == 1 && str[i] != 0)
 		i++;
-	temp = ft_strjoin(new, expand_substr_com(ft_substr(str, j , i - j), env_lst, current));
+	temp = ft_strjoin_free(ft_strdup(new), expand_substr_com(ft_substr(str, j , i - j), env_lst, current));
 	if(!temp)
 		return (NULL);
 	j = i;
 	while (str[i] != 0)
 		i++;
-	temp = ft_strjoin(temp, ft_substr(str + j, 0, i));
+	temp = ft_strjoin_free(temp, ft_substr(str + j, 0, i));
 	return (temp);
 }
 
