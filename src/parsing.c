@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
 /*   Updated: 2024/05/30 10:33:52 by pkangas          ###   ########.fr       */
@@ -13,6 +13,7 @@
 #include "../includes/minishell.h"
 
 int	g_signal_marker;
+
 int	skip_file(char **tokenarr, int i)
 {
 	if (check_redir(tokenarr[i]) > 0 && check_redir(tokenarr[i]) < 5)
@@ -37,28 +38,23 @@ int	parse_com_and_args(t_token *new, char **tokenarr, int exit_status)
 	j = 0;
 	while (tokenarr[i] != NULL)
 	{
-		if (check_redir(tokenarr[i]) != -1)
-			i += skip_file(tokenarr, i);
+		if (check_redir(tokenarr[i]) > 0)
+			i += skip_file(tokenarr, i) - 1;
 		else if (tokenarr[i] != NULL && new->com == NULL && check_redir(tokenarr[i]) == -1)
 		{
 			new->com = ft_strdup(tokenarr[i]);
 			if (!new->com)
 				return (write_sys_error("malloc error"));
-			i++;
 		}
 		else if (tokenarr[i] != NULL && check_redir(tokenarr[i]) == -1 && new->arg_count > 0)
 		{
 			new->args[j] = ft_strdup(tokenarr[i]);
-			if (!new->args[j])
+			if (!new->args[j++])
 				return (write_sys_error("malloc error"));
-			j++;
-			i++;
 		}
-		else
-			i++;
+		i++;
 	}
 	new->args[j] = NULL;
-	j = 0;
 	return (exit_status);
 }
 
@@ -94,9 +90,9 @@ int explore_tokenarr(t_token *new, char **tokenarr)
 		exit_status = check_no_filename(tokenarr, i, exit_status);
 		if (exit_status != 0)
 			return (exit_status);
-		if (check_redir(tokenarr[i]) != -1)
+		if (check_redir(tokenarr[i]) > 0)
 		{
-			i += skip_file(tokenarr, i);
+			i += skip_file(tokenarr, i) - 1;
 			new->filecount++;
 		}
 		else if (check_redir(tokenarr[i]) == -1)
@@ -105,10 +101,8 @@ int explore_tokenarr(t_token *new, char **tokenarr)
 				new->comcount++;
 			else
 				new->arg_count++;
-			i++;
 		}
-		else
-			i++;
+		i++;
 	}
 	return (0);
 }
@@ -133,10 +127,7 @@ int	add_new_token(t_data *data, char **tokenarr)
 	}
 	new->args = (char **)malloc((new->arg_count + 1) * sizeof(char *));
 	while (i <= new->arg_count)
-	{
-		new->args[i] = NULL;
-		i++;
-	}
+		new->args[i++] = NULL;
 	if (new->comcount > 0)
 	{
 		exit_status = parse_com_and_args(new, tokenarr, exit_status);
@@ -154,14 +145,11 @@ char *check_non_spaced_files(char *str)
 {
 	int i;
 	int j;
-	char *result;
+	char result[strlen(str) * 2];
 	char *ret;
 
 	j = 0;
 	i = 0;
-	result = (char *)malloc(strlen(str) * 2);
-	if (!result)
-		return NULL;
 	while (str[i] != '\0')
 	{
 		if ((str[i] == '<' || str[i] == '>') && \
@@ -172,7 +160,6 @@ char *check_non_spaced_files(char *str)
 	}
 	result[j] = '\0';
 	ret = ft_strdup(result);
-	free (result);
 	if (!ret)
 		return(NULL);
 	return (ret);
@@ -181,14 +168,13 @@ char *check_non_spaced_files(char *str)
 static int	parse_single_token(char *str, t_data *data, int exit_status)
 {
 	char	**tokenarr;
-//	int		i; // --> is this needed ??
-	(void)data;
+	char	*temp;
 
-//	i = 0; // --> is this needed ??
-	str = check_non_spaced_files(str);
-	if (!str)
+	temp = check_non_spaced_files(str);
+	if (!temp)
 		return (write_sys_error("malloc error"));
-	tokenarr = ft_pipex_split(str, ' ');
+	tokenarr = ft_pipex_split(temp, ' ');
+	free (temp);
 	if (!tokenarr)
 		return (write_sys_error("malloc error"));
 	exit_status = add_new_token(data, tokenarr);
@@ -221,7 +207,10 @@ static int	lexer_input(t_data *data, int exit_status)
 		}
 		exit_status = parse_single_token(inputarr[data->proc_count], data, exit_status);
 		if (exit_status != 0)
+		{
+			ft_free_double(inputarr);
 			return (exit_status);
+		}
 		data->proc_count++;
 	}
 	ft_free_double(inputarr);
@@ -230,7 +219,6 @@ static int	lexer_input(t_data *data, int exit_status)
 
 int parsing_pipeline(t_data *data, t_env_lst *env_lst)
 {
-	(void)env_lst;
 	int exit_status;
 
 	exit_status = 0;
@@ -286,7 +274,6 @@ int	parsing(void)
 			data->prev_exit_status = 1;
 			g_signal_marker = 0;
 		}
-
 		alter_termios(1);
 		if (!data->input)
 		{
@@ -294,13 +281,16 @@ int	parsing(void)
 			ft_putstr_fd("exit\n", 2);
 			return (0);
 		}
-		if (ft_strlen(data->input) != 0 && handle_only_spaces(data) == 0)
+		if (ft_strlen(data->input) != 0)
 		{
 			add_history(data->input); // error handling ??
-			exit_status = parsing_pipeline(data, env_lst);
-			// ft_lstiter_ms(data->tokens, printnode);
-			if (exit_status == 0 && data->special_case != 0)
-				exit_status = make_processes(data, env_lst); // should system errors like "malloc fail" lead to whole program's termination...?
+			if (handle_only_spaces(data) == 0)
+			{
+				exit_status = parsing_pipeline(data, env_lst);
+				//ft_lstiter_ms(data->tokens, printnode);
+				if (exit_status == 0)
+					exit_status = make_processes(data, env_lst); // should system errors like "malloc fail" lead to whole program's termination...?
+			}
 		}
 		copy_cur_dir_from_data(data, parsing_cur_dir);
 		ft_free_data(data, 0);
