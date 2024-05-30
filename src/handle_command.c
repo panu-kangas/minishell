@@ -102,6 +102,7 @@ int	handle_command(t_data *data, t_env_lst *env_lst, int index)
 
 	cur_token = get_cur_token(data, index);
 
+	exit_status = 0;
 	if (cur_token->com != NULL && ft_strchr(cur_token->com, '=') != NULL) // IN PROCESS
 	{
 		exit_status = check_for_env_var(cur_token, env_lst);
@@ -111,7 +112,7 @@ int	handle_command(t_data *data, t_env_lst *env_lst, int index)
 
 	if (check_for_built_in(cur_token->com) == 1)
 		exit_status = execute_built_in(env_lst, data, cur_token);
-	else
+	else if (cur_token->com != NULL)
 	{
 		execve_args = get_execve_args(cur_token->com, cur_token->args);
 		if (execve_args == NULL)

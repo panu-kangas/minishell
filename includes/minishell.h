@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 12:47:29 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 15:21:26 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,6 +245,10 @@ int			check_quot_syntax(t_data *data);
 int			analyze_path(char *path, t_data *data);
 int			check_valid_path(char *path);
 void		get_parsing_cur_dir(char *parsing_cur_dir);
+
+void	free_all_from_process(char *cmd_path, char **e_args, char **env_var);
+int	check_empty_input(char *cmd);
+int	check_cmd_path(char *cmd);
 
 
 #endif

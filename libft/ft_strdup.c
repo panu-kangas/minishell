@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 15:40:20 by pkangas           #+#    #+#             */
-/*   Updated: 2023/11/08 14:08:17 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/30 13:51:08 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_strdup(const char *s1)
 	int		i;
 	char	*dest;
 
+	if (s1 == NULL)
+		return (NULL);
 	dest = (char *) malloc(ft_strlen(s1) + 1);
 	if (dest == 0)
 		return (0);

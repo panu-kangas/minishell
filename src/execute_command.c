@@ -1,59 +1,27 @@
 #include "minishell.h"
 
-void	free_all_from_process(char *cmd_path, char **e_args, char **env_var)
+int	is_a_path(char *cmd, int *exit_status)
 {
-	free(cmd_path);
-	ft_free_doubleptr(e_args);
-	ft_free_doubleptr(env_var);
+	char *cmd_path;
+
+	if (cmd != NULL && ft_strchr(cmd, '/') != NULL)
+	{
+		*exit_status = check_cmd_path(cmd);
+		if (*exit_status != 0)
+			return (NULL);
+		cmd_path = ft_strdup(cmd);
+		return (cmd_path);
+	}
 }
 
-int	check_empty_input(char *cmd)
-{
-	if (cmd[0] == '\0')
-		return (write_error(NULL, "\0", "command not found"));
-	else
-		return (0);
-}
-
-int	check_cmd_path(char *cmd)
-{
-	struct 	stat statbuf;
-
-	if (access(cmd, F_OK == -1))
-	{
-		write_error(NULL, cmd, "No such file or directory");
-		return (127);
-	}
-	if (stat(cmd, &statbuf) == 0)
-	{
-		if (S_ISDIR(statbuf.st_mode) == 1)
-		{
-			write_error(NULL, cmd, "is a directory");
-			return (126);
-		}
-	}
-	if (access(cmd, X_OK) == -1)
-	{
-		write_error(NULL, cmd, "Permission denied");
-		return (126);
-	}
-	return (0);
-}
-
-char	*find_cmd_path(char *cmd, char **paths, int *err_stat)
+char	*find_cmd_path(char *cmd, char **paths, int *exit_status)
 {
 	int		i;
 	char	*cmd_path;
 
 	i = 0;
 	if (cmd != NULL && ft_strchr(cmd, '/') != NULL)
-	{
-		*err_stat = check_cmd_path(cmd);
-		if (*err_stat != 0)
-			return (NULL);
-		cmd_path = ft_strdup(cmd);
-		return (cmd_path);
-	}
+		return (is_a_path(cmd, &exit_status));
 	cmd_path = NULL;
 	while (paths != NULL && paths[i] != NULL)
 	{
@@ -61,7 +29,7 @@ char	*find_cmd_path(char *cmd, char **paths, int *err_stat)
 		if (cmd_path == NULL)
 		{
 			write_sys_error("malloc failed");
-			return (NULL); // What is the correct err_status for malloc failure ??
+			return (NULL);
 		}
 		if (access(cmd_path, F_OK) == 0)
 			break ;
@@ -72,7 +40,7 @@ char	*find_cmd_path(char *cmd, char **paths, int *err_stat)
 	if (paths != NULL && paths[i] == NULL)
 	{
 		write_error(NULL, cmd, "command not found");
-		*err_stat = 127;
+		*exit_status = 127;
 		return (NULL);
 	}
 	return (cmd_path);
@@ -86,7 +54,7 @@ int	execute_command(char *cmd, char **e_args, t_env_lst *env_lst, t_data *data)
 	char	*cmd_path;
 	char	**paths;
 	char	**env_var;
-	int		err_stat;
+	int		exit_status;
 
 	if (check_empty_input(cmd) == ERR_STAT)
 		return (127);
@@ -102,11 +70,11 @@ int	execute_command(char *cmd, char **e_args, t_env_lst *env_lst, t_data *data)
 	if (paths == NULL && ft_strchr(cmd, '/') == NULL)
 		return (write_error(NULL, cmd, "No such file or directory"));
 
-	cmd_path = find_cmd_path(cmd, paths, &err_stat); // needs err_status research
+	cmd_path = find_cmd_path(cmd, paths, &exit_status);
 	if (cmd_path == NULL)
 	{
 		ft_free_doubleptr(paths);
-		return (err_stat);
+		return (exit_status);
 	}
 	if (access(cmd_path, X_OK) == -1)
 	{
