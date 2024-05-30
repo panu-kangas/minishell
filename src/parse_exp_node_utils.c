@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/29 14:07:28 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 07:44:15 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,18 @@
 char *ft_lstiter_and_make_new_str(t_parse *lst)
 {
 	char *new;
+	char *temp;
 
 	new = ft_strdup("");
 	if (!new)
 		return (NULL);
 	while (lst)
 	{
+		temp = new;
 		new = ft_strjoin(new, lst->str);
+		free (temp);
 		if (!new)
 			return (NULL);
-		free(lst->str);
 		lst = lst->next;
 	}
 	return (new);
@@ -54,7 +56,6 @@ char *trimmed_str(char *str, int in_word, int j, int i)
 	return(ft_strdup(temp));
 }
 
-
 char *trim_str(char *str)
 {
 	char *temp;
@@ -70,6 +71,8 @@ char *trim_str(char *str)
 	while (str[i] == ' ')
 		i++;
 	temp = trimmed_str(str, in_word, j, i);
+	if (!temp)
+		return (NULL);
 	return(temp);
 }
 

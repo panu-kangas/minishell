@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 10:56:58 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/29 08:43:44 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 07:32:17 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,17 +78,18 @@ int	ft_free_data(t_data *data, int code)
 	return (code);
 }
 
-int	ft_free_parse(t_parse *head)
+int	ft_free_parse(t_parse *head, int exit_status)
 {
 	t_parse *temp;
 
 	temp = head;
 	while (temp != NULL)
 	{
-		free(temp->str);
+		if (temp->str != NULL)
+			free(temp->str);
 		temp = temp->next;
 		free(head);
 		head = temp;
 	}
-	return (0);
+	return (exit_status);
 }

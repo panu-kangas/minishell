@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 09:39:53 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/29 14:01:24 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 09:34:49 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,7 @@ int handle_only_spaces(t_data *data)
 		|| data->input[i] != '\v' || data->input[i] != '\f' \
 		|| data->input[i] != '\r' || data->input[i] != ' ')
 		{
-			data->special_case = 1;
 			return (0);
-		}
-		else
-		{
-			data->special_case = 0;
 		}
 		i++;
 	}

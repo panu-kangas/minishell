@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:01:29 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/22 11:41:41 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 09:35:22 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	init_data(t_data *data, int exit_status, char *parsing_cur_dir)
 	data->input = NULL;
 	data->tokens = NULL;
 	data->proc_count = 0;
-	data->special_case = 0;
 	data->prev_exit_status = exit_status;
 	copy_cur_dir_to_data(data, parsing_cur_dir); // diff init on first time ! maybe broken
 }

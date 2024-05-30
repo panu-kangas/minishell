@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/29 14:17:54 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 09:35:27 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ typedef struct	s_data
 	t_token	*tokens;
 	int		proc_count;
 	int		prev_exit_status;
-	int		special_case;
 	char	current_directory[256];
 } t_data;
 
@@ -95,7 +94,7 @@ typedef struct s_env_lst
 //free
 void	ft_free_double(char **arr);
 int		ft_free_data(t_data *data, int code);
-int 	ft_free_parse(t_parse *head);
+int 	ft_free_parse(t_parse *head, int exit_status);
 
 //init
 void	init_data(t_data *data, int exit_status, char *parsing_cur_dir);
@@ -114,6 +113,7 @@ int		handle_no_file(char **tokenarr, int i, int exit_status);
 int		parse_out_quotes(t_data *data, int exit_status);
 int		ft_char_counter(char *str, char c);
 int		handle_only_spaces(t_data *data);
+int		ft_array_len(char **arr);
 
 
 //parse split quotes to nodes
