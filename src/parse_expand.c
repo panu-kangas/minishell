@@ -90,10 +90,10 @@ int add_to_arg(t_token *current, char **arr)
 static char	*expand_substr_com(char *str, t_env_lst *env_lst, t_token *current)
 {
 	char	*temp;
-	int		len;
+//	int		len;
 	char	**split;
 
-	len = 0;
+//	len = 0;
 	if (!str || !env_lst)
 		return(NULL);
 	if (expand_env_var(env_lst, str) != NULL)
@@ -114,9 +114,9 @@ static char	*expand_substr_com(char *str, t_env_lst *env_lst, t_token *current)
 static char	*expand_substr(char *str, t_env_lst *env_lst)
 {
 	char	*temp;
-	int		len;
+//	int		len;
 
-	len = 0;
+//	len = 0;
 	if (!str || !env_lst)
 		return(NULL);
 	if (expand_env_var(env_lst, str) != NULL)

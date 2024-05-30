@@ -12,20 +12,21 @@ int	is_relative_path(char *path)
 		return (1);
 	else if (ft_strncmp(path, "..", 3) == 0)
 		return (2);
-	else if (ft_strncmp(path, "./", 2) == 0)
+	else if (ft_strncmp(path, "./", 3) == 0)
 		return (3);
-	else if (ft_strncmp(path, "../", 3) == 0)
+	else if (ft_strncmp(path, "../", 4) == 0)
 		return (4);
-	else if (ft_strnstr(path, "/./", ft_strlen(path)) != 0 || ft_strnstr(path, "/../", ft_strlen(path)) != 0)
+	else if (ft_strncmp(path, "./", 2) == 0)
 		return (5);
-	else if (ft_strnstr(path, "/./", ft_strlen(path)) != 0 || ft_strnstr(path, "/../", ft_strlen(path)) != 0)
+	else if (ft_strncmp(path, "../", 3) == 0)
 		return (6);
-	else if (i > 0 && path[i] == '.' && path[i - 1] == '/')
+	else if (ft_strnstr(path, "/./", ft_strlen(path)) != 0 || ft_strnstr(path, "/../", ft_strlen(path)) != 0)
 		return (7);
-	else if (i > 1 && path[i] == '.' && path[i - 1] == '.' && path[i - 2] == '/')
+	else if (i > 0 && path[i - 1] == '/' && path[i] == '.')
 		return (8);
-	else
-		return (0);
+	else if (i > 1 && path[i - 2] == '/' && path[i - 1] == '.' && path[i] == '.')
+		return (7);
+	return (0);
 }
 
 int	free_paths_cd(char **paths, int paths_count)
@@ -144,42 +145,93 @@ int	check_parent_dir_permissions(char *path)
 	return (flag);
 }
 
+char	*update_cur_dir(char *temp_cur_dir, char *path)
+{
+	int		i;
+	char	*temp;
+
+	i = ft_strlen(temp_cur_dir) - 1;
+
+	if (is_relative_path(path) == 1)
+		return (temp_cur_dir);
+	else if (is_relative_path(path) == 2)
+	{
+		if (temp_cur_dir[i] == '/')
+		{
+			while (temp_cur_dir[i] == '/')
+				i--;
+		}
+		while (temp_cur_dir[i] != '/')
+			i--;
+		if (i != 0)
+			temp_cur_dir[i] = '\0';
+		return (temp_cur_dir);
+	}
+	else
+	{
+		temp = temp_cur_dir;
+		temp_cur_dir = ft_strjoin(temp_cur_dir, "/");
+		free(temp);
+		if (temp_cur_dir == NULL)
+			return (NULL);
+		temp = temp_cur_dir;
+		temp_cur_dir = ft_strjoin(temp_cur_dir, path);
+		free(temp);
+		if (temp_cur_dir == NULL)
+			return (NULL);
+		return (temp_cur_dir);
+	}
+}
+
 int	check_given_path_permissions(t_data *data, char **split_path)
 {
 	int		i;
-	int		flag;
+//	int		flag;
 	char	*temp_cur_dir;
-	char	*temp;
+//	char	*temp;
 
 	i = 0;
-	flag = 0;
+//	flag = 0;
 	temp_cur_dir = ft_strdup(data->current_directory);
 	if (temp_cur_dir == NULL)
 		return (-1);
 	while (split_path[i] != NULL)
 	{
 		errno = 0;
+
+		ft_printf("temp-cur-dir: %s\n", temp_cur_dir);
+
 		if (chdir(split_path[i]) != 0)
 		{
 			if (errno == EACCES)
 			{
-				// check next split. If it is not "..", throw Permission error
-				// ALSO watch out for ../../../ which should be Perm error.
-				// So if current split is a name and next is .., continue.
+				if (split_path[i + 1] == NULL || \
+				is_relative_path(split_path[i + 1]) != 2)
+					return (3);
+				else if (is_relative_path(split_path[i]) != 2 && is_relative_path(split_path[i + 1]) == 2 \
+				&& is_relative_path(split_path[i + 2]) == 2)
+					return (3);
+				else if (is_relative_path(split_path[i]) == 2 && is_relative_path(split_path[i + 1]) == 2)
+					return (3);
 			}
 			else if (errno == ENOENT)
 			{
-				// check next split. If it is not .., throw error
-				// try to handle ../../../ here
+				ft_printf("ENOENT");
+		//		if (is_relative_path(split_path[i]) == 2)
+		//			flag = check_complete_path(split_path); // not done
+		//		else
+		//			return (1);
 			}
 		}
-		// update temp_cur_dir
+		temp_cur_dir = update_cur_dir(temp_cur_dir, split_path[i]);
+		if (temp_cur_dir == NULL)
+			return (-1);
 		i++;
 	}
-	// get the flag value here from temp_cur_dir
+	// get the flag value here from temp_cur_dir --> MAYBE NOT NEEDED
 	free(temp_cur_dir);
 	// remember to return to actual cur_dir if something fails
-	return (flag);
+	return (0);
 }
 
 int	analyze_path(char *path, t_data *data)
@@ -225,14 +277,18 @@ int	analyze_path(char *path, t_data *data)
 		if (path_flag == 0)
 			return (-2);
 	}
-	
-	split_path = ft_split(path, '/');
-	if (split_path == NULL)
-		return (write_sys_error("malloc failed"));
-	path_flag = check_given_path_permissions(data, split_path);
-	if (path_flag < 0)
-		return (write_sys_error("malloc failed"));
-	// check flag value and act accordingly
+	else if (is_relative_path(path) > 4)
+	{
+		split_path = ft_split(path, '/');
+		if (split_path == NULL)
+			return (write_sys_error("malloc failed"));
+		path_flag = check_given_path_permissions(data, split_path);
+		if (path_flag < 0)
+			return (write_sys_error("malloc failed"));
+
+		ft_printf("FINAL FLAG: %d\n", path_flag);
+		// check flag value and act accordingly
+	}
 
 	return (-1);
 }
