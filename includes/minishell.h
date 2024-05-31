@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 20:51:01 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 08:12:31 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,12 +126,13 @@ char	*expand_str_file(char *str, t_env_lst *env_lst);
 char	*ft_strjoin_free(char *s1, char *s2);
 
 //parse_utils
-int		add_files_to_token(t_token *new, char **tokenarr);
+int	add_files_to_token(t_token *new, char **tokenarr, int i);
 t_file	*add_file(char *str, int is_append, int is_infile);
 int		check_redir(char *str);
 int		ft_lstiter_and_expand_arg(t_parse *lst, t_env_lst *env_lst, t_data *data, int exit_status);
 int		expand_prev_exit_code(t_parse *lst, t_data *data);
 char	*trim_str(char *str);
+int		check_no_filename(char **tokenarr, int i, int exit_status);
 
 //nodes
 void	ft_lstadd_back_ms(t_token **tokens, t_token *newnode);

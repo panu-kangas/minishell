@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:10:01 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 20:10:32 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 08:39:41 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	handle_only_spaces(t_data *data)
 	int	i;
 
 	i = 0;
-	while(data->input[i] != 0)
+	while (data->input[i] != 0)
 	{
 		if (data->input[i] != '\t' || data->input[i] != '\n' \
 		|| data->input[i] != '\v' || data->input[i] != '\f' \
