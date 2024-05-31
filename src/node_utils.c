@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 08:09:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 15:47:58 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 12:38:16 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,3 @@ void	ft_lstadd_back_ms(t_token **tokens, t_token *newnode)
 		newnode->next = NULL;
 	}
 }
-

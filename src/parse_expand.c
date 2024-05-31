@@ -6,36 +6,18 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:27 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 14:52:33 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 11:04:40 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int ft_char_counter(char *str, char c)
-{
-	int i;
-	int ctr;
-
-	if (!str)
-		return (0);
-	ctr = 0;
-	i = 0;
-	while(str[i] != 0)
-	{
-		if (str[i] == c)
-			ctr++;
-		i++;
-	}
-	return (ctr);
-}
 
 static char	*expand_substr(char *str, t_env_lst *env_lst)
 {
 	char	*temp;
 
 	if (!str || !env_lst)
-		return(NULL);
+		return (NULL);
 	if (expand_env_var(env_lst, str) != NULL)
 		temp = ft_strdup(expand_env_var(env_lst, str));
 	else
@@ -49,7 +31,7 @@ static char	*expand_substr_file(char *str, t_env_lst *env_lst)
 	char	*temp;
 
 	if (!str || !env_lst)
-		return(NULL);
+		return (NULL);
 	if (expand_env_var(env_lst, str) != NULL)
 		temp = ft_strdup(expand_env_var(env_lst, str));
 	else
@@ -87,15 +69,16 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	return (final_str);
 }
 
-char *expand_str(char *str, t_env_lst *env_lst)
+char	*expand_str(char *str, t_env_lst *env_lst)
 {
-	char new[ft_strlen(str) + 1];
-	char *temp;
-	int i;
-	int j;
+	char	*new;
+	char	*temp;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
+	new = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	while (str[i] != 0 && str[i] != '$')
 		i++;
 	ft_strlcpy(new, str, i - j + 1);
@@ -103,8 +86,10 @@ char *expand_str(char *str, t_env_lst *env_lst)
 	i++;
 	while (ft_isalnum(str[i]) == 1 && str[i] != 0)
 		i++;
-	temp = ft_strjoin_free(ft_strdup(new), expand_substr(ft_substr(str, j , i - j), env_lst));
-	if(!temp)
+	temp = ft_strjoin_free (ft_strdup(new), \
+	expand_substr(ft_substr(str, j, i - j), env_lst));
+	free (new);
+	if (!temp)
 		return (NULL);
 	j = i;
 	while (str[i] != 0)
@@ -113,15 +98,16 @@ char *expand_str(char *str, t_env_lst *env_lst)
 	return (temp);
 }
 
-char *expand_str_file(char *str, t_env_lst *env_lst)
+char	*expand_str_file(char *str, t_env_lst *env_lst)
 {
-	char new[ft_strlen(str) + 1];
-	char *temp;
-	int i;
-	int j;
+	char	*new;
+	char	*temp;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
+	new = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	while (str[i] != 0 && str[i] != '$')
 		i++;
 	ft_strlcpy(new, str, i - j + 1);
@@ -129,8 +115,10 @@ char *expand_str_file(char *str, t_env_lst *env_lst)
 	i++;
 	while (ft_isalnum(str[i]) == 1 && str[i] != 0)
 		i++;
-	temp = ft_strjoin(new, expand_substr_file(ft_substr(str, j , i - j), env_lst));
-	if(!temp)
+	temp = ft_strjoin_free(ft_strdup(new), \
+	expand_substr_file(ft_substr(str, j, i - j), env_lst));
+	free (new);
+	if (!temp)
 		return (NULL);
 	j = i;
 	while (str[i] != 0)

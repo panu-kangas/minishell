@@ -6,11 +6,11 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:39:13 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 08:33:10 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 11:09:10 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"../includes/minishell.h"
+#include "../includes/minishell.h"
 
 static int	check_file_name(char **temp, char *orig)
 {
@@ -21,9 +21,9 @@ static int	check_file_name(char **temp, char *orig)
 	len = 0;
 	exit_status = 0;
 	split = ft_split(*temp, ' ');
-	if(!split)
+	if (!split)
 		return (1);
-	while(split[len] != NULL)
+	while (split[len] != NULL)
 		len++;
 	if (len > 1)
 	{
@@ -35,10 +35,10 @@ static int	check_file_name(char **temp, char *orig)
 	return (exit_status);
 }
 
-static int	expand_filename(t_parse *temp_parse, t_env_lst *env_lst, int exit_status)
+static int	expand_filename(t_parse *temp_parse, t_env_lst *env_lst, int e_st)
 {
-	char *temp;
-	int i;
+	char	*temp;
+	int		i;
 
 	i = 0;
 	while (temp_parse->str[i] != 0)
@@ -53,34 +53,34 @@ static int	expand_filename(t_parse *temp_parse, t_env_lst *env_lst, int exit_sta
 				temp = expand_str_file(temp_parse->str, env_lst);
 			if (!temp)
 				return (write_sys_error("malloc error"));
-			exit_status = check_file_name(&temp, temp_parse->str);
-			if (exit_status != 0)
+			e_st = check_file_name(&temp, temp_parse->str);
+			if (e_st != 0)
 				return (write_sys_error("malloc error"));
 			free(temp_parse->str);
 			temp_parse->str = temp;
 		}
 		i++;
 	}
-	return(exit_status);
+	return (e_st);
 }
 
-int ft_lstiter_and_expand_files(t_parse *head, t_env_lst *env_lst, t_data *data, int exit_status)
+int	ft_iter_and_exp_files(t_parse *head, t_env_lst *e_lst, t_data *d, int e_st)
 {
-	t_parse *temp_parse;
+	t_parse	*temp_parse;
 
 	temp_parse = head;
-	exit_status = expand_prev_exit_code(head, data);
-	if (exit_status != 0)
-		return (exit_status);
+	e_st = expand_prev_exit_code(head, d);
+	if (e_st != 0)
+		return (e_st);
 	while (temp_parse)
 	{
 		if (temp_parse->isexpand == 1)
 		{
-			exit_status = expand_filename(temp_parse, env_lst, exit_status);
-			if (exit_status != 0)
-				return(exit_status);
+			e_st = expand_filename(temp_parse, e_lst, e_st);
+			if (e_st != 0)
+				return (e_st);
 		}
 		temp_parse = temp_parse->next;
 	}
-	return (exit_status);
+	return (e_st);
 }

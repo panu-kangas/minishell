@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 08:12:31 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 11:53:09 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,8 @@ int		parse_com_and_args(t_token *new, char **tokenarr, int exit_status);
 int		handle_substrings(char *str, t_parse **head);
 
 //expand node utils
-int		ft_lstiter_and_expand_com(t_parse *lst, t_env_lst *env_lst, t_data *data, t_token *current);
-int		ft_lstiter_and_expand_files(t_parse *lst, t_env_lst *env_lst, t_data *data, int exit_status);
+int		ft_iter_and_exp_com(t_parse *lst, t_env_lst *e_lst, t_token *cur);
+int		ft_iter_and_exp_files(t_parse *lst, t_env_lst *env_lst, t_data *data, int exit_status);
 char 	*expand_str_com(char *str, t_env_lst *env_lst, t_token *current);
 char	*ft_lstiter_and_make_new_str(t_parse *lst);
 t_parse	*new_node(char *str,  int isexpand, int istrim);
@@ -124,12 +124,16 @@ int		ft_lst_iter_remove_quotes(t_parse *lst);
 char	*expand_str(char *str, t_env_lst *env_lst);
 char	*expand_str_file(char *str, t_env_lst *env_lst);
 char	*ft_strjoin_free(char *s1, char *s2);
+int		expand_com(t_token *cur, t_env_lst *e_lst, t_data *d, int e_status);
+int		expand_args(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st);
+int		expand_file(t_parse *head, t_env_lst *e_lst, t_data *d, char **temp);
+int		expand_files(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st);
 
 //parse_utils
-int	add_files_to_token(t_token *new, char **tokenarr, int i);
+int		add_files_to_token(t_token *new, char **tokenarr, int i);
 t_file	*add_file(char *str, int is_append, int is_infile);
 int		check_redir(char *str);
-int		ft_lstiter_and_expand_arg(t_parse *lst, t_env_lst *env_lst, t_data *data, int exit_status);
+int		ft_iter_and_exp_arg(t_parse *temp, t_env_lst *e_lst,int i);
 int		expand_prev_exit_code(t_parse *lst, t_data *data);
 char	*trim_str(char *str);
 int		check_no_filename(char **tokenarr, int i, int exit_status);

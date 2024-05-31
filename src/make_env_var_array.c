@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-
-//Timos change, cause heap_overflow in line 52
 int	env_lstsize_all(t_env_lst *lst)
 {
 	int	size;

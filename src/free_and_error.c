@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 10:56:58 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 19:45:52 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 12:56:05 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_free_double(char **arr)
 
 void	close_hd_pipes(t_data *data)
 {
-	t_token *cur_token;
+	t_token	*cur_token;
 	t_file	*cur_file;
 
 	cur_token = data->tokens;
@@ -47,30 +47,39 @@ void	close_hd_pipes(t_data *data)
 	}
 }
 
-int	ft_free_data(t_data *data, int code)
+static void	free_token(t_token *token)
 {
 	t_token	*temp;
 	t_file	*tempfile;
 
-	close_hd_pipes(data);
-	while (data->tokens != NULL)
+	temp = token;
+	while (temp->files != NULL)
 	{
-		temp = data->tokens;
-		while (temp->files != NULL)
-		{
-			tempfile = temp->files;
-			if (tempfile->filename != NULL)
-				free (tempfile->filename);
-			temp->files = tempfile->next;
-			if (tempfile != NULL)
-				free (tempfile);
-		}
-		if (temp->args != NULL)
-			ft_free_double(temp->args);
-		if (temp->com != NULL)
-			free (temp->com);
-		data->tokens = temp->next;
-		free(temp);
+		tempfile = temp->files;
+		if (tempfile->filename != NULL)
+			free (tempfile->filename);
+		temp->files = tempfile->next;
+		if (tempfile != NULL)
+			free (tempfile);
+	}
+	if (temp->args != NULL)
+		ft_free_double(temp->args);
+	if (temp->com != NULL)
+		free (temp->com);
+}
+
+int	ft_free_data(t_data *data, int code)
+{
+	t_token	*temp;
+
+	temp = data->tokens;
+	close_hd_pipes(data);
+	while (temp != NULL)
+	{
+		free_token(temp);
+		temp = temp->next;
+		free(data->tokens);
+		data->tokens = temp;
 	}
 	if (data->input != NULL)
 		free(data->input);
@@ -80,7 +89,7 @@ int	ft_free_data(t_data *data, int code)
 
 int	ft_free_parse(t_parse *head, int exit_status)
 {
-	t_parse *temp;
+	t_parse	*temp;
 
 	temp = head;
 	while (temp != NULL)
@@ -92,13 +101,4 @@ int	ft_free_parse(t_parse *head, int exit_status)
 		head = temp;
 	}
 	return (exit_status);
-}
-
-void	free_token(t_token *token)
-{
-	if (token->args != NULL)
-		ft_free_double(token->args);
-	if (token->com != NULL)
-		free(token->com);
-	free(token);
 }

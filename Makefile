@@ -6,7 +6,7 @@
 #    By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/05/31 07:44:54 by tsaari           ###   ########.fr        #
+#    Updated: 2024/05/31 12:59:27 by tsaari           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = minishell
 CC = cc
 RM = rm -rf
 CFLAGS =  -g -Wall -Wextra -Werror # remove the -g flag eventually ??
-FSFLAGS =-fsanitize=address
+#FSFLAGS =-fsanitize=address
 LIBFT = libft/libft.a
 # Koulussa tää --> -I /Users/$(USER)/.brew/opt/readline/include ||| Panun kotona --> -I /usr/local/Cellar/readline/8.2.10/include
 HEADERS = -I includes -I /Users/$(USER)/.brew/opt/readline/include
@@ -23,7 +23,7 @@ HEADERS = -I includes -I /Users/$(USER)/.brew/opt/readline/include
 SRC_DIR = src/
 SRCS = main.c parsing.c parse_utils.c parse_utils2.c parse_utils3.c parse_node_utils.c \
 	ft_pipex_split.c free_and_error.c parse_init.c handle_no_filename.c \
-	parse_expansion.c parse_split_quotes.c parse_expand.c parse_exp_node_utils.c \
+	parse_expansion.c parse_expansion_tokens.c parse_split_quotes.c parse_expand.c parse_exp_node_utils.c \
 	parse_expand_file.c parse_expand_args.c parse_expand_com.c parse_exp_node_utils2.c \
 	ft_cd.c ft_echo.c ft_empty_export.c ft_pwd_env.c ft_unset_export.c \
 	env_lst_utils.c expand_env_var.c get_env_node.c make_env_node.c save_env_list.c \

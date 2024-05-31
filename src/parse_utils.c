@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 09:39:53 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 08:39:56 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 11:01:02 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,22 @@ int	add_files_to_token(t_token *new, char **tokenarr, int i)
 		ft_lstadd_file_ms(&new->files, temp);
 	}
 	return (0);
+}
+
+int	ft_char_counter(char *str, char c)
+{
+	int	i;
+	int	ctr;
+
+	if (!str)
+		return (0);
+	ctr = 0;
+	i = 0;
+	while (str[i] != 0)
+	{
+		if (str[i] == c)
+			ctr++;
+		i++;
+	}
+	return (ctr);
 }
