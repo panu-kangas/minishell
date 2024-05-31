@@ -106,7 +106,11 @@ int	write_expanded_hd(t_env_lst *env_lst, char *hd_str, char *limiter, int fd)
 		else
 			write(fd, &hd_str[i++], 1);
 		if (prev_i == i)
+		{
+			free(hd_str);
 			return (write_sys_error("malloc failed"));
+		}
 	}
+	free(hd_str);
 	return (0);
 }

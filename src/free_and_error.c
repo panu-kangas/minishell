@@ -26,22 +26,6 @@ char	**ft_free_doubleptr(char **ptr)
 	return (NULL);
 }
 
-void	ft_free_double(char **arr)
-{
-	int	i;
-
-	if (!arr)
-		return ;
-	i = 0;
-	while (arr[i] != NULL)
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
-	arr = NULL;
-}
-
 void	close_hd_pipes(t_data *data)
 {
 	t_token	*cur_token;
@@ -77,7 +61,7 @@ static void	free_token(t_token *token)
 			free (tempfile);
 	}
 	if (temp->args != NULL)
-		ft_free_double(temp->args);
+		ft_free_doubleptr(temp->args);
 	if (temp->com != NULL)
 		free (temp->com);
 }

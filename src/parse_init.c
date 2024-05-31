@@ -38,7 +38,7 @@ void	init_data(t_data *data, int exit_status, char *parsing_cur_dir)
 	data->tokens = NULL;
 	data->proc_count = 0;
 	data->prev_exit_status = exit_status;
-	copy_cur_dir_to_data(data, parsing_cur_dir); // diff init on first time ! maybe broken --> THIS IS THE WRONG VERSION
+	copy_cur_dir_to_data(data, parsing_cur_dir);
 }
 
 void	init_file(t_file *new)

@@ -22,7 +22,7 @@ int	alter_termios(int flag)
 		term.c_lflag &= ~ECHOCTL;
 	else
 		term.c_lflag |= ECHOCTL;
-	if (tcsetattr(0, TCSANOW, &term) == -1)
+	if (tcsetattr(2, TCSANOW, &term) == -1)
 		return (write_sys_error("termios alteration failed")); // How to handle this in main ??
 	return (0);
 }

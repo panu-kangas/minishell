@@ -110,7 +110,10 @@ int	ft_heredoc(t_env_lst *env_lst, char *limiter, int *hd_pipe_fd, int flag)
 			break ;
 	}
 	if (g_signal_marker == 2)
+	{
+		free(hd_str); // make this into one "free and return" -function
 		return (1);
+	}
 	if (pipe(hd_pipe_fd) < 0)
 		return (write_sys_error("pipe failed"));
 	if (hd_str != NULL && ft_strchr(hd_str, '$') != NULL && flag == 0)

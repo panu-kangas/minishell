@@ -82,7 +82,6 @@ typedef struct s_env_lst
 extern int	g_signal_marker;
 
 //free and error
-void	ft_free_double(char **arr);
 int		ft_free_data(t_data *data, int code);
 int 	ft_free_parse(t_parse *head, int exit_status);
 int		write_amb_error(char *err_str); // is this in use ?

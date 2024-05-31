@@ -52,25 +52,21 @@ static int	parse_single_token(char *str, t_data *data, int exit_status)
 	i = -1;
 	temp = check_non_spaced_files(str);
 	if (!temp)
-
 		return (write_sys_error("malloc error"));
 	tokenarr = ft_pipex_split(temp, ' ');
-	free (temp);
+	free(temp);
 	if (!tokenarr)
 		return (write_sys_error("malloc error"));
 	exit_status = check_no_filename(tokenarr, i, exit_status);
 	if (exit_status != 0)
 	{
-		ft_free_double(tokenarr);
+		ft_free_doubleptr(tokenarr);
 		return (exit_status);
 	}
 	exit_status = add_new_token(data, tokenarr);
+	ft_free_doubleptr(tokenarr);
 	if (exit_status != 0)
-	{
-		ft_free_double(tokenarr);
 		return (write_sys_error("malloc error"));
-	}
-	ft_free_double(tokenarr);
 	return (0);
 }
 
@@ -92,12 +88,12 @@ static int	lexer_input(t_data *data, int e_status)
 		e_status = parse_single_token(inparr[data->proc_count], data, e_status);
 		if (e_status != 0)
 		{
-			ft_free_double(inparr);
+			ft_free_doubleptr(inparr);
 			return (e_status);
 		}
 		data->proc_count++;
 	}
-	ft_free_double(inparr);
+	ft_free_doubleptr(inparr);
 	return (0);
 }
 
@@ -124,7 +120,7 @@ int	parsing(t_data *data, t_env_lst *env_lst, int exit_status)
 	{
 		free(data);
 		ft_putstr_fd("exit\n", 2);
-		return (0);
+		exit(0);
 	}
 	if (ft_strlen(data->input) != 0)
 	{

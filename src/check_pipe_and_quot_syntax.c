@@ -53,27 +53,28 @@ int	check_quot_syntax(t_data *data)
 
 int	check_pipe_syntax(t_data *data, int i)
 {
-	char	*input;
+	char	*str;
 
-	input = data->input;
-	while (input[i] != '\0')
+	str = data->input;
+	while (str[i] != '\0')
 	{
-		while (input[i] == '\t' || input[i] == '\n' || input[i] == '\v' \
-		|| input[i] == '\f' || input[i] == '\r' || input[i] == ' ')
+		while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v' \
+		|| str[i] == '\f' || str[i] == '\r' || str[i] == ' ')
 			i++;
-		if ((input[i] == '|' && input[i + 1] == '|') || (ft_strchr(input, '|') != NULL && input[i] == '\0'))
+		if ((str[i] == '|' && str[i + 1] == '|') \
+		|| (ft_strchr(str, '|') != NULL && str[i] == '\0'))
 			return (write_syntax_error("||"));
-		if (input[i] == '|' || (ft_strchr(input, '|') != NULL && input[i] == '\0'))
+		if (str[i] == '|' || (ft_strchr(str, '|') != NULL && str[i] == '\0'))
 			return (write_syntax_error("|"));
-		else if (input[i] != '\0')
+		else if (str[i] != '\0')
 		{
-			while (input[i] != '|' && input[i] != '\0')
+			while (str[i] != '|' && str[i] != '\0')
 				i++;
-			if (input[i] == '|' && (input[i + 1] == '|' \
-			|| input[i + 1] == '\0'))
+			if (str[i] == '|' && (str[i + 1] == '|' \
+			|| str[i + 1] == '\0'))
 				return (write_syntax_error("|"));
 		}
-		if (input[i] != '\0')
+		if (str[i] != '\0')
 			i++;
 	}
 	return (0);

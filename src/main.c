@@ -22,6 +22,12 @@ void	copy_cur_dir_from_data(t_data *data, char *parsing_cur_dir)
 	parsing_cur_dir[i] = '\0';
 }
 
+void	update_prev_exit_status(t_data *data)
+{
+	data->prev_exit_status = 1;
+	g_signal_marker = 0;
+}
+
 int	set_input_and_env(t_env_lst *env_lst, int exit_status)
 {
 	t_data		*data;
@@ -29,7 +35,7 @@ int	set_input_and_env(t_env_lst *env_lst, int exit_status)
 
 	get_parsing_cur_dir(parsing_cur_dir);
 	if (parsing_cur_dir[0] == 0)
-		write_sys_error("malloc error; working directory storage set up failed"); // should we exit...?
+		write_sys_error("malloc error; current dir storage set up failed"); // should we exit...?
 	g_signal_marker = 0;
 	while (1)
 	{
@@ -41,10 +47,7 @@ int	set_input_and_env(t_env_lst *env_lst, int exit_status)
 		init_data(data, exit_status, parsing_cur_dir);
 		data->input = readline("minishell-1.1$: ");
 		if (g_signal_marker == 2)
-		{
-			data->prev_exit_status = 1;
-			g_signal_marker = 0;
-		}
+			update_prev_exit_status(data);
 		exit_status = parsing(data, env_lst, exit_status); //should we do something if not 0
 		copy_cur_dir_from_data(data, parsing_cur_dir);
 		ft_free_data(data, 0);
@@ -53,20 +56,16 @@ int	set_input_and_env(t_env_lst *env_lst, int exit_status)
 	return (exit_status);
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv)
 {
-	extern char **environ;
-	t_env_lst 	*env_lst;
+	extern char	**environ;
+	t_env_lst	*env_lst;
 	int			exit_status;
-	
+
 	exit_status = 0;
 	env_lst = save_env_list(environ);
 	if (env_lst == NULL)
 		return (write_sys_error("environmental variable set up unsuccessful"));
-	if (!envp)
-	{
-		//errorhandling
-	}
 	if (argc != 1 || argv == NULL) // this needs to be checked
 	{
 		//errorhandling
@@ -76,5 +75,5 @@ int	main(int argc, char **argv, char **envp)
 		exit_status = set_input_and_env(env_lst, exit_status);
 	//system("leaks executablename");
 	free_env_lst(env_lst);
-	return(exit_status);
+	return (exit_status);
 }

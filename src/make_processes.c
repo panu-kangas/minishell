@@ -46,6 +46,8 @@ int	create_processes(t_data *data, t_env_lst *env_lst)
 	pid_t	*pids;
 	int		**fd_pipes;
 
+	if (data->tokens->next == NULL && data->tokens->com == NULL) // CHECK THIS!
+		return (0);
 	pids = get_pids(data->proc_count);
 	if (pids == NULL)
 		return (write_sys_error("malloc failed"));
