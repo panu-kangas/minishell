@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-int	is_a_path(char *cmd, int *exit_status)
+char	*is_a_path(char *cmd, int *exit_status)
 {
-	char *cmd_path;
+	char	*cmd_path;
 
 	if (cmd != NULL && ft_strchr(cmd, '/') != NULL)
 	{
@@ -12,6 +12,7 @@ int	is_a_path(char *cmd, int *exit_status)
 		cmd_path = ft_strdup(cmd);
 		return (cmd_path);
 	}
+	return (NULL);
 }
 
 char	*find_cmd_path(char *cmd, char **paths, int *exit_status)
@@ -19,11 +20,10 @@ char	*find_cmd_path(char *cmd, char **paths, int *exit_status)
 	int		i;
 	char	*cmd_path;
 
-	i = 0;
 	if (cmd != NULL && ft_strchr(cmd, '/') != NULL)
-		return (is_a_path(cmd, &exit_status));
-	cmd_path = NULL;
-	while (paths != NULL && paths[i] != NULL)
+		return (is_a_path(cmd, exit_status));
+	i = -1;
+	while (paths != NULL && paths[++i] != NULL)
 	{
 		cmd_path = ft_strjoin(paths[i], cmd);
 		if (cmd_path == NULL)
@@ -34,8 +34,6 @@ char	*find_cmd_path(char *cmd, char **paths, int *exit_status)
 		if (access(cmd_path, F_OK) == 0)
 			break ;
 		free(cmd_path);
-		cmd_path = NULL;
-		i++;
 	}
 	if (paths != NULL && paths[i] == NULL)
 	{
@@ -46,31 +44,30 @@ char	*find_cmd_path(char *cmd, char **paths, int *exit_status)
 	return (cmd_path);
 }
 
-// Should I free everything the process needs here? So on every error return, there maybe should be also a free_all -call.
-// what if I had a "write_execve_error" -function: it could have a free_all -call included!
-
-int	execute_command(char *cmd, char **e_args, t_env_lst *env_lst, t_data *data)
+int	handle_paths(t_env_lst *env_lst, char *cmd, char ***final_paths)
 {
-	char	*cmd_path;
 	char	**paths;
-	char	**env_var;
-	int		exit_status;
 
-	if (check_empty_input(cmd) == ERR_STAT)
+	if (check_empty_input(cmd) == 1)
 		return (127);
-
+	paths = NULL;
 	if (check_if_var_exist(env_lst, "PATH") != NULL)
 	{
 		paths = get_paths(env_lst);
 		if (paths == NULL)
 			return (write_sys_error("malloc failed"));
 	}
-	else
-		paths = NULL;
 	if (paths == NULL && ft_strchr(cmd, '/') == NULL)
-		return (write_error(NULL, cmd, "No such file or directory"));
+	{
+		write_error(NULL, cmd, "No such file or directory");
+		return (127);
+	}
+	*final_paths = paths;
+	return (0);
+}
 
-	cmd_path = find_cmd_path(cmd, paths, &exit_status);
+int	handle_cmd_path(char **paths, char *cmd_path, int exit_status)
+{
 	if (cmd_path == NULL)
 	{
 		ft_free_doubleptr(paths);
@@ -82,10 +79,27 @@ int	execute_command(char *cmd, char **e_args, t_env_lst *env_lst, t_data *data)
 		write_error(NULL, cmd_path, "Permission denied");
 		return (126);
 	}
-
 	ft_free_doubleptr(paths);
-	paths = NULL;
+	return (0);
+}
 
+// CHECK LEAKS (for every possible fail condition separately)
+// Run few tests to ensure correct exit codes etc
+
+int	execute_command(char *cmd, char **e_args, t_env_lst *env_lst, t_data *data)
+{
+	char	*cmd_path;
+	char	**paths;
+	char	**env_var;
+	int		exit_status;
+
+	exit_status = handle_paths(env_lst, cmd, &paths);
+	if (exit_status != 0)
+		return (exit_status);
+	cmd_path = find_cmd_path(cmd, paths, &exit_status);
+	exit_status = handle_cmd_path(paths, cmd_path, exit_status);
+	if (exit_status != 0)
+		return (exit_status);
 	env_var = make_env_var_array(env_lst);
 	if (env_var == NULL)
 	{
@@ -95,11 +109,7 @@ int	execute_command(char *cmd, char **e_args, t_env_lst *env_lst, t_data *data)
 	}
 	free_env_lst(env_lst);
 	ft_free_data(data, 0);
-
-	if (execve(cmd_path, e_args, env_var) == -1)
-	{
-		free_all_from_process(cmd_path, e_args, env_var);
-		return (write_sys_error("execve failed"));
-	}
-	return (1);
+	execve(cmd_path, e_args, env_var);
+	free_all_from_process(cmd_path, e_args, env_var);
+	return (write_sys_error("execve failed"));
 }

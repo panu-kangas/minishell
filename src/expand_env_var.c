@@ -1,14 +1,5 @@
 #include "minishell.h"
 
-// In calling function: if expand_env_var returns NULL, skip the argument totally!!
-// for example:
-// bash-3.2$ echo $NON_EXISTING hi hello
-// hi hello
-
-
-// The case of $? needs it's own separate handling !!!
-
-
 char	*expand_env_var(t_env_lst *env_lst, char *var_name)
 {
 	t_env_lst	*temp;

@@ -56,7 +56,7 @@ char	*get_whole_hd_str(char *read_line, char *hd_str)
 	int		i;
 	int		j;
 	char	*temp;
-	
+
 	temp = malloc(ft_strlen(read_line) + ft_strlen(hd_str) + 2);
 	if (temp == NULL)
 	{
@@ -85,13 +85,12 @@ int	ft_heredoc(t_env_lst *env_lst, char *limiter, int *hd_pipe_fd, int flag)
 	int		line_len;
 
 	hd_str = NULL;
-	read_line = NULL;
 	while (1)
 	{
 		read_line = readline("> ");
 		line_len = ft_strlen(read_line);
 		if (read_line == NULL)
-			break ;		
+			break ;
 		hd_str = get_whole_hd_str(read_line, hd_str);
 		if (hd_str == NULL)
 			return (write_sys_error("malloc failed"));
@@ -108,10 +107,9 @@ int	ft_heredoc(t_env_lst *env_lst, char *limiter, int *hd_pipe_fd, int flag)
 		return (write_hd(hd_str, read_line, limiter, hd_pipe_fd[1]));
 }
 
-
 int	process_heredoc(t_data *data, t_env_lst *env_lst, int exit_status)
 {
-	t_token *cur_token;
+	t_token	*cur_token;
 	t_file	*cur_file;
 
 	alter_termios(0);
@@ -127,19 +125,14 @@ int	process_heredoc(t_data *data, t_env_lst *env_lst, int exit_status)
 				cur_file->hd_pipe, cur_file->quoted_heredoc);
 			}
 			if (exit_status != 0)
-			{
-				alter_termios(1);
-				return (exit_status);
-			}
+				break ;
 			cur_file = cur_file->next;
 		}
 		cur_token = cur_token->next;
 	}
 	alter_termios(1);
-	return (0);
+	return (exit_status);
 }
-
-
 /*
 
 int	check_limiter(char *hd_str, char *limiter, int bytes)
@@ -236,9 +229,4 @@ int	ft_heredoc(char *limiter, int *hd_pipe_fd, t_data *data, t_env_lst *env_lst)
 	}
 	return (write_hd(hd_str, limiter, bytes, hd_pipe_fd));
 }
-
-
-
-
-
 */

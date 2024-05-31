@@ -198,8 +198,6 @@ int	analyze_path(char *path, t_data *data)
 
 	valid_path_flag = check_valid_path(path);
 
-	ft_printf("FLAG 1: %d\n", valid_path_flag);
-
 	if (valid_path_flag == 0)
 		return (-1);
 	else if (valid_path_flag == 1 && is_relative_path(path) == 0)
@@ -217,8 +215,6 @@ int	analyze_path(char *path, t_data *data)
 		ft_free_doubleptr(split_cur_dir);
 	if (cur_dir_flag < 0)
 		return (write_sys_error("malloc failed"));
-
-	ft_printf("FLAG 2: %d\n", cur_dir_flag);
 
 	if (is_relative_path(path) == 1 && cur_dir_flag == 3)
 	{
@@ -266,7 +262,10 @@ int	analyze_path(char *path, t_data *data)
 					free(split_path[i + 1]);
 					split_path[i + 1] = ft_strdup(split_path[i]);
 					if (split_path[i + 1] == NULL)
+					{
+						ft_free_doubleptr(split_path);
 						return (write_sys_error("malloc failed"));
+					}
 				}
 				else
 					break ;
@@ -288,7 +287,10 @@ int	analyze_path(char *path, t_data *data)
 				return (write_error("cd", path, "Permission denied"));
 		}
 		else
+		{
+			ft_free_doubleptr(split_path);
 			return (-3);
+		}
 	}
 
 	return (-1);

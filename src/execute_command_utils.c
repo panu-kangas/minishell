@@ -17,7 +17,7 @@ int	check_empty_input(char *cmd)
 
 int	check_cmd_path(char *cmd)
 {
-	struct 	stat statbuf;
+	struct stat	statbuf;
 
 	if (access(cmd, F_OK == -1))
 	{

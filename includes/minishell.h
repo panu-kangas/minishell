@@ -246,9 +246,16 @@ int			analyze_path(char *path, t_data *data);
 int			check_valid_path(char *path);
 void		get_parsing_cur_dir(char *parsing_cur_dir);
 
+// from norminetting
+
 void	free_all_from_process(char *cmd_path, char **e_args, char **env_var);
 int	check_empty_input(char *cmd);
 int	check_cmd_path(char *cmd);
+void	copy_cur_dir_to_data(t_data *data, char *cur_dir);
+void	add_path_to_data_cur_dir(t_data *data, char *path);
+int	update_pwd_env_var(t_data *data, t_env_lst *env_lst, char *cur_dir);
+int	handle_oldpwd(t_env_lst *env_lst, t_env_lst *pwd);
+
 
 
 #endif

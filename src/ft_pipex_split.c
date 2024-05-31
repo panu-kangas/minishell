@@ -1,6 +1,5 @@
 #include "../includes/minishell.h"
 
-
 void	ft_free_doubleptr(char **ptr)
 {
 	int	i;

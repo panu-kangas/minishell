@@ -30,7 +30,7 @@ void	ft_free_double(char **arr)
 
 void	close_hd_pipes(t_data *data)
 {
-	t_token *cur_token;
+	t_token	*cur_token;
 	t_file	*cur_file;
 
 	cur_token = data->tokens;
@@ -59,16 +59,13 @@ int	ft_free_data(t_data *data, int code)
 		while (temp->files != NULL)
 		{
 			tempfile = temp->files;
-			if (tempfile->filename != NULL)
-				free (tempfile->filename);
+			free (tempfile->filename);
 			temp->files = tempfile->next;
-			if (tempfile != NULL)
-				free (tempfile);
+			free (tempfile);
 		}
 		if (temp->args != NULL)
 			ft_free_double(temp->args);
-		if (temp->com != NULL)
-			free (temp->com);
+		free (temp->com);
 		data->tokens = temp->next;
 		free(temp);
 	}

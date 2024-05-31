@@ -86,7 +86,7 @@ int	process_shlvl(t_env_lst *env_lst)
 		free(shlvl->value);
 		if (value == 1000)
 			shlvl->value = ft_strdup("");
-		else	
+		else
 			shlvl->value = ft_itoa(value);
 		if (shlvl->value == NULL)
 			return (1);
