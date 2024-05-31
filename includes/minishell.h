@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 15:16:57 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/31 16:20:51 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,7 @@ int			alter_termios(int flag);
 
 void		copy_cur_dir_to_data(t_data *data, char *cur_dir);
 
-int			check_pipe_syntax(t_data *data);
+int			check_pipe_syntax(t_data *data, int i);
 int			check_quot_syntax(t_data *data);
 
 int			analyze_path(char *path, t_data *data);
