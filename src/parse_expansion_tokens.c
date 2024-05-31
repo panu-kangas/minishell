@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:22:11 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 12:34:46 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 15:38:04 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,21 @@ int	expand_com(t_token *cur, t_env_lst *e_lst, t_data *d, int e_status)
 static int	handle_arg_exp(t_parse *head, t_env_lst *e_lst, t_data *d, int e_st)
 {
 	int		i;
-	t_parse	*temp;
 
-	temp = head;
 	i = -1;
+
 	e_st = expand_prev_exit_code(head, d);
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
-	e_st = ft_iter_and_exp_arg(temp, e_lst, i);
+	e_st = ft_iter_and_exp_arg(head, e_lst, i);
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
 	e_st = ft_lst_iter_remove_quotes(head);
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
-	return (e_st);
+	head = head->next;
+
+	return (0);
 }
 
 int	expand_args(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st)
@@ -66,8 +67,8 @@ int	expand_args(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st)
 	char	*temp;
 	int		i;
 
-	i = -1;
-	while (cur->args[++i] != 0)
+	i = 0;
+	while (cur->args[i] != 0)
 	{
 		head = NULL;
 		e_st = handle_substrings(cur->args[i], &head);
@@ -82,6 +83,7 @@ int	expand_args(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st)
 		free(cur->args[i]);
 		cur->args[i] = temp;
 		ft_free_parse(head, 0);
+		i++;
 	}
 	return (0);
 }
