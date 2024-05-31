@@ -1,18 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_pipex_split.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/31 11:43:05 by pkangas           #+#    #+#             */
+/*   Updated: 2024/05/31 11:43:07 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
-
-
-void	ft_free_doubleptr(char **ptr)
-{
-	int	i;
-
-	i = 0;
-	if (ptr != NULL)
-	{
-		while (ptr[i] != NULL)
-			free(ptr[i++]);
-	}
-	free(ptr);
-}
 
 static int	get_str_len(char const *s, char c, int i)
 {
@@ -28,11 +26,7 @@ static int	get_str_len(char const *s, char c, int i)
 			return (i - orig_i);
 		quot = s[i++];
 		while (s[i] != quot && s[i] != '\0')
-		{
-			if (quot == '\"' && s[i] == '\\' && s[i + 1] != '\0') // should this be removed? Because we don't need to handle '\'
-				i++;
 			i++;
-		}
 		if (s[i] == '\0')
 			return (i - orig_i);
 		else if (s[i + 1] == c || s[i + 1] == '\0')
@@ -78,11 +72,7 @@ static int	skip_quotation(char const *s, int i)
 	{
 		i++;
 		while (s[i] != '\"' && s[i] != '\0')
-		{
-			if (s[i] == '\\' && s[i + 1] != '\0') // should this be removed? Because we don't need to handle '\'
-				i++;
 			i++;
-		}
 	}
 	else if (s[i] == '\'')
 	{

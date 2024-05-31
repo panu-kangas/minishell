@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_heredoc_env_var.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/31 10:37:44 by pkangas           #+#    #+#             */
+/*   Updated: 2024/05/31 10:37:45 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	search_for_limiter(char *hd_str, char *limiter, int hd_len, int limit_len)
@@ -7,7 +19,6 @@ int	search_for_limiter(char *hd_str, char *limiter, int hd_len, int limit_len)
 
 	i = hd_len - 1 - limit_len;
 	j = 0;
-
 	if (limit_len == 0 && hd_str[i] == '\n' && hd_str[i - 1] == '\n')
 		return (1);
 	else if (limit_len == 0)
@@ -34,14 +45,13 @@ void	remove_limiter(char *hd_str, char *limiter)
 	hd_len = ft_strlen(hd_str);
 	limit_len = ft_strlen(limiter);
 	is_limiter = search_for_limiter(hd_str, limiter, hd_len, limit_len);
-
 	if (limit_len == 0 && is_limiter == 1)
 		hd_str[hd_len - 1] = '\0';
 	else if (is_limiter == 1)
 		hd_str[hd_len - limit_len - 1] = '\0';
 }
 
-char *find_env_var_name(char *hd_str, int i)
+char	*find_env_var_name(char *hd_str, int i)
 {
 	int	orig_i;
 	int	var_name_len;
@@ -53,7 +63,7 @@ char *find_env_var_name(char *hd_str, int i)
 	while (hd_str[i] != '\0')
 	{
 		if (ft_isalnum(hd_str[i]) == 0 && hd_str[i] != '_')
-			break;
+			break ;
 		i++;
 		var_name_len++;
 	}
@@ -76,7 +86,7 @@ int	write_expanded_env_var(t_env_lst *env_lst, char *hd_str, int i, int fd)
 		write(fd, "./minishell", 11);
 	free(var_name);
 	if (var_value != NULL)
-		write(fd, var_value, ft_strlen(var_value));	
+		write(fd, var_value, ft_strlen(var_value));
 	return (var_name_len);
 }
 

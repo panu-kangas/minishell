@@ -1,17 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal_handling.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/31 13:47:54 by pkangas           #+#    #+#             */
+/*   Updated: 2024/05/31 15:19:02 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void	alter_termios(int flag)
+int	alter_termios(int flag)
 {
 	struct termios	term;
 
-	tcgetattr(2, &term); // error handling ??
-
+	if (tcgetattr(2, &term) == -1)
+		return (write_sys_error("termios alteration failed")); // How to handle this in main ??
 	if (flag == 0)
 		term.c_lflag &= ~ECHOCTL;
 	else
 		term.c_lflag |= ECHOCTL;
-
-	tcsetattr(0, TCSANOW, &term);  // error handling ??
+	if (tcsetattr(0, TCSANOW, &term) == -1)
+		return (write_sys_error("termios alteration failed")); // How to handle this in main ??
+	return (0);
 }
 
 void	sig_handler_hd(int signum)
@@ -29,21 +42,22 @@ void	sig_handler_main(int signum)
 	if (signum == 2)
 	{
 		ft_putendl_fd("", 1);
-		rl_on_new_line(); // do we have to check for return value ??
-		rl_replace_line("", 0); // do we have to check for return value ??
-		rl_redisplay(); // do we have to check for return value ??
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 		g_signal_marker = 2;
 	}
 }
 
-void	process_signal_main(void)
+int	process_signal_main(void)
 {
-	struct sigaction sigact;
+	struct sigaction	sigact;
 
 	sigact.sa_handler = &sig_handler_main;
 	sigemptyset(&sigact.sa_mask);
 	sigact.sa_flags = SA_RESTART;
-
-	sigaction(SIGINT, &sigact, NULL); // do we have to check for return value ??
-	signal(SIGQUIT, SIG_IGN); // change to SIGACTION
+	if (sigaction(SIGINT, &sigact, NULL) == -1)
+		return (write_sys_error("sigaction failed")); // How to handle this in main ??
+	signal(SIGQUIT, SIG_IGN);
+	return (0);
 }

@@ -1,6 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_empty_export.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/31 11:34:57 by pkangas           #+#    #+#             */
+/*   Updated: 2024/05/31 11:34:59 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-
 
 int	env_lstsize(t_env_lst *lst)
 {
@@ -56,7 +66,8 @@ char	**get_env_var_alph_order(t_env_lst *env_lst, char **alph_order)
 		j = -1;
 		while (++j < (lstsize - 1))
 		{
-			if (ft_strncmp(alph_order[j], alph_order[j + 1], ft_strlen(alph_order[j])) > 0)
+			if (ft_strncmp(alph_order[j], \
+			alph_order[j + 1], ft_strlen(alph_order[j])) > 0)
 			{
 				temp = alph_order[j];
 				alph_order[j] = alph_order[j + 1];
@@ -66,8 +77,6 @@ char	**get_env_var_alph_order(t_env_lst *env_lst, char **alph_order)
 	}
 	return (alph_order);
 }
-
-// How to handle possibly empty env_lst ?? A check again in the beginning (if env_lst->name == NULL)
 
 int	ft_empty_export(t_env_lst *env_lst)
 {
@@ -82,8 +91,8 @@ int	ft_empty_export(t_env_lst *env_lst)
 		ft_free_doubleptr(alph_order);
 		return (1);
 	}
-	i = 0;
-	while (alph_order[i] != NULL)
+	i = -1;
+	while (alph_order[++i] != NULL)
 	{
 		temp = check_if_var_exist(env_lst, alph_order[i]);
 		if (temp->value == NULL)
@@ -93,7 +102,6 @@ int	ft_empty_export(t_env_lst *env_lst)
 			ft_printf("declare -x %s=\"%s\"\n", \
 			alph_order[i], expand_env_var(env_lst, alph_order[i]));
 		}
-		i++;
 	}
 	ft_free_doubleptr(alph_order);
 	return (0);

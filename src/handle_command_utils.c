@@ -1,30 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   handle_command_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/31 11:34:38 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 12:09:56 by pkangas          ###   ########.fr       */
+/*   Created: 2024/05/31 12:39:00 by pkangas           #+#    #+#             */
+/*   Updated: 2024/05/31 12:39:01 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_echo(int flag, char **args)
+int	get_args_size(char **args)
 {
 	int	i;
 
 	i = 0;
-	if (flag == 1)
+	while (args[i] != NULL)
 		i++;
-	while (args != NULL && args[i] != NULL)
-	{
-		ft_putstr_fd(args[i++], 1);
-		if (args[i] != NULL)
-			ft_putchar_fd(' ', 1);
-	}
-	if (flag == 0)
-		ft_putendl_fd("", 1);
+	return (i);
 }

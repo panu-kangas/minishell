@@ -1,14 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_command.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/31 12:38:51 by pkangas           #+#    #+#             */
+/*   Updated: 2024/05/31 12:38:52 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-int	get_args_size(char **args)
-{
-	int	i;
-
-	i = 0;
-	while (args[i] != NULL)
-		i++;
-	return (i);
-}	
 
 char	**just_the_cmd_doubleptr(char *cmd)
 {
@@ -40,19 +42,13 @@ char	**get_execve_args(char *cmd, char **args)
 		return (NULL);
 	new_args[0] = ft_strdup(cmd);
 	if (new_args[0] == NULL)
-	{
-		ft_free_doubleptr(new_args);
-		return (NULL);
-	}
+		return (ft_free_doubleptr(new_args));
 	i = 1;
 	while (args[i - 1] != NULL)
 	{
 		new_args[i] = ft_strdup(args[i - 1]);
 		if (new_args[i] == NULL)
-		{
-			ft_free_doubleptr(new_args);
-			return (NULL);
-		}
+			return (ft_free_doubleptr(new_args));
 		i++;
 	}
 	new_args[i] = NULL;
@@ -80,7 +76,7 @@ int	change_command(t_token *cur_token)
 	return (2);
 }
 
-int	check_for_env_var(t_token *cur_token, t_env_lst *env_lst) // IN PROCESS
+int	check_for_env_var(t_token *cur_token, t_env_lst *env_lst)
 {
 	int	exit_status;
 
@@ -97,27 +93,26 @@ int	check_for_env_var(t_token *cur_token, t_env_lst *env_lst) // IN PROCESS
 int	handle_command(t_data *data, t_env_lst *env_lst, int index)
 {
 	int		exit_status;
-	char	**execve_args;
+	char	**e_args;
 	t_token	*cur_token;
 
 	cur_token = get_cur_token(data, index);
-
-	if (cur_token->com != NULL && ft_strchr(cur_token->com, '=') != NULL) // IN PROCESS
+	exit_status = 0;
+	if (cur_token->com != NULL && ft_strchr(cur_token->com, '=') != NULL)
 	{
 		exit_status = check_for_env_var(cur_token, env_lst);
 		if (exit_status != 2)
 			return (exit_status);
 	}
-
 	if (check_for_built_in(cur_token->com) == 1)
 		exit_status = execute_built_in(env_lst, data, cur_token);
-	else
+	else if (cur_token->com != NULL)
 	{
-		execve_args = get_execve_args(cur_token->com, cur_token->args);
-		if (execve_args == NULL)
+		e_args = get_execve_args(cur_token->com, cur_token->args);
+		if (e_args == NULL)
 			return (write_sys_error("malloc failed"));
-		exit_status = execute_command(cur_token->com, execve_args, env_lst, data);
-		ft_free_doubleptr(execve_args);
+		exit_status = execute_command(cur_token->com, e_args, env_lst, data);
+		ft_free_doubleptr(e_args);
 	}
 	return (exit_status);
 }

@@ -27,6 +27,7 @@ DONE     - Env_var expansion / parsing: if we do solo expansion of env_var that 
 
 
 
+
 XX Env_var expansions with quotes: $PATH expands, "$PATH" expands, '$PATH' does not
 XX Handle $?
 XX Remove quotes from files (example: > "file 1" should create a file named file 1, so no quotes)
@@ -49,6 +50,12 @@ XX Env_var expansions with blank spaces
 								jee jee jee											--> BUT they are trimmed away when expanding
 								bash-3.2$ echo "$PANU"
 								jee    jee    jee 									--> EXCEPT if the env_var is inside double quotation
+XX Heredoc: limiter (in our logic, filename of heredoc) does not expand at all!
+XX Env_var expansion / parsing: if we do solo expansion of env_var that has spaces in it, they should be parsed
+		--> example:
+		--> bash-3.2$ export PANU="echo hello"
+		--> bash-3.2$ $PANU
+		--> hello				--> so the "echo hello" got parsed into a command and arg
 
 
 
@@ -61,11 +68,12 @@ PANU:
 -HEREDOC SEGFAULT in get_execve_args handle_command.c:41
 
 - CHECK PHONE NOTES !!
-- check "Ambiguous redirect" inside ft_redirect!!
 - Signals during solo built_in (DFL vs IGN)
 
 
 
+
+XX check "Ambiguous redirect" inside ft_redirect!!
 XX CD ISSUES:
 	--> When trying "cd ." inside a deleted folder, bash message is --> cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
 	--> When trying "cd ..", our minishell has a wrong message
@@ -103,18 +111,15 @@ XX Unclosed quot: I think this could be just a syntax error! with error message 
 QUESTIONS:
 
 - Handling special characters: is this ok at the moment? We should handle them always or not at all, I think.
-- How to handle this? 	bash-3.2$ echo hello2 >$NOT_EXISTING 	--> Maybe in parsing? If filename is $something, exit_code is 1 and write "ambiguous redirect"
-						bash: $NOT_EXISTING: ambiguous redirect		--> This same also works with NOT_EXISTING=, so with env_var that has value of '\0'
 
-						BUT THIS WORKS
-						bash-3.2$ ls >$?	--> so exit code is expanded no matter what
 
 - How to handle this?	bash-3.2$ export PANU=>file1 --> this is actually same as "export PANU= >file1", so a matter of parsing
 						bash-3.2$ echo hello $PANU
 
-- Special case of 2>file1 (redirecting standard error) --> should we handle this? If yes, how?
-
 - rl_clear_history in the end of program (and in exit function also) ??
+
+XX How to handle this? 	bash-3.2$ echo hello2 >$NOT_EXISTING 	--> Maybe in parsing? If filename is $something, exit_code is 1 and write "ambiguous redirect"
+						bash: $NOT_EXISTING: ambiguous redirect		--> This same also works with NOT_EXISTING=, so with env_var that has value of '\0'
 
 
 ------------------------------------

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_built_in.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/30 15:18:45 by pkangas           #+#    #+#             */
+/*   Updated: 2024/05/30 15:18:47 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	handle_export(t_env_lst *env_lst, char **args)
@@ -42,6 +54,14 @@ int	handle_unset(t_env_lst *env_lst, char **args)
 	return (exit_status);
 }
 
+void	handle_echo(char **args)
+{
+	if (ft_strncmp(args[0], "-n", 3) == 0)
+		ft_echo(1, args);
+	else
+		ft_echo(0, args);
+}
+
 int	execute_built_in(t_env_lst *env_lst, t_data *data, t_token *token)
 {
 	int		exit_status;
@@ -52,12 +72,7 @@ int	execute_built_in(t_env_lst *env_lst, t_data *data, t_token *token)
 	cmd = token->com;
 	args = token->args;
 	if (is_echo(cmd) == 1)
-	{
-		if (ft_strncmp(args[0], "-n",  3) == 0)
-			ft_echo(1, args);
-		else
-			ft_echo(0, args);
-	}
+		handle_echo(args);
 	else if (ft_strncmp(cmd, "export", ft_strlen(cmd) + 1) == 0)
 		exit_status = handle_export(env_lst, args);
 	else if (ft_strncmp(cmd, "cd", ft_strlen(cmd) + 1) == 0)
@@ -67,7 +82,7 @@ int	execute_built_in(t_env_lst *env_lst, t_data *data, t_token *token)
 	else if (is_pwd(cmd) == 1)
 		exit_status = ft_pwd(data);
 	else if (is_env(cmd) == 1)
-		ft_env(env_lst); // Do we handle env arguments...? With an error? Probably not... example --> env: hehe: No such file or directory
+		ft_env(env_lst);
 	else if (ft_strncmp(cmd, "exit", ft_strlen(cmd) + 1) == 0)
 		exit_status = ft_exit(env_lst, data, args);
 	return (exit_status);

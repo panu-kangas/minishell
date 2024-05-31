@@ -1,9 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_open_functions.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/31 11:35:51 by pkangas           #+#    #+#             */
+/*   Updated: 2024/05/31 11:35:53 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
+
+int	check_for_bad_filename(char *file)
+{
+	if (file != NULL && file[0] == '\0')
+		return (write_error(NULL, "", "No such file or directory"));
+	if (file != NULL && file[0] == '$')
+		return (write_amb_error(file));
+	return (0);
+}
 
 int	ft_just_create_file(char *file)
 {
-	int	file_fd;
-	struct stat statbuf;
+	int			file_fd;
+	struct stat	statbuf;
 
 	if (file != NULL && file[0] == '$')
 		return (write_amb_error(file));
@@ -27,12 +48,10 @@ int	ft_just_create_file(char *file)
 int	open_outfile_append(char *file)
 {
 	int			file_fd;
-	struct stat statbuf;
+	struct stat	statbuf;
 
-	if (file != NULL && file[0] == '\0')
-		return (write_error(NULL, "", "No such file or directory"));
-	if (file != NULL && file[0] == '$')
-		return (write_amb_error(file));
+	if (check_for_bad_filename(file) == 1)
+		return (1);
 	if (access(file, F_OK) == 0)
 	{
 		if (stat(file, &statbuf) == 0)
@@ -58,12 +77,10 @@ int	open_outfile_append(char *file)
 int	open_outfile(char *file)
 {
 	int			file_fd;
-	struct stat statbuf;
+	struct stat	statbuf;
 
-	if (file != NULL && file[0] == '\0')
-		return (write_error(NULL, "", "No such file or directory"));
-	if (file != NULL && file[0] == '$')
-		return (write_amb_error(file));
+	if (check_for_bad_filename(file) == 1)
+		return (1);
 	if (access(file, F_OK) == 0)
 	{
 		if (stat(file, &statbuf) == 0)
@@ -85,7 +102,6 @@ int	open_outfile(char *file)
 	close(file_fd);
 	return (0);
 }
-
 
 int	open_infile(char *file)
 {

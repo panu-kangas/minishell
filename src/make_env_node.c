@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   make_env_node.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/31 12:40:38 by pkangas           #+#    #+#             */
+/*   Updated: 2024/05/31 12:40:39 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	process_global_env_node(t_env_lst *env_lst, char *new_env_var)
@@ -10,7 +22,7 @@ int	process_global_env_node(t_env_lst *env_lst, char *new_env_var)
 		return (write_sys_error("malloc failed"));
 	temp = check_if_var_exist(env_lst, var_name);
 	free(var_name);
-	if (temp == NULL) // READ NOTE BELOW
+	if (temp == NULL)
 	{
 		temp = env_lst->next;
 		env_lst->next = get_global_env_node(new_env_var);
@@ -38,7 +50,7 @@ int	process_non_global_env_node(t_env_lst *env_lst, char *new_env_var)
 		return (write_sys_error("malloc failed"));
 	temp = check_if_var_exist(env_lst, var_name);
 	free(var_name);
-	if (temp == NULL) // READ NOTE BELOW
+	if (temp == NULL)
 	{
 		temp = env_lst->next;
 		env_lst->next = get_non_global_env_node(new_env_var);
@@ -66,7 +78,7 @@ int	process_null_value_env_node(t_env_lst *env_lst, char *new_env_var)
 		return (write_sys_error("malloc failed"));
 	temp = check_if_var_exist(env_lst, var_name);
 	free(var_name);
-	if (temp == NULL) // READ NOTE BELOW
+	if (temp == NULL)
 	{
 		temp = env_lst->next;
 		env_lst->next = get_null_value_env_node(new_env_var);
@@ -76,8 +88,3 @@ int	process_null_value_env_node(t_env_lst *env_lst, char *new_env_var)
 	}
 	return (0);
 }
-
-// NOTE RELATED TO NEW VAR POSITION IN LIST:
-// now in my code, the new env_var goes to the second position of env_linked_list. Is this ok? bash seemed to do things quite randomly...
-// if you export multiple variables at the same time (multiple args), they go right next to each other
-// otherwise, it seems random where they go in the list!
