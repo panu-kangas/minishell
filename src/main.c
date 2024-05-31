@@ -6,15 +6,63 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:51:38 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 12:51:15 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/30 19:25:57 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+void	copy_cur_dir_from_data(t_data *data, char *parsing_cur_dir)
+{
+	int	i;
+
+	i = -1;
+	while (data->current_directory[++i] != '\0')
+		parsing_cur_dir[i] = data->current_directory[i];
+	parsing_cur_dir[i] = '\0';
+}
+
+int	set_input_and_env(t_env_lst *env_lst, int exit_status)
+{
+	t_data		*data;
+	char		parsing_cur_dir[256];
+
+	get_parsing_cur_dir(parsing_cur_dir);
+	if (parsing_cur_dir[0] == 0)
+		write_sys_error("malloc error; working directory storage set up failed"); // should we exit...?
+	g_signal_marker = 0;
+	while (1)
+	{
+		alter_termios(0);
+		process_signal_main();
+		data = (t_data *)malloc(sizeof (t_data));
+		if (!data)
+			return (write_sys_error("malloc failed"));
+		init_data(data, exit_status, parsing_cur_dir);
+		data->input = readline("minishell-1.1$: ");
+		if (g_signal_marker == 2)
+		{
+			data->prev_exit_status = 1;
+			g_signal_marker = 0;
+		}
+		exit_status = parsing(data, env_lst, exit_status); //should we do something if not 0
+		copy_cur_dir_from_data(data, parsing_cur_dir);
+		ft_free_data(data, 0);
+	}
+	//rl_clear_history(); //do we need this??
+	return (exit_status);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-
+	extern char **environ;
+	t_env_lst 	*env_lst;
+	int			exit_status;
+	
+	exit_status = 0;
+	env_lst = save_env_list(environ);
+	if (env_lst == NULL)
+		return (write_sys_error("environmental variable set up unsuccessful"));
 	if (!envp)
 	{
 		//errorhandling
@@ -25,9 +73,8 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	}
 	else
-	{
-		return (parsing());
-	}
+		exit_status = set_input_and_env(env_lst, exit_status);
 	//system("leaks executablename");
-	return(0);
+	free_env_lst(env_lst);
+	return(exit_status);
 }

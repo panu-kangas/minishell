@@ -6,16 +6,16 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 06:21:44 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 12:28:58 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *expand_exit_str(char *str, t_data *data, int i)
+char	*expand_exit_str(char *str, t_data *data, int i)
 {
-	char *temp;
-	char *new;
+	char	*temp;
+	char	*new;
 
 	new = ft_substr(str, 0, i);
 	if (!new)
@@ -23,7 +23,7 @@ char *expand_exit_str(char *str, t_data *data, int i)
 	temp = new;
 	new = ft_strjoin(new, (ft_itoa(data->prev_exit_status)));
 	if (!new)
-		return(NULL);
+		return (NULL);
 	free (temp);
 	temp = new;
 	i += 2;
@@ -34,12 +34,11 @@ char *expand_exit_str(char *str, t_data *data, int i)
 	return (new);
 }
 
-
-int expand_prev_exit_code(t_parse *lst, t_data *data)
+int	expand_prev_exit_code(t_parse *lst, t_data *data)
 {
-	char *temp;
-	t_parse *head;
-	int i;
+	char	*temp;
+	t_parse	*head;
+	int		i;
 
 	i = 0;
 	head = lst;
@@ -64,14 +63,14 @@ int expand_prev_exit_code(t_parse *lst, t_data *data)
 	return (0);
 }
 
-void ft_lstadd_back_parse(t_parse **lst, t_parse *new)
+void	ft_lstadd_back_parse(t_parse **lst, t_parse *new)
 {
-	t_parse *head;
+	t_parse	*head;
 
 	if (*lst == NULL)
 	{
 		*lst = new;
-		return;
+		return ;
 	}
 	head = *lst;
 	while (head->next != NULL)
@@ -79,17 +78,17 @@ void ft_lstadd_back_parse(t_parse **lst, t_parse *new)
 	head->next = new;
 }
 
-t_parse *new_node(char *str,  int isexpand, int istrim)
+t_parse	*new_node(char *str, int isexpand, int istrim)
 {
-	t_parse *new;
+	t_parse	*new;
 
 	new = (t_parse *)malloc(sizeof(t_parse));
 	if (!new)
-		return NULL;
+		return (NULL);
 	init_parse(new);
 	new->str = str;
 	new->istrim = istrim;
 	new->isexpand = isexpand;
 	new->next = NULL;
-	return new;
+	return (new);
 }

@@ -63,8 +63,9 @@ int	check_pipe_syntax(t_data *data)
 		while (input[i] == '\t' || input[i] == '\n' || input[i] == '\v' \
 		|| input[i] == '\f' || input[i] == '\r' || input[i] == ' ')
 			i++;
-		if (input[i] == '|' \
-		|| (ft_strchr(input, '|') != NULL && input[i] == '\0'))
+		if ((input[i] == '|' && input[i + 1] == '|') || (ft_strchr(input, '|') != NULL && input[i] == '\0'))
+			return (write_syntax_error("||"));
+		if (input[i] == '|' || (ft_strchr(input, '|') != NULL && input[i] == '\0'))
 			return (write_syntax_error("|"));
 		else if (input[i] != '\0')
 		{

@@ -6,16 +6,16 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 12:17:09 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 12:34:23 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *ft_lstiter_and_make_new_str(t_parse *lst)
+char	*ft_lstiter_and_make_new_str(t_parse *lst)
 {
-	char *new;
-	char *temp;
+	char	*new;
+	char	*temp;
 
 	new = ft_strdup("");
 	if (!new)
@@ -32,10 +32,12 @@ char *ft_lstiter_and_make_new_str(t_parse *lst)
 	return (new);
 }
 
-char *trimmed_str(char *str, int in_word, int j, int i)
+char	*trimmed_str(char *str, int in_word, int j, int i)
 {
-	char temp[ft_strlen(str)];
+	char	*temp;
+	char	*ret;
 
+	temp = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	while (str[i] != '\0')
 	{
 		if (str[i] != ' ')
@@ -53,19 +55,21 @@ char *trimmed_str(char *str, int in_word, int j, int i)
 		}
 	}
 	temp[j] = 0;
-	return(ft_strdup(temp));
+	ret = ft_strdup(temp);
+	free (temp);
+	return (ret);
 }
 
-char *trim_str(char *str)
+char	*trim_str(char *str)
 {
-	char *temp;
-	int i;
-	int j;
-	int in_word;
+	char	*temp;
+	int		i;
+	int		j;
+	int		in_word;
 
 	if (!str)
 		return (NULL);
- 	i = 0;
+	i = 0;
 	j = 0;
 	in_word = 0;
 	while (str[i] == ' ')
@@ -74,25 +78,25 @@ char *trim_str(char *str)
 	free(str);
 	if (!temp)
 		return (NULL);
-	return(temp);
+	return (temp);
 }
 
-void change_expand_status(t_parse *head)
+void	change_expand_status(t_parse *head)
 {
-	t_parse *temp;
+	t_parse	*temp;
 
 	temp = head;
-
-	while(temp != NULL)
+	while (temp != NULL)
 	{
 		temp->isexpand = 0;
 		temp = temp->next;
 	}
 }
 
-int ft_lst_iter_remove_quotes(t_parse *lst)
+int	ft_lst_iter_remove_quotes(t_parse *lst)
 {
-	char *stret;
+	char	*stret;
+
 	while (lst)
 	{
 		if (lst->str[0] == '\'')

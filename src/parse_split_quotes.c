@@ -6,38 +6,38 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 10:59:20 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/22 11:41:21 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 10:16:59 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int get_quoted_string(char *str, int i, char **substring, char quote)
+static int	get_quoted_string(char *str, int i, char **substring, char quote)
 {
-    int j;
+	int	j;
 
-    j = i + 1;
-    while (str[j] != quote && str[j] != '\0')
-        j++;
-    if (str[j] == quote)
-    {
-        *substring = (char *)malloc(j - i + 2);
-        if (*substring == NULL)
-            return (-1);
-        ft_strlcpy(*substring, str + i, j - i + 2);
-        return (j - i + 1);
-    }
-    else
-        return (-2);
+	j = i + 1;
+	while (str[j] != quote && str[j] != '\0')
+		j++;
+	if (str[j] == quote)
+	{
+		*substring = (char *)malloc(j - i + 2);
+		if (*substring == NULL)
+			return (-1);
+		ft_strlcpy(*substring, str + i, j - i + 2);
+		return (j - i + 1);
+	}
+	else
+		return (-2);
 }
 
-static int handle_quoted_substring(char *str, int i, t_parse **head)
+static int	handle_quoted_substring(char *str, int i, t_parse **head)
 {
-	char *substring;
-	int length;
-	char quote;
-	int expand;
-	t_parse *new;
+	char	*substring;
+	int		length;
+	char	quote;
+	int		expand;
+	t_parse	*new;
 
 	quote = str[i];
 	if (quote == '\'')
@@ -59,11 +59,11 @@ static int handle_quoted_substring(char *str, int i, t_parse **head)
 	return (0);
 }
 
-static int handle_non_quoted_substring(char *str, int i, t_parse **head)
+static int	handle_non_quoted_substring(char *str, int i, t_parse **head)
 {
-	int j;
-	char *substring;
-	t_parse *new;
+	int		j;
+	char	*substring;
+	t_parse	*new;
 
 	j = i;
 	while (str[j] != '\0' && str[j] != '\'' && str[j] != '"')
@@ -81,10 +81,10 @@ static int handle_non_quoted_substring(char *str, int i, t_parse **head)
 	return (j - i);
 }
 
-int handle_substrings(char *str, t_parse **head)
+int	handle_substrings(char *str, t_parse **head)
 {
-	int i;
-	int exit_status;
+	int	i;
+	int	exit_status;
 
 	if (str == NULL)
 		return (0);

@@ -61,27 +61,39 @@ void	close_hd_pipes(t_data *data)
 	}
 }
 
-int	ft_free_data(t_data *data, int code)
+static void	free_token(t_token *token)
 {
 	t_token	*temp;
 	t_file	*tempfile;
 
-	close_hd_pipes(data);
-	while (data->tokens != NULL)
+	temp = token;
+	while (temp->files != NULL)
 	{
-		temp = data->tokens;
-		while (temp->files != NULL)
-		{
-			tempfile = temp->files;
+		tempfile = temp->files;
+		if (tempfile->filename != NULL)
 			free (tempfile->filename);
-			temp->files = tempfile->next;
+		temp->files = tempfile->next;
+		if (tempfile != NULL)
 			free (tempfile);
-		}
-		if (temp->args != NULL)
-			ft_free_double(temp->args);
+	}
+	if (temp->args != NULL)
+		ft_free_double(temp->args);
+	if (temp->com != NULL)
 		free (temp->com);
-		data->tokens = temp->next;
-		free(temp);
+}
+
+int	ft_free_data(t_data *data, int code)
+{
+	t_token	*temp;
+
+	temp = data->tokens;
+	close_hd_pipes(data);
+	while (temp != NULL)
+	{
+		free_token(temp);
+		temp = temp->next;
+		free(data->tokens);
+		data->tokens = temp;
 	}
 	if (data->input != NULL)
 		free(data->input);
