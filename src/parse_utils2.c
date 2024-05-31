@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:44:13 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 08:38:52 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 14:50:52 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,26 +31,26 @@ int	check_no_filename(char **tokenarr, int i, int exit_status)
 {
 	while (tokenarr[++i] != 0)
 	{
-		if (check_redir(tokenarr[i]) == -2)
+		if (check_redir(tokenarr[i]) == -2 && tokenarr[i][0] == '>')
 		{
-			if (tokenarr[i][0] == '>')
-			{
-				if (tokenarr[i][3] != '>')
-					return (write_syntax_error(">"));
-				else
-					return (write_syntax_error(">>"));
-			}
+			if (tokenarr[i][3] != '>')
+				return (write_syntax_error(">"));
 			else
-			{
-				if (tokenarr[i][3] != '<')
-					return (write_syntax_error("<"));
-				else
-					return (write_syntax_error("<<"));
-			}
+				return (write_syntax_error(">>"));
 		}
-		else if (check_redir(tokenarr[i]) > 0 && check_redir(tokenarr[i]) \
-		< 5 && tokenarr[i + 1] == NULL)
+		else if (check_redir(tokenarr[i]) == -2 && tokenarr[i][0] == '<')
+		{
+			if (tokenarr[i][3] != '<')
+				return (write_syntax_error("<"));
+			else
+				return (write_syntax_error("<<"));
+		}
+		else if (check_redir(tokenarr[i]) > 0 && check_redir(tokenarr[i]) < 5)
+		{
 			exit_status = handle_no_file(tokenarr, i, exit_status);
+			if (exit_status != 0)
+				return (exit_status);
+		}
 	}
 	return (exit_status);
 }

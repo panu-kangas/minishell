@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 08:41:46 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 14:48:37 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static int	parse_single_token(char *str, t_data *data, int exit_status)
 	i = -1;
 	temp = check_non_spaced_files(str);
 	if (!temp)
+
 		return (write_sys_error("malloc error"));
 	tokenarr = ft_pipex_split(temp, ' ');
 	free (temp);
@@ -59,7 +60,10 @@ static int	parse_single_token(char *str, t_data *data, int exit_status)
 		return (write_sys_error("malloc error"));
 	exit_status = check_no_filename(tokenarr, i, exit_status);
 	if (exit_status != 0)
+	{
+		ft_free_double(tokenarr);
 		return (exit_status);
+	}
 	exit_status = add_new_token(data, tokenarr);
 	if (exit_status != 0)
 	{

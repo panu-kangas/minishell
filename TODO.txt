@@ -8,13 +8,13 @@ TIMO:
 	needs to be handled somehow in processes cause $jaha | ls should work too
 		do we need some kind of flag?
 - Syntax error: these don't work yet or have wrong message:
-		--> >>>>>
-		--> ><
-		--> <>
-		--> >><
-		--> <<>
-		--> >>|
-		--> <<<<<<<
+		--> >>>>> does nothig, I suppose  bash `>>'
+		--> ><  does nothing  bash: syntax error near unexpected token `<'
+		--> <> >: No such file or directory    bash 'newline'
+		--> >><  makes file <   bash `<'
+		--> <<> meilla heredoc  bash syntax error near unexpected token `>'
+		--> >>|      near unexpected token 'newline'
+		--> <<<<<<<    bash syntax error near unexpected token `<<<'
 MAYBE DONE    - Heredoc: limiter (in our logic, filename of heredoc) does not expand at all! SEGFAUL
 DONE 	- Parsing of file names: if a file name is non_expandable env_var, leave it be! I need it later in program
 I THINK THIS WORKS????    - Env_var expansion bug: _ is a valid character in env_var. So PANU_KANGAS should be one variable
@@ -23,7 +23,7 @@ DONE     - Env_var expansion / parsing: if we do solo expansion of env_var that 
 		--> example:
 		--> bash-3.2$ export PANU="echo hello"
 		--> bash-3.2$ $PANU
-		--> hello				--> so the "echo hello" got parsed into a command and arg
+		--> hello	meilla HEREDOC	--> so the "echo hello" got parsed into a command and arg
 
 
 
@@ -36,7 +36,7 @@ XX Env_var expansion with special char: if we have an env_var TIMO=best, and you
 		before special char! And in the end, the expansion is concatonated to the rest of the string.
 XX Edge-case of redirect			bash-3.2$ >""
 								bash: : No such file or directory
-XX Edge-case for parsing			bash-3.2$ file1<cat 	
+XX Edge-case for parsing			bash-3.2$ file1<cat
 								bash: cat: No such file or directory	--> our minishell says "minishell: file1<cat: command not found"
 XX Minishell: echo hello>file1 --> should be parsed to echo hello > file1, now it echoes "hello>file1"
 XX "<< EOF" or " " will result in 'minishell: : command not found', but bash doesn't
@@ -75,7 +75,7 @@ XX HD: Move heredoc out of child processes!! Because SIGINT in a heredoc should 
 XX HD: Current line gets deleted with ctrl-C
 XX HD: Here_doc env_var expanding (Panu) --> EOF vs "EOF"
 XX SHLVL --> do SHLVL++ in save_env_lst
-XX Unset doesn't work on _=/usr/bin/env 
+XX Unset doesn't work on _=/usr/bin/env
 XX declare -x _="./a.out" --> this can be seen with env, but not with export
 XX Exit-built_in arguments: check int_max, int_min , negative etc
 XX Non global env var --> if command has = and there are no args, process_non_global_env_var
@@ -89,7 +89,7 @@ XX Check SHLVL edge case values (int_min, int_max, negative)
 	--> Okay, this is VERY complicated and I think also unnecessary... might just give up :D
 	--> if SHLVL == 1000 when starting shell, the value is empty (SHLVL=)
 	--> if SHLVL is > 1000 and < INT_MAX when starting shell, we get error message:
-		bash: warning: shell level (1001) too high, resetting to 1 
+		bash: warning: shell level (1001) too high, resetting to 1
 		(tested with 1001 as start value)
 XX Minishell: echo hello | --> should have some sort of syntax error
 XX Minishell: | --> solo pipe sign could maybe be a syntax error ?

@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 07:43:59 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 08:43:07 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 14:40:06 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@ int	handle_no_file(char **tokenarr, int i, int exit_status)
 			return (write_syntax_error(">"));
 		else if (tokenarr[i + 1][0] == '<')
 			return (write_syntax_error("<"));
-		else if (tokenarr[i + 1][0] == '|')
-			return (write_syntax_error("|"));
-		else if (tokenarr[i + 1][0] == '|' && tokenarr[i + 1][1] == '|')
-			return (write_syntax_error("||"));
 	}
 	else if (check_redir(tokenarr[i]) > 4 && check_redir(tokenarr[i]) < 9)
 	{
