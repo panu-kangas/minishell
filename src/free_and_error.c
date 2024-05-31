@@ -3,14 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   free_and_error.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 10:56:58 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 07:32:17 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 15:14:14 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+char	**ft_free_doubleptr(char **ptr)
+{
+	int	i;
+
+	i = 0;
+	if (ptr != NULL)
+	{
+		while (ptr[i] != NULL)
+			free(ptr[i++]);
+	}
+	free(ptr);
+	return (NULL);
+}
 
 void	ft_free_double(char **arr)
 {
@@ -77,7 +91,7 @@ int	ft_free_data(t_data *data, int code)
 
 int	ft_free_parse(t_parse *head, int exit_status)
 {
-	t_parse *temp;
+	t_parse	*temp;
 
 	temp = head;
 	while (temp != NULL)

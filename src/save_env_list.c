@@ -1,62 +1,49 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   save_env_list.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/31 12:52:58 by pkangas           #+#    #+#             */
+/*   Updated: 2024/05/31 15:13:27 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char	*get_var_value(char *environ_var)
+int	change_shlvl(t_env_lst *shlvl)
 {
-	char	*var_value;
-	int		i;
-	int		j;
-	int		len;
-	int		value_start_i;
+	int	value;
 
-	i = 0;
-	while (environ_var[i] != '=' && environ_var[i] != '\0')
-		i++;
-	if (environ_var[i] != '\0')
-		i++;
-	value_start_i = i;
-	len = 0;
-	while (environ_var[i++] != '\0')
-		len++;
-	var_value = malloc(len + 1);
-	if (var_value == NULL)
-		return (NULL);
-	i = value_start_i;
-	j = 0;
-	while (environ_var[i] != '\0')
-		var_value[j++] = environ_var[i++];
-	var_value[j] = '\0';
-	return (var_value);
-}
-
-char	*get_var_name(char *environ_var)
-{
-	char	*var_name;
-	int		i;
-	int		j;
-	int		len;
-
-	i = 0;
-	len = 0;
-	while (environ_var[i] != '=' && environ_var[i] != '\0')
+	if (shlvl->value == NULL || shlvl->value[0] == '\0')
+		value = 0;
+	else
+		value = ft_atoi(shlvl->value);
+	value++;
+	if (value < 0)
+		value = 0;
+	else if (value > 1000)
 	{
-		i++;
-		len++;
+		ft_putstr_fd("minishell: warning: shell level (", 2);
+		ft_putnbr_fd(value, 2);
+		ft_putendl_fd(") too high, resetting to 1", 2);
+		value = 1;
 	}
-	var_name = malloc(len + 1);
-	if (var_name == NULL)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (environ_var[i] != '=' && environ_var[i] != '\0')
-		var_name[j++] = environ_var[i++];
-	var_name[j] = '\0';
-	return (var_name);
+	free(shlvl->value);
+	if (value == 1000)
+		shlvl->value = ft_strdup("");
+	else
+		shlvl->value = ft_itoa(value);
+	if (shlvl->value == NULL)
+		return (1);
+	else
+		return (0);
 }
 
 int	process_shlvl(t_env_lst *env_lst)
 {
 	t_env_lst	*shlvl;
-	int			value;
 
 	shlvl = check_if_var_exist(env_lst, "SHLVL");
 	if (shlvl == NULL)
@@ -68,37 +55,32 @@ int	process_shlvl(t_env_lst *env_lst)
 		env_lst->next = shlvl;
 	}
 	else
-	{
-		if (shlvl->value == NULL || shlvl->value[0] == '\0')
-			value = 0;
-		else
-			value = ft_atoi(shlvl->value);
-		value++;
-		if (value < 0)
-			value = 0;
-		else if (value > 1000)
-		{
-			ft_putstr_fd("minishell: warning: shell level (", 2);
-			ft_putnbr_fd(value, 2);
-			ft_putendl_fd(") too high, resetting to 1", 2);
-			value = 1;
-		}
-		free(shlvl->value);
-		if (value == 1000)
-			shlvl->value = ft_strdup("");
-		else
-			shlvl->value = ft_itoa(value);
-		if (shlvl->value == NULL)
-			return (1);
-	}
+		return (change_shlvl(shlvl));
+	return (0);
+}
+
+int	create_pwd(t_env_lst *temp)
+{
+	char		*cur_dir;
+	char		*pwd;
+
+	cur_dir = getcwd(NULL, 0);
+	if (cur_dir == NULL)
+		return (1);
+	pwd = ft_strjoin("PWD=", cur_dir);
+	free(cur_dir);
+	if (pwd == NULL)
+		return (1);
+	temp->next = get_global_env_node(pwd);
+	free(pwd);
+	if (temp->next == NULL)
+		return (1);
 	return (0);
 }
 
 int	make_pwd_variables(t_env_lst *env_lst)
 {
 	t_env_lst	*temp;
-	char		*cur_dir;
-	char		*pwd;
 
 	temp = env_lst;
 	while (temp->next != NULL)
@@ -111,19 +93,7 @@ int	make_pwd_variables(t_env_lst *env_lst)
 		temp = temp->next;
 	}
 	if (check_if_var_exist(env_lst, "PWD") == NULL)
-	{
-		cur_dir = getcwd(NULL, 0);
-		if (cur_dir == NULL)
-			return (1);
-		pwd = ft_strjoin("PWD=", cur_dir);
-		free(cur_dir);
-		if (pwd == NULL)
-			return (1);
-		temp->next = get_global_env_node(pwd);
-		free(pwd);
-		if (temp->next == NULL)
-			return (1);
-	}
+		return (create_pwd(temp));
 	return (0);
 }
 

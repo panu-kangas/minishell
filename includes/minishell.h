@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 15:21:26 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/31 15:16:57 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <signal.h>
 # include <termios.h>
 # include <sys/stat.h>
-# include <errno.h> // is this needed ?
+# include <errno.h>
 # include <limits.h> // can we use this ?
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -43,45 +43,44 @@
 # define MALLOC_ERR 0
 # define SPECIAL_TOKENS "<>()="
 
-typedef struct	s_file
+typedef struct s_file
 {
-	char	*filename;
-	int		is_infile;
-	int		is_append;
-	int		no_filename;
-	int		hd_pipe[2];
-	int		quoted_heredoc;
-	struct s_file *next;
+	char			*filename;
+	int				is_infile;
+	int				is_append;
+	int				no_filename;
+	int				hd_pipe[2];
+	int				quoted_heredoc;
+	struct s_file	*next;
 }	t_file;
 
-typedef struct	s_token
+typedef struct s_token
 {
-	char	*com;
-	t_file	*files;
-	int		filecount;
-	char	**args;
-	int comcount;
-	int arg_count;
-	struct	s_token *next;
-} t_token;
+	char			*com;
+	t_file			*files;
+	int				filecount;
+	char			**args;
+	int				comcount;
+	int				arg_count;
+	struct s_token	*next;
+}	t_token;
 
-
-typedef struct	s_data
+typedef struct s_data
 {
 	char	*input;
 	t_token	*tokens;
 	int		proc_count;
 	int		prev_exit_status;
 	char	current_directory[256];
-} t_data;
+}	t_data;
 
 typedef struct s_parse
 {
 	char			*str;
 	int				isexpand;
-	int 			istrim;
+	int				istrim;
 	struct s_parse	*next;
-}				t_parse;
+}	t_parse;
 
 typedef struct s_env_lst
 {
@@ -89,12 +88,12 @@ typedef struct s_env_lst
 	char				*value;
 	int					is_global;
 	struct s_env_lst	*next;
-}				t_env_lst;
+}	t_env_lst;
 
 //free
 void	ft_free_double(char **arr);
 int		ft_free_data(t_data *data, int code);
-int 	ft_free_parse(t_parse *head, int exit_status);
+int		ft_free_parse(t_parse *head, int exit_status);
 
 //init
 void	init_data(t_data *data, int exit_status, char *parsing_cur_dir);
@@ -104,7 +103,7 @@ void	init_parse(t_parse *new);
 
 //parsing
 int		parsing(void);
-int 	parse_expansions(t_data *data, t_env_lst *env_lst);
+int		parse_expansions(t_data *data, t_env_lst *env_lst);
 char	**ft_split_minishell(const char *so);
 void	split_redir_and_pipes(t_data *data);
 char	**ft_pipex_split(char const *s, char c);
@@ -114,7 +113,6 @@ int		parse_out_quotes(t_data *data, int exit_status);
 int		ft_char_counter(char *str, char c);
 int		handle_only_spaces(t_data *data);
 int		ft_array_len(char **arr);
-
 
 //parse split quotes to nodes
 int		handle_substrings(char *str, t_parse **head);
@@ -157,7 +155,7 @@ void	ft_lstiter_parse(t_parse *lst, void (*f)(t_parse *));
 void	printparse(t_parse *node);
 
 // error
-int		write_amb_error(char *err_str);
+int			write_amb_error(char *err_str);
 
 // GLOBAL VAR
 
@@ -196,17 +194,16 @@ t_env_lst	*get_null_value_env_node(char *environ_var);
 
 void		delete_env_node(t_env_lst *temp);
 void		free_env_lst(t_env_lst *env_lst);
-void		ft_free_doubleptr(char **ptr);
+char		**ft_free_doubleptr(char **ptr);
 void		ft_free_int_doubleptr(int **ptr);
 int			env_lstsize(t_env_lst *lst);
 
 char		*expand_env_var(t_env_lst *env_lst, char *var_name);
 
 int			write_error(char *cmd, char *specifier, char *err_str);
-int			write_export_error(char *cmd, char *specifier, char *err_str);
+int			write_exp_error(char *cmd, char *specifier);
 int			write_sys_error(char *err_str);
 int			write_syntax_error(char *err_str);
-int			write_weird_cd_error(char *err_str);
 
 char		**get_paths(t_env_lst *env_lst);
 char		**make_env_var_array(t_env_lst *env_lst);
@@ -232,10 +229,10 @@ int			ft_just_create_file(char *file);
 int			open_outfile_append(char *file);
 t_token		*get_cur_token(t_data *data, int index);
 
-void		process_signal_main(void);
+int			process_signal_main(void);
 void		process_signal_commands(void);
 void		sig_handler_hd(int signum);
-void		alter_termios(int flag);
+int			alter_termios(int flag);
 
 void		copy_cur_dir_to_data(t_data *data, char *cur_dir);
 
@@ -248,13 +245,39 @@ void		get_parsing_cur_dir(char *parsing_cur_dir);
 
 // from norminetting
 
-void	free_all_from_process(char *cmd_path, char **e_args, char **env_var);
-int	check_empty_input(char *cmd);
-int	check_cmd_path(char *cmd);
-void	copy_cur_dir_to_data(t_data *data, char *cur_dir);
-void	add_path_to_data_cur_dir(t_data *data, char *path);
-int	update_pwd_env_var(t_data *data, t_env_lst *env_lst, char *cur_dir);
-int	handle_oldpwd(t_env_lst *env_lst, t_env_lst *pwd);
+void		free_all_from_process(char *cmd_path, char **e_args, char **env_var);
+int			check_empty_input(char *cmd);
+int			check_cmd_path(char *cmd);
+void		copy_cur_dir_to_data(t_data *data, char *cur_dir);
+void		add_path_to_data_cur_dir(t_data *data, char *path);
+int			update_pwd_env_var(t_data *data, t_env_lst *env_lst, char *cur_dir);
+int			handle_oldpwd(t_env_lst *env_lst, t_env_lst *pwd);
+int			is_relative_path(char *path);
+int			free_paths_cd(char **paths, int paths_count);
+int			add_slash_cd(char **paths);
+t_token		*get_cur_token(t_data *data, int index);
+int			count_outfiles(t_token *cur_token);
+t_file		*find_outfile(t_token *cur_token);
+int			dup_pipe_out(int **fd_pipes, int index);
+int			dup_pipe_in(int **fd_pipes, int index);
+int			test_whole_path(char **split_path, int *path_flag, int i);
+int			check_parent_dir_permissions(char *path);
+int			check_cur_dir_permissions(char **split_cur_dir);
+int			check_valid_path(char *path);
+int			check_for_outfile(t_token *cur_token);
+int			check_for_infile(t_token *cur_token);
+int			export_check_valid_input(char *new_env_var);
+int			unset_check_valid_input(char *var_name);
+int			get_args_size(char **args);
+int			free_close_wait(pid_t *pids, int **fd_pipes, t_data *data, int exit_status);
+int			fork_exit(int **fd_pipes, int index, pid_t *pids, t_data *data);
+int			is_builtin(t_data *data, t_env_lst *env_lst, int *std_fd, int *e_stat);
+int			check_env_var_change(t_data *data, t_env_lst *env_lst, int *exit_status);
+int			handle_heredoc(t_data *data, t_env_lst *env_lst, int *std_fd, int *e_stat);
+int			store_stdin_stdout(int *std_fd);
+
+
+
 
 
 

@@ -60,14 +60,12 @@ XX Env_var expansion / parsing: if we do solo expansion of env_var that has spac
 PANU:
 
 - CHECK PHONE NOTES !!
-- check "Ambiguous redirect" inside ft_redirect!!
 - Signals during solo built_in (DFL vs IGN)
-- bash-3.2$ echo $?
-	--> 130
 
 
 
 
+XX check "Ambiguous redirect" inside ft_redirect!!
 XX CD ISSUES:
 	--> When trying "cd ." inside a deleted folder, bash message is --> cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
 	--> When trying "cd ..", our minishell has a wrong message

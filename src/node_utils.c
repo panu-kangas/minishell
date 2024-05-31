@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   node_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 08:09:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/20 15:47:58 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 12:45:51 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,3 @@ void	ft_lstadd_back_ms(t_token **tokens, t_token *newnode)
 		newnode->next = NULL;
 	}
 }
-

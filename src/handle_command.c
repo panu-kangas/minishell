@@ -1,14 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_command.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/31 12:38:51 by pkangas           #+#    #+#             */
+/*   Updated: 2024/05/31 12:38:52 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-int	get_args_size(char **args)
-{
-	int	i;
-
-	i = 0;
-	while (args[i] != NULL)
-		i++;
-	return (i);
-}
 
 char	**just_the_cmd_doubleptr(char *cmd)
 {
@@ -40,19 +42,13 @@ char	**get_execve_args(char *cmd, char **args)
 		return (NULL);
 	new_args[0] = ft_strdup(cmd);
 	if (new_args[0] == NULL)
-	{
-		ft_free_doubleptr(new_args);
-		return (NULL);
-	}
+		return (ft_free_doubleptr(new_args));
 	i = 1;
 	while (args[i - 1] != NULL)
 	{
 		new_args[i] = ft_strdup(args[i - 1]);
 		if (new_args[i] == NULL)
-		{
-			ft_free_doubleptr(new_args);
-			return (NULL);
-		}
+			return (ft_free_doubleptr(new_args));
 		i++;
 	}
 	new_args[i] = NULL;

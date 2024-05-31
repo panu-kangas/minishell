@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 15:28:54 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/31 15:19:30 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,7 +253,7 @@ int	parsing(void)
 
 	exit_status = 0;
 	get_parsing_cur_dir(parsing_cur_dir);
-	if (parsing_cur_dir[0] == 0)
+	if (parsing_cur_dir[0] == '\0')
 		write_sys_error("malloc error; working directory storage set up failed"); // should we exit...?
 	g_signal_marker = 0;
 	env_lst = save_env_list(environ);

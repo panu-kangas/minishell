@@ -1,7 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   make_env_var_array.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/31 12:44:24 by pkangas           #+#    #+#             */
+/*   Updated: 2024/05/31 12:44:27 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-
-//Timos change, cause heap_overflow in line 52
 int	env_lstsize_all(t_env_lst *lst)
 {
 	int	size;
@@ -18,7 +28,7 @@ int	env_lstsize_all(t_env_lst *lst)
 
 char	*get_full_env_str(t_env_lst *node)
 {
-	char 	*full_str;
+	char	*full_str;
 	char	*temp;
 
 	full_str = ft_strdup(node->name);
@@ -48,7 +58,7 @@ char	**make_env_var_array(t_env_lst *env_lst)
 
 	env_var_arr = malloc((env_lstsize_all(env_lst) + 1) * sizeof(char *));
 	if (env_var_arr == NULL)
-		return (NULL); // err_status?
+		return (NULL);
 	temp = env_lst;
 	i = 0;
 	while (temp != NULL)
