@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:27 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 11:04:40 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 15:42:09 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*expand_str(char *str, t_env_lst *env_lst)
 	ft_strlcpy(new, str, i - j + 1);
 	j = i + 1;
 	i++;
-	while (ft_isalnum(str[i]) == 1 && str[i] != 0)
+	while ((ft_isalnum(str[i]) == 1 || str[i] == '_') && str[i] != 0)
 		i++;
 	temp = ft_strjoin_free (ft_strdup(new), \
 	expand_substr(ft_substr(str, j, i - j), env_lst));

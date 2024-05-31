@@ -2,7 +2,7 @@
 TIMO:
 
 
-- if we have only non_found env_var expansion, nothing should happen. We now have the followinng error:
+DONE - if we have only non_found env_var expansion, nothing should happen. We now have the followinng error:
 	--> minishell-1.1$: $jaha
 	--> minishell: : command not found
 	needs to be handled somehow in processes cause $jaha | ls should work too
