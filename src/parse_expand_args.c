@@ -1,49 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_expand-args.c                                :+:      :+:    :+:   */
+/*   parse_expand_args.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:41:18 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/29 11:42:21 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 12:26:04 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"../includes/minishell.h"
+#include "../includes/minishell.h"
 
-
-int ft_lstiter_and_expand_arg(t_parse *lst, t_env_lst *env_lst, t_data *data, int exit_status)
+int	ft_iter_and_exp_arg(t_parse *temp, t_env_lst *e_lst, int i)
 {
-	char *temp;
-	int i;
-	t_parse *head;
+	char	*tempstr;
 
-	i = 0;
-	head = lst;
-	exit_status = expand_prev_exit_code(head, data);
-	if (exit_status != 0)
-		return (exit_status);
-	while (head)
+	while (temp)
 	{
-		while (head->isexpand == 1 && head->str[i] != 0)
+		while (temp->isexpand == 1 && temp->str[i] != 0)
 		{
-			if (head->str[i] == '$')
+			if (temp->str[++i] == '$')
 			{
-				if (*(ft_strchr(head->str, '$') + 1) == ' ' || *(ft_strchr(head->str, '$') + 1) == 0)
-				break ;
-				if (head->istrim != 0)
-					temp = trim_str(expand_str(head->str, env_lst));
+				if (*(ft_strchr(temp->str, '$') + 1) == ' '\
+				|| *(ft_strchr(temp->str, '$') + 1) == 0)
+					break ;
+				if (temp->istrim != 0)
+					tempstr = trim_str(expand_str(temp->str, e_lst));
 				else
-					temp = expand_str(head->str, env_lst);
-				if (!temp)
+					tempstr = expand_str(temp->str, e_lst);
+				if (!tempstr)
 					return (write_sys_error("malloc error"));
-				free(head->str);
-				head->str = temp;
+				free(temp->str);
+				temp->str = tempstr;
 			}
-			i++;
 		}
-		head = head->next;
+		temp = temp->next;
 	}
 	return (0);
 }

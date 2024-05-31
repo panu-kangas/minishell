@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 21:24:34 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 08:41:46 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int	g_signal_marker;
 static int	add_new_token(t_data *data, char **tokenarr)
 {
 	t_token	*new;
-	int exit_status;
-	int i;
+	int		exit_status;
+	int		i;
 
 	i = 0;
 	exit_status = 0;
@@ -39,7 +39,7 @@ static int	add_new_token(t_data *data, char **tokenarr)
 	if (exit_status != 0)
 		return (exit_status);
 	ft_lstadd_back_ms(&data->tokens, new);
-	exit_status = add_files_to_token(new, tokenarr);
+	exit_status = add_files_to_token(new, tokenarr, i);
 	return (exit_status);
 }
 
@@ -47,7 +47,9 @@ static int	parse_single_token(char *str, t_data *data, int exit_status)
 {
 	char	**tokenarr;
 	char	*temp;
+	int		i;
 
+	i = -1;
 	temp = check_non_spaced_files(str);
 	if (!temp)
 		return (write_sys_error("malloc error"));
@@ -55,6 +57,9 @@ static int	parse_single_token(char *str, t_data *data, int exit_status)
 	free (temp);
 	if (!tokenarr)
 		return (write_sys_error("malloc error"));
+	exit_status = check_no_filename(tokenarr, i, exit_status);
+	if (exit_status != 0)
+		return (exit_status);
 	exit_status = add_new_token(data, tokenarr);
 	if (exit_status != 0)
 	{
@@ -65,47 +70,47 @@ static int	parse_single_token(char *str, t_data *data, int exit_status)
 	return (0);
 }
 
-static int	lexer_input(t_data *data, int exit_status)
+static int	lexer_input(t_data *data, int e_status)
 {
-	char	**inputarr;
+	char	**inparr;
 	char	*temp;
 
-	inputarr = ft_pipex_split(data->input, '|');
-	if (!inputarr)
+	inparr = ft_pipex_split(data->input, '|');
+	if (!inparr)
 		return (write_sys_error("malloc error"));
-	while (inputarr[data->proc_count] != NULL)
+	while (inparr[data->proc_count] != NULL)
 	{
-		temp = inputarr[data->proc_count];
-		inputarr[data->proc_count] = ft_strtrim(temp, " ");
+		temp = inparr[data->proc_count];
+		inparr[data->proc_count] = ft_strtrim(temp, " ");
 		free(temp);
-		if (!inputarr[data->proc_count])
+		if (!inparr[data->proc_count])
 			return (write_sys_error("malloc error"));
-		exit_status = parse_single_token(inputarr[data->proc_count], data, exit_status);
-		if (exit_status != 0)
+		e_status = parse_single_token(inparr[data->proc_count], data, e_status);
+		if (e_status != 0)
 		{
-			ft_free_double(inputarr);
-			return (exit_status);
+			ft_free_double(inparr);
+			return (e_status);
 		}
 		data->proc_count++;
 	}
-	ft_free_double(inputarr);
+	ft_free_double(inparr);
 	return (0);
 }
 
-int parsing_pipeline(t_data *data, t_env_lst *env_lst)
+int	parsing_pipeline(t_data *data, t_env_lst *env_lst)
 {
-	int exit_status;
+	int	exit_status;
 
 	exit_status = 0;
 	if (check_quot_syntax(data) != 0 || check_pipe_syntax(data) != 0)
 		return (258);
 	exit_status = lexer_input(data, exit_status);
 	if (exit_status != 0)
-		return (exit_status); //check leaks
-	exit_status = parse_expansions(data, env_lst); //this removes now also quotes
+		return (exit_status);
+	exit_status = parse_expansions(data, env_lst);
 	if (exit_status != 0)
-		return (exit_status); //check leaks
-	return(exit_status);
+		return (exit_status);
+	return (exit_status);
 }
 
 int	parsing(t_data *data, t_env_lst *env_lst, int exit_status)
@@ -119,13 +124,13 @@ int	parsing(t_data *data, t_env_lst *env_lst, int exit_status)
 	}
 	if (ft_strlen(data->input) != 0)
 	{
-		add_history(data->input); // error handling ??
+		add_history(data->input);
 		if (handle_only_spaces(data) == 0)
 		{
 			exit_status = parsing_pipeline(data, env_lst);
 			//ft_lstiter_ms(data->tokens, printnode);
 			if (exit_status == 0)
-				exit_status = make_processes(data, env_lst); // should system errors like "malloc fail" lead to whole program's termination...?
+				exit_status = make_processes(data, env_lst);
 		}
 	}
 	return (exit_status);
