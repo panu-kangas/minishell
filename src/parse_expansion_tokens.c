@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expansion_tokens.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:22:11 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 15:38:04 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 16:18:10 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ static int	handle_arg_exp(t_parse *head, t_env_lst *e_lst, t_data *d, int e_st)
 	int		i;
 
 	i = -1;
-
 	e_st = expand_prev_exit_code(head, d);
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
@@ -57,7 +56,6 @@ static int	handle_arg_exp(t_parse *head, t_env_lst *e_lst, t_data *d, int e_st)
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
 	head = head->next;
-
 	return (0);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:01:29 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 09:58:18 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/05/31 16:19:10 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	init_data(t_data *data, int exit_status, char *parsing_cur_dir)
 	data->tokens = NULL;
 	data->proc_count = 0;
 	data->prev_exit_status = exit_status;
-	copy_cur_dir_to_data(data, parsing_cur_dir); // diff init on first time ! maybe broken
+	copy_cur_dir_to_data(data, parsing_cur_dir); // diff init on first time ! maybe broken --> THIS IS THE WRONG VERSION
 }
 
 void	init_file(t_file *new)

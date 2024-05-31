@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 15:10:39 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 15:51:47 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/31 16:17:52 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,14 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	if (data->tokens->com != NULL && ft_strchr(data->tokens->com, '=') != NULL \
-	&& data->tokens->next ==  NULL)
+	&& data->tokens->next == NULL)
 	{
 		exit_status = handle_command(data, env_lst, 0);
 		if (exit_status != 2)
 			return (exit_status);
 	}
 	if (is_builtin(data, env_lst, std_fd, &exit_status) == 1)
-		return (exit_status);	
+		return (exit_status);
 	exit_status = create_processes(data, env_lst);
 	return (exit_status);
 }

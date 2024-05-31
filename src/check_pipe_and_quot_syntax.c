@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:18:22 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/30 15:18:23 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/31 16:15:37 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,11 @@ int	check_quot_syntax(t_data *data)
 	return (0);
 }
 
-int	check_pipe_syntax(t_data *data)
+int	check_pipe_syntax(t_data *data, int i)
 {
 	char	*input;
-	int		i;
 
 	input = data->input;
-	i = 0;
 	while (input[i] != '\0')
 	{
 		while (input[i] == '\t' || input[i] == '\n' || input[i] == '\v' \

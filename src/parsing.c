@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 15:19:30 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/05/31 16:16:02 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	parsing_pipeline(t_data *data, t_env_lst *env_lst)
 	int	exit_status;
 
 	exit_status = 0;
-	if (check_quot_syntax(data) != 0 || check_pipe_syntax(data) != 0)
+	if (check_quot_syntax(data) != 0 || check_pipe_syntax(data, 0) != 0)
 		return (258);
 	exit_status = lexer_input(data, exit_status);
 	if (exit_status != 0)

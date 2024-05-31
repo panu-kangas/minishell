@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_path_permissions.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/31 16:11:01 by pkangas           #+#    #+#             */
+/*   Updated: 2024/05/31 16:14:37 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	check_valid_path(char *path)
@@ -73,22 +85,22 @@ int	check_parent_dir_permissions(char *path)
 	return (flag);
 }
 
-int	test_whole_path(char **split_path, int *path_flag, int i)
+int	test_whole_path(char **sp_path, int *path_flag, int i)
 {
-	while (split_path[++i] != NULL)	
+	while (sp_path[++i] != NULL)
 	{
 		errno = 0;
-		if (chdir(split_path[i]) != 0)
+		if (chdir(sp_path[i]) != 0)
 		{
-			if (errno == EACCES && is_relative_path(split_path[i + 1]) == 2)
+			if (errno == EACCES && is_relative_path(sp_path[i + 1]) == 2)
 				i++;
-			else if (errno == EACCES && is_relative_path(split_path[i + 1]) == 1)
+			else if (errno == EACCES && is_relative_path(sp_path[i + 1]) == 1)
 			{
-				free(split_path[i + 1]);
-				split_path[i + 1] = ft_strdup(split_path[i]);
-				if (split_path[i + 1] == NULL)
+				free(sp_path[i + 1]);
+				sp_path[i + 1] = ft_strdup(sp_path[i]);
+				if (sp_path[i + 1] == NULL)
 				{
-					ft_free_doubleptr(split_path);
+					ft_free_doubleptr(sp_path);
 					return (write_sys_error("malloc failed"));
 				}
 			}
@@ -97,8 +109,7 @@ int	test_whole_path(char **split_path, int *path_flag, int i)
 		}
 	}
 	*path_flag = errno;
-	if (split_path[i] == NULL)
+	if (sp_path[i] == NULL)
 		return (0);
-	else
-		return (1);
+	return (1);
 }
