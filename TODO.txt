@@ -2,6 +2,22 @@
 TIMO:
 
 
+- echo hello >hello$not_found
+	--> meillä $not_found jää laajentamatta. Lopputuloksena pitäis syntyä filu hello
+	--> samoin: >$not_found:hello pitäis luoda filu :hello, meillä tulee ambiguous redirect
+
+- export PANU="   jee   jee   jeee   " ja perään echo hello > $PANU
+	--> Pitäis luoda tiedosto $PANU, mut meillä tulee ambiguous, koska aina kun nimessä on $, niin meil tulee ambiguous
+	--> Täytyy käyttää jotain "amb redirect" flagia, jotta tiedetään et millon pitää heittää se error!
+
+- echo hello > $PANU
+minishell: $$PANU: ambiguous redirect --> ylimääränen $
+
+- echo hello > "$PANU"
+	--> Tää ei ookaan ambiguous, vaan laajentuu yhdeks stringiks, vaikka $PANU koostuu useista sanoista
+	--> Eli jos PANU="  jee  jee   jeee" niin > "$PANU" luo filun    jee  jee   jeee
+
+
 DONE - if we have only non_found env_var expansion, nothing should happen. We now have the followinng error:
 	--> minishell-1.1$: $jaha
 	--> minishell: : command not found
@@ -69,6 +85,7 @@ PANU:
 
 - CHECK PHONE NOTES !!
 - Signals during solo built_in (DFL vs IGN)
+- ft_open_functions: korjaa amb redirect ehto! Ei voi olla aina, kun $ löytyy filunimestä
 
 
 

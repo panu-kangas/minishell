@@ -103,7 +103,9 @@ int	analyze_path(char *path, t_data *data)
 		return (write_error("cd", path, "Permission denied"));
 	else if (is_relative_flag == 2 && cur_dir_flag == 3 && parent_dir_flag == 0)
 		return (-2);
-	else if (is_relative_flag > 6 && cur_dir_flag == 1) // add edge check here somewhere !! 
+	else if (is_relative_flag == 6 && cur_dir_flag == 1)
+		return (check_path_backtrack(data, path));
+	else if (is_relative_flag > 6 && cur_dir_flag == 1)
 		return (write_error("cd", path, "No such file or directory"));
 	else if (is_relative_flag != 0 && (cur_dir_flag == 3 || cur_dir_flag == 1))
 		return (try_to_change_dir(path, cur_dir_flag));
@@ -111,8 +113,3 @@ int	analyze_path(char *path, t_data *data)
 		return (break_and_test_path(data, path));
 	return (-1);
 }
-
- // ONE EDGE CASE: if your deep in a "No such file", and wanna backtrack using ../../../ path or even ../../../../minishell
- // SOLUTION: add a check: if cur_dir_flag == 1 && is_relative_path == 6
- // make a function that builds the "final directory" using split_path.
- // if final directory is valid --> return -1, else throw error

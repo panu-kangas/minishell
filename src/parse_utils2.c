@@ -58,10 +58,8 @@ int	check_no_filename(char **tokenarr, int i, int exit_status)
 int	explore_tokenarr(t_token *new, char **tokenarr)
 {
 	int	i;
-	int	exit_status;
 
 	i = 0;
-	exit_status = 0;
 	while (tokenarr[i] != NULL)
 	{
 		if (check_redir(tokenarr[i]) > 0)

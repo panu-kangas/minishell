@@ -113,7 +113,7 @@ char	*update_cur_dir(char *temp_cur_dir, char *path)
 		}
 		while (temp_cur_dir[i] != '/')
 			i--;
-		if (i != 0)
+		if (i > 0)
 			temp_cur_dir[i] = '\0';
 		return (temp_cur_dir);
 	}

@@ -38,7 +38,7 @@ int	get_absolute_parent_path(t_data *data, t_token *token)
 		return (-1);
 	path = token->args[0];
 	i = ft_strlen(path) - 1;
-	while (i != 0)
+	while (i > 0)
 	{
 		if (path[i] == '/')
 		{
@@ -47,7 +47,7 @@ int	get_absolute_parent_path(t_data *data, t_token *token)
 		}
 		i--;
 	}
-	if (i != 0)
+	if (i > 0)
 		path[i] = '\0';
 	return (0);
 }

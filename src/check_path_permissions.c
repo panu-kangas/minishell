@@ -69,7 +69,7 @@ int	check_parent_dir_permissions(char *path)
 	if (temp == NULL)
 		return (-1);
 	i = ft_strlen(temp) - 1;
-	while (i != 0)
+	while (i > 0)
 	{
 		if (temp[i] == '/')
 		{
@@ -78,7 +78,7 @@ int	check_parent_dir_permissions(char *path)
 		}
 		i--;
 	}
-	if (i != 0)
+	if (i > 0)
 		temp[i] = '\0';
 	flag = check_valid_path(temp);
 	free(temp);

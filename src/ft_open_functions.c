@@ -16,7 +16,7 @@ int	check_for_bad_filename(char *file)
 {
 	if (file != NULL && file[0] == '\0')
 		return (write_error(NULL, "", "No such file or directory"));
-	if (file != NULL && file[0] == '$')
+	if (file != NULL && ft_strchr(file, '$') != NULL) // KORJAA TÄMÄ
 		return (write_amb_error(file));
 	return (0);
 }

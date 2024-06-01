@@ -262,5 +262,9 @@ int			is_builtin(t_data *data, t_env_lst *env_lst, int *std_fd, int *e_stat);
 int			check_env_var_change(t_data *data, t_env_lst *env_lst, int *exit_status);
 int			handle_heredoc(t_data *data, t_env_lst *env_lst, int *std_fd, int *e_stat);
 int			store_stdin_stdout(int *std_fd);
+char		*join_path_to_cur_dir(char *temp_cur_dir, char *path);
+int			check_path_backtrack(t_data *data, char *path);
+
+
 
 #endif
