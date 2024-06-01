@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 16:16:02 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/01 13:40:40 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,10 @@ static int	parse_single_token(char *str, t_data *data, int exit_status)
 	i = -1;
 	temp = check_non_spaced_files(str);
 	if (!temp)
+
 		return (write_sys_error("malloc error"));
 	tokenarr = ft_pipex_split(temp, ' ');
-	free(temp);
+	free (temp);
 	if (!tokenarr)
 		return (write_sys_error("malloc error"));
 	exit_status = check_no_filename(tokenarr, i, exit_status);
@@ -64,9 +65,12 @@ static int	parse_single_token(char *str, t_data *data, int exit_status)
 		return (exit_status);
 	}
 	exit_status = add_new_token(data, tokenarr);
-	ft_free_doubleptr(tokenarr);
 	if (exit_status != 0)
+	{
+		ft_free_doubleptr(tokenarr);
 		return (write_sys_error("malloc error"));
+	}
+	ft_free_doubleptr(tokenarr);
 	return (0);
 }
 
@@ -100,9 +104,11 @@ static int	lexer_input(t_data *data, int e_status)
 int	parsing_pipeline(t_data *data, t_env_lst *env_lst)
 {
 	int	exit_status;
+	int	i;
 
+	i = 0;
 	exit_status = 0;
-	if (check_quot_syntax(data) != 0 || check_pipe_syntax(data, 0) != 0)
+	if (check_quot_syntax(data) != 0 || check_pipe_syntax(data, i) != 0)
 		return (258);
 	exit_status = lexer_input(data, exit_status);
 	if (exit_status != 0)
@@ -120,7 +126,7 @@ int	parsing(t_data *data, t_env_lst *env_lst, int exit_status)
 	{
 		free(data);
 		ft_putstr_fd("exit\n", 2);
-		exit(0);
+		return (0);
 	}
 	if (ft_strlen(data->input) != 0)
 	{

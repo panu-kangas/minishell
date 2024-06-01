@@ -6,21 +6,23 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:41:18 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 15:29:06 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/01 14:05:55 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_iter_and_exp_arg(t_parse *temp, t_env_lst *e_lst, int i)
+int	ft_iter_and_exp_arg(t_parse *head, t_env_lst *e_lst, int i)
 {
 	char	*tempstr;
+	t_parse	*temp;
 
-	while (temp)
+	temp = head;
+	while (temp != NULL)
 	{
-		while (temp->isexpand == 1 && temp->str[i] != 0)
+		while (temp->str[i] != 0)
 		{
-			if (temp->str[++i] == '$')
+			if (temp->str[i] == '$' && temp->isexpand == 1)
 			{
 				if (*(ft_strchr(temp->str, '$') + 1) == ' '\
 				|| *(ft_strchr(temp->str, '$') + 1) == 0)
@@ -34,6 +36,7 @@ int	ft_iter_and_exp_arg(t_parse *temp, t_env_lst *e_lst, int i)
 				free(temp->str);
 				temp->str = tempstr;
 			}
+			i++;
 		}
 		temp = temp->next;
 	}

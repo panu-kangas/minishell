@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 16:20:51 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/01 14:04:57 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int		expand_files(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st);
 int		add_files_to_token(t_token *new, char **tokenarr, int i);
 t_file	*add_file(char *str, int is_append, int is_infile);
 int		check_redir(char *str);
-int		ft_iter_and_exp_arg(t_parse *temp, t_env_lst *e_lst,int i);
+int		ft_iter_and_exp_arg(t_parse *head, t_env_lst *e_lst, int i);
 int		expand_prev_exit_code(t_parse *lst, t_data *data);
 char	*trim_str(char *str);
 int		check_no_filename(char **tokenarr, int i, int exit_status);
@@ -262,10 +262,5 @@ int			is_builtin(t_data *data, t_env_lst *env_lst, int *std_fd, int *e_stat);
 int			check_env_var_change(t_data *data, t_env_lst *env_lst, int *exit_status);
 int			handle_heredoc(t_data *data, t_env_lst *env_lst, int *std_fd, int *e_stat);
 int			store_stdin_stdout(int *std_fd);
-
-
-
-
-
 
 #endif

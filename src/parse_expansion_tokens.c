@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expansion_tokens.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:22:11 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 16:18:10 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/01 14:05:15 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,12 @@ int	expand_com(t_token *cur, t_env_lst *e_lst, t_data *d, int e_status)
 	return (e_status);
 }
 
-static int	handle_arg_exp(t_parse *head, t_env_lst *e_lst, t_data *d, int e_st)
+static int	handle_arg_exp(t_parse *head, t_env_lst *e_lst, t_data *d)
 {
-	int		i;
+	int	i;
+	int	e_st;
 
-	i = -1;
+	i = 0;
 	e_st = expand_prev_exit_code(head, d);
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
@@ -55,15 +56,14 @@ static int	handle_arg_exp(t_parse *head, t_env_lst *e_lst, t_data *d, int e_st)
 	e_st = ft_lst_iter_remove_quotes(head);
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
-	head = head->next;
 	return (0);
 }
 
 int	expand_args(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st)
 {
 	t_parse	*head;
-	char	*temp;
 	int		i;
+	char	*tempstr;
 
 	i = 0;
 	while (cur->args[i] != 0)
@@ -72,14 +72,14 @@ int	expand_args(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st)
 		e_st = handle_substrings(cur->args[i], &head);
 		if (e_st != 0)
 			return (ft_free_parse(head, e_st));
-		e_st = handle_arg_exp(head, e_lst, d, e_st);
+		e_st = handle_arg_exp(head, e_lst, d);
 		if (e_st != 0)
 			return (e_st);
-		temp = ft_lstiter_and_make_new_str(head);
-		if (!temp)
+		tempstr = ft_lstiter_and_make_new_str(head);
+		if (!tempstr)
 			return (ft_free_parse(head, 1));
 		free(cur->args[i]);
-		cur->args[i] = temp;
+		cur->args[i] = tempstr;
 		ft_free_parse(head, 0);
 		i++;
 	}

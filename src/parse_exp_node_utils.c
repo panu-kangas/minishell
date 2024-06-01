@@ -6,28 +6,30 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 12:34:23 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/01 11:46:04 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_lstiter_and_make_new_str(t_parse *lst)
+char	*ft_lstiter_and_make_new_str(t_parse *head)
 {
 	char	*new;
-	char	*temp;
+	char	*tempstr;
+	t_parse	*temp;
 
+	temp = head;
 	new = ft_strdup("");
 	if (!new)
 		return (NULL);
-	while (lst)
+	while (temp)
 	{
-		temp = new;
-		new = ft_strjoin(new, lst->str);
-		free (temp);
+		tempstr = new;
+		new = ft_strjoin(new, temp->str);
+		free (tempstr);
 		if (!new)
 			return (NULL);
-		lst = lst->next;
+		temp = temp->next;
 	}
 	return (new);
 }
@@ -93,29 +95,31 @@ void	change_expand_status(t_parse *head)
 	}
 }
 
-int	ft_lst_iter_remove_quotes(t_parse *lst)
+int	ft_lst_iter_remove_quotes(t_parse *head)
 {
 	char	*stret;
+	t_parse	*temp;
 
-	while (lst)
+	temp = head;
+	while (temp)
 	{
-		if (lst->str[0] == '\'')
+		if (temp->str[0] == '\'')
 		{
-			stret = ft_strtrim(lst->str, "'");
+			stret = ft_strtrim(temp->str, "'");
 			if (!stret)
 				return (-1);
-			free(lst->str);
-			lst->str = stret;
+			free(temp->str);
+			temp->str = stret;
 		}
-		else if (lst->str[0] == '"')
+		else if (temp->str[0] == '"')
 		{
-			stret = ft_strtrim(lst->str, "\"");
+			stret = ft_strtrim(temp->str, "\"");
 			if (!stret)
 				return (-1);
-			free(lst->str);
-			lst->str = stret;
+			free(temp->str);
+			temp->str = stret;
 		}
-		lst = lst->next;
+		temp = temp->next;
 	}
 	return (0);
 }
