@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_pipe_and_quot_syntax.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:18:22 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 16:15:37 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/01 13:21:42 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,30 +51,29 @@ int	check_quot_syntax(t_data *data)
 	return (0);
 }
 
-int	check_pipe_syntax(t_data *data, int i)
+int	check_pipe_syntax(t_data *data,  int i)
 {
-	char	*str;
+	char	*input;
 
-	str = data->input;
-	while (str[i] != '\0')
+	input = data->input;
+	while (input[i] != '\0')
 	{
-		while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v' \
-		|| str[i] == '\f' || str[i] == '\r' || str[i] == ' ')
+		while (input[i] == '\t' || input[i] == '\n' || input[i] == '\v' \
+		|| input[i] == '\f' || input[i] == '\r' || input[i] == ' ')
 			i++;
-		if ((str[i] == '|' && str[i + 1] == '|') \
-		|| (ft_strchr(str, '|') != NULL && str[i] == '\0'))
+		if ((input[i] == '|' && input[i + 1] == '|') || (ft_strchr(input, '|') != NULL && input[i] == '\0'))
 			return (write_syntax_error("||"));
-		if (str[i] == '|' || (ft_strchr(str, '|') != NULL && str[i] == '\0'))
+		if (input[i] == '|' || (ft_strchr(input, '|') != NULL && input[i] == '\0'))
 			return (write_syntax_error("|"));
-		else if (str[i] != '\0')
+		else if (input[i] != '\0')
 		{
-			while (str[i] != '|' && str[i] != '\0')
+			while (input[i] != '|' && input[i] != '\0')
 				i++;
-			if (str[i] == '|' && (str[i + 1] == '|' \
-			|| str[i + 1] == '\0'))
+			if (input[i] == '|' && (input[i + 1] == '|' \
+			|| input[i + 1] == '\0'))
 				return (write_syntax_error("|"));
 		}
-		if (str[i] != '\0')
+		if (input[i] != '\0')
 			i++;
 	}
 	return (0);

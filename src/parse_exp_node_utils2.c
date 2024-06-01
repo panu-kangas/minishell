@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 12:28:58 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/01 13:33:41 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,15 @@ char	*expand_exit_str(char *str, t_data *data, int i)
 {
 	char	*temp;
 	char	*new;
-	char	*exit_status_str;
 
 	new = ft_substr(str, 0, i);
 	if (!new)
 		return (NULL);
 	temp = new;
-	exit_status_str = ft_itoa(data->prev_exit_status);
-	new = ft_strjoin(new, exit_status_str);
-	free(temp);
-	free(exit_status_str);
+	new = ft_strjoin(new, (ft_itoa(data->prev_exit_status)));
 	if (!new)
 		return (NULL);
+	free (temp);
 	temp = new;
 	i += 2;
 	new = ft_strjoin(new, str + i);
