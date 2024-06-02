@@ -6,9 +6,13 @@ TIMO:
 	--> meillä $not_found jää laajentamatta. Lopputuloksena pitäis syntyä filu hello
 	--> samoin: >$not_found:hello pitäis luoda filu :hello, meillä tulee ambiguous redirect
 
-- export PANU="   jee   jee   jeee   " ja perään echo hello > $PANU
+- export PANU="   jee   jee   jeee   " ja perään echo hello > '$PANU'
 	--> Pitäis luoda tiedosto $PANU, mut meillä tulee ambiguous, koska aina kun nimessä on $, niin meil tulee ambiguous
 	--> Täytyy käyttää jotain "amb redirect" flagia, jotta tiedetään et millon pitää heittää se error!
+
+- minishell-1.1$: $P_K
+minishell: _K: command not found
+	--> Eli command expand ei ymmärrä alaviivaa normi characteriks
 
 - echo hello > $PANU
 minishell: $$PANU: ambiguous redirect --> ylimääränen $
@@ -17,18 +21,21 @@ minishell: $$PANU: ambiguous redirect --> ylimääränen $
 	--> Tää ei ookaan ambiguous, vaan laajentuu yhdeks stringiks, vaikka $PANU koostuu useista sanoista
 	--> Eli jos PANU="  jee  jee   jeee" niin > "$PANU" luo filun    jee  jee   jeee
 
-
-DONE - if we have only non_found env_var expansion, nothing should happen. We now have the followinng error:
+- if we have only non_found env_var expansion, nothing should happen. We now have the followinng error:
 	--> minishell-1.1$: $jaha
 	--> minishell: : command not found
 	needs to be handled somehow in processes cause $jaha | ls should work too
-		do we need some kind of flag?
+
+--> <<> meilla heredoc  bash syntax error near unexpected token `>'
+--> <<>>
+
+
+DONE
 - Syntax error: these don't work yet or have wrong message:
 		--> >>>>> does nothig, I suppose  bash `>>'
 		--> ><  does nothing  bash: syntax error near unexpected token `<'
 		--> <> >: No such file or directory    bash 'newline'
 		--> >><  makes file <   bash `<'
-		--> <<> meilla heredoc  bash syntax error near unexpected token `>'
 		--> >>|      near unexpected token 'newline'
 		--> <<<<<<<    bash syntax error near unexpected token `<<<'
 MAYBE DONE    - Heredoc: limiter (in our logic, filename of heredoc) does not expand at all! SEGFAUL
@@ -81,8 +88,6 @@ XX Env_var expansion / parsing: if we do solo expansion of env_var that has spac
 
 PANU:
 
--HEREDOC SEGFAULT in get_execve_args handle_command.c:41
-
 - CHECK PHONE NOTES !!
 - Signals during solo built_in (DFL vs IGN)
 - ft_open_functions: korjaa amb redirect ehto! Ei voi olla aina, kun $ löytyy filunimestä
@@ -127,13 +132,13 @@ XX Unclosed quot: I think this could be just a syntax error! with error message 
 
 QUESTIONS:
 
-- Handling special characters: is this ok at the moment? We should handle them always or not at all, I think.
+XX Handling special characters: is this ok at the moment? We should handle them always or not at all, I think.
 
 
-- How to handle this?	bash-3.2$ export PANU=>file1 --> this is actually same as "export PANU= >file1", so a matter of parsing
+XX How to handle this?	bash-3.2$ export PANU=>file1 --> this is actually same as "export PANU= >file1", so a matter of parsing
 						bash-3.2$ echo hello $PANU
 
-- rl_clear_history in the end of program (and in exit function also) ??
+XX rl_clear_history in the end of program (and in exit function also) ??
 
 XX How to handle this? 	bash-3.2$ echo hello2 >$NOT_EXISTING 	--> Maybe in parsing? If filename is $something, exit_code is 1 and write "ambiguous redirect"
 						bash: $NOT_EXISTING: ambiguous redirect		--> This same also works with NOT_EXISTING=, so with env_var that has value of '\0'
@@ -146,5 +151,5 @@ CHECK THESE:
 
 XX single and double quotations won't show in env-listed value. I mean:  export TEST='hello world' --> TEST=hello world in variable list (wth env-command)
 XX export PATH=$PATH:something
-- Panu: is OS given PATH superior to user given path? Or does it execute the first path it finds (example: ls-executable in work folder, work folder added to PATH)
-- lsof -c minishell
+XX Panu: is OS given PATH superior to user given path? Or does it execute the first path it finds (example: ls-executable in work folder, work folder added to PATH)
+XX lsof -c minishell

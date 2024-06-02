@@ -27,16 +27,16 @@ int	is_relative_path(char *path)
 		return (5);
 	else if (ft_strncmp(path, "../", 3) == 0)
 		return (6);
-	else if (ft_strnstr(path, "/./", ft_strlen(path)) != 0 \
-	|| ft_strnstr(path, "/../", ft_strlen(path)) != 0)
+	else if (ft_strnstr(path, "/./", ft_strlen(path)) != NULL \
+	|| ft_strnstr(path, "/../", ft_strlen(path)) != NULL)
 		return (7);
 	else if (i > 0 && path[i - 1] == '/' && path[i] == '.')
 		return (8);
 	else if (i > 1 && path[i - 2] == '/' \
 	&& path[i - 1] == '.' && path[i] == '.')
-		return (7);
+		return (9);
 	else if (path[0] != '/')
-		return (8);
+		return (10);
 	return (0);
 }
 
@@ -106,12 +106,12 @@ char	*update_cur_dir(char *temp_cur_dir, char *path)
 		return (temp_cur_dir);
 	else if (is_relative_path(path) == 2)
 	{
-		if (temp_cur_dir[i] == '/')
+		if (i > 0 && temp_cur_dir[i] == '/')
 		{
 			while (temp_cur_dir[i] == '/')
 				i--;
 		}
-		while (temp_cur_dir[i] != '/')
+		while (i > 0 && temp_cur_dir[i] != '/')
 			i--;
 		if (i > 0)
 			temp_cur_dir[i] = '\0';

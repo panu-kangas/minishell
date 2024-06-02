@@ -124,6 +124,6 @@ char	*expand_str_file(char *str, t_env_lst *env_lst)
 	j = i;
 	while (str[i] != 0)
 		i++;
-	temp = ft_strjoin_free(temp, ft_substr(str + j, 0, i)); // testing to change strjoin --> strjoin_free
+	temp = ft_strjoin_free(temp, ft_substr(str + j, 0, i));
 	return (temp);
 }

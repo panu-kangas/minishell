@@ -16,19 +16,22 @@ char	*expand_exit_str(char *str, t_data *data, int i)
 {
 	char	*temp;
 	char	*new;
+	char	*prev_exit_stat;
 
 	new = ft_substr(str, 0, i);
 	if (!new)
 		return (NULL);
 	temp = new;
-	new = ft_strjoin(new, (ft_itoa(data->prev_exit_status)));
+	prev_exit_stat = ft_itoa(data->prev_exit_status);
+	new = ft_strjoin(new, prev_exit_stat);
+	free(temp);
+	free(prev_exit_stat);
 	if (!new)
 		return (NULL);
-	free (temp);
 	temp = new;
 	i += 2;
 	new = ft_strjoin(new, str + i);
-	free (temp);
+	free(temp);
 	if (!str)
 		return (NULL);
 	return (new);

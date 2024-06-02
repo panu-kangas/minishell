@@ -90,7 +90,7 @@ int	check_for_env_var(t_token *cur_token, t_env_lst *env_lst)
 	return (exit_status);
 }
 
-int	handle_command(t_data *data, t_env_lst *env_lst, int index)
+int	handle_command(t_data *data, t_env_lst *env_lst, int index, int e_flag)
 {
 	int		exit_status;
 	char	**e_args;
@@ -105,7 +105,7 @@ int	handle_command(t_data *data, t_env_lst *env_lst, int index)
 			return (exit_status);
 	}
 	if (check_for_built_in(cur_token->com) == 1)
-		exit_status = execute_built_in(env_lst, data, cur_token);
+		exit_status = execute_built_in(env_lst, data, cur_token, e_flag);
 	else if (cur_token->com != NULL)
 	{
 		e_args = get_execve_args(cur_token->com, cur_token->args);

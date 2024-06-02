@@ -27,7 +27,7 @@ static int	check_file_name(char **temp, char *orig)
 		len++;
 	if (len > 1)
 	{
-		free(*temp); // added this to avoid a leak
+		free(*temp);
 		*temp = ft_strjoin("$", orig);
 		if (!(*temp))
 			exit_status = (1);

@@ -49,6 +49,12 @@ void	sig_handler_main(int signum)
 	}
 }
 
+void	set_signals_to_dfl(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
+
 int	process_signal_main(void)
 {
 	struct sigaction	sigact;

@@ -26,12 +26,12 @@ int	enter_fork_loop(t_data *data, t_env_lst *env_lst, int *pids, int **fd_pipes)
 			return (fork_exit(fd_pipes, index, pids, data));
 		else if (pids[index] == 0)
 		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
+			set_signals_to_dfl();
 			free(pids);
 			exit_status = ft_redirect(data, fd_pipes, index);
 			if (exit_status == 0)
-				exit_status = handle_command(data, env_lst, index);
+				exit_status = handle_command(data, env_lst, index, 0);
+			close_std_fd(data->std_fd);
 			free_env_lst(env_lst);
 			ft_free_data(data, 0);
 			exit(exit_status);
@@ -62,18 +62,11 @@ int	create_processes(t_data *data, t_env_lst *env_lst)
 	return (free_close_wait(pids, fd_pipes, data, 0));
 }
 
-int	make_processes(t_data *data, t_env_lst *env_lst)
+int	make_processes(t_data *data, t_env_lst *env_lst, int *std_fd)
 {
-	int			exit_status;
-	int			std_fd[2];
+	int	exit_status;
 
 	exit_status = 0;
-	std_fd[0] = dup(0);
-	if (std_fd[0] == -1)
-		return (write_sys_error("dup failed"));
-	std_fd[1] = dup(1);
-	if (std_fd[1] == -1)
-		return (write_sys_error("dup failed"));
 	if (handle_heredoc(data, env_lst, std_fd, &exit_status) != 0)
 		return (exit_status);
 	signal(SIGINT, SIG_DFL);
@@ -81,7 +74,7 @@ int	make_processes(t_data *data, t_env_lst *env_lst)
 	if (data->tokens->com != NULL && ft_strchr(data->tokens->com, '=') != NULL \
 	&& data->tokens->next == NULL)
 	{
-		exit_status = handle_command(data, env_lst, 0);
+		exit_status = handle_command(data, env_lst, 0, 1);
 		if (exit_status != 2)
 			return (exit_status);
 	}

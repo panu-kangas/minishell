@@ -12,8 +12,7 @@
 
 #include "minishell.h"
 
-/*
-int	store_stdin_stdout(int **std_fd)
+int	store_stdin_stdout(int *std_fd)
 {
 	std_fd[0] = dup(0);
 	if (std_fd[0] == -1)
@@ -22,7 +21,7 @@ int	store_stdin_stdout(int **std_fd)
 	if (std_fd[1] == -1)
 		return (write_sys_error("dup failed"));
 	return (0);
-} */
+}
 
 int	handle_heredoc(t_data *data, t_env_lst *env_lst, int *std_fd, int *e_stat)
 {
@@ -45,7 +44,7 @@ int	check_env_var_change(t_data *data, t_env_lst *env_lst, int *exit_status)
 {
 	if (data->tokens->com != NULL && ft_strchr(data->tokens->com, '=') != NULL \
 	&& data->tokens->next == NULL)
-		*exit_status = handle_command(data, env_lst, 0);
+		*exit_status = handle_command(data, env_lst, 0, 1);
 	return (*exit_status);
 }
 
@@ -60,7 +59,7 @@ int	is_builtin(t_data *data, t_env_lst *env_lst, int *std_fd, int *e_stat)
 		flag = 1;
 		*e_stat = ft_redirect(data, NULL, 0);
 		if (*e_stat == 0)
-			*e_stat = handle_command(data, env_lst, 0);
+			*e_stat = handle_command(data, env_lst, 0, 1);
 		if (dup2(std_fd[0], 0) == -1)
 			return (write_sys_error("dup2 failed here"));
 		if (dup2(std_fd[1], 1) == -1)

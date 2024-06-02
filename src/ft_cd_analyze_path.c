@@ -50,7 +50,7 @@ int	get_cur_dir_flag(t_data *data)
 	return (cur_dir_flag);
 }
 
-int	try_to_change_dir(char *path, int cur_dir_flag)
+int	try_to_change_dir(char *path, int cur_dir_flag) // TEST THIS!
 {
 	if (chdir(path) != 0)
 	{
@@ -59,10 +59,12 @@ int	try_to_change_dir(char *path, int cur_dir_flag)
 		else if (cur_dir_flag == 3)
 			return (write_error("cd", path, "Permission denied"));
 	}
+	else if (is_relative_path(path) == 2 && cur_dir_flag == 1) // is this needed...?
+		return (write_error("cd", path, "No such file or directory"));
 	return (-3);
 }
 
-int	break_and_test_path(t_data *data, char *path) // TEST THIS HARD!!
+int	break_and_test_path(t_data *data, char *path)
 {
 	int		path_flag;
 	int		test_flag;
@@ -89,7 +91,7 @@ int	break_and_test_path(t_data *data, char *path) // TEST THIS HARD!!
 int	analyze_path(char *path, t_data *data)
 {
 	int		cur_dir_flag;
-	int		is_relative_flag;
+	int		is_relative;
 	int		parent_dir_flag;
 
 	if (handle_valid_path(path) == 1)
@@ -97,17 +99,19 @@ int	analyze_path(char *path, t_data *data)
 	cur_dir_flag = get_cur_dir_flag(data);
 	if (cur_dir_flag < 0)
 		return (1);
-	is_relative_flag = is_relative_path(path);
+	is_relative = is_relative_path(path);
 	parent_dir_flag = check_parent_dir_permissions(data->current_directory);
-	if (is_relative_flag == 1 && cur_dir_flag == 3 && parent_dir_flag == 0)
+	if (is_relative == 1 && cur_dir_flag == 3 && parent_dir_flag == 0)
 		return (write_error("cd", path, "Permission denied"));
-	else if (is_relative_flag == 2 && cur_dir_flag == 3 && parent_dir_flag == 0)
+	else if (is_relative == 2 && cur_dir_flag == 3 && parent_dir_flag == 0)
 		return (-2);
-	else if (is_relative_flag == 6 && cur_dir_flag == 1)
-		return (check_path_backtrack(data, path));
-	else if (is_relative_flag > 6 && cur_dir_flag == 1)
+	else if (is_relative == 2 && cur_dir_flag == 1 && parent_dir_flag == 0)
+		return (-2);
+//	else if ((is_relative == 6 || is_relative == 2) && cur_dir_flag == 1)
+//		return (check_path_backtrack(data, path)); // run tests in school environ and decide what to do based on that
+	else if (is_relative > 6 && cur_dir_flag == 1)
 		return (write_error("cd", path, "No such file or directory"));
-	else if (is_relative_flag != 0 && (cur_dir_flag == 3 || cur_dir_flag == 1))
+	else if (is_relative != 0 && (cur_dir_flag == 3 || cur_dir_flag == 1))
 		return (try_to_change_dir(path, cur_dir_flag));
 	else if (cur_dir_flag == 0)
 		return (break_and_test_path(data, path));

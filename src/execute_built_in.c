@@ -62,21 +62,21 @@ void	handle_echo(char **args)
 		ft_echo(0, args);
 }
 
-int	execute_built_in(t_env_lst *env_lst, t_data *data, t_token *token)
+int	execute_built_in(t_env_lst *env_lst, t_data *data, t_token *t, int e_flag)
 {
 	int		exit_status;
 	char	*cmd;
 	char	**args;
 
 	exit_status = 0;
-	cmd = token->com;
-	args = token->args;
+	cmd = t->com;
+	args = t->args;
 	if (is_echo(cmd) == 1)
 		handle_echo(args);
 	else if (ft_strncmp(cmd, "export", ft_strlen(cmd) + 1) == 0)
 		exit_status = handle_export(env_lst, args);
 	else if (ft_strncmp(cmd, "cd", ft_strlen(cmd) + 1) == 0)
-		exit_status = ft_cd(data, env_lst, token);
+		exit_status = ft_cd(data, env_lst, t);
 	else if (ft_strncmp(cmd, "unset", ft_strlen(cmd) + 1) == 0)
 		exit_status = handle_unset(env_lst, args);
 	else if (is_pwd(cmd) == 1)
@@ -84,6 +84,6 @@ int	execute_built_in(t_env_lst *env_lst, t_data *data, t_token *token)
 	else if (is_env(cmd) == 1)
 		ft_env(env_lst);
 	else if (ft_strncmp(cmd, "exit", ft_strlen(cmd) + 1) == 0)
-		exit_status = ft_exit(env_lst, data, args);
+		exit_status = ft_exit(env_lst, data, args, e_flag);
 	return (exit_status);
 }

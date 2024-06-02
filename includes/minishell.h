@@ -58,6 +58,7 @@ typedef struct s_data
 	t_token	*tokens;
 	int		proc_count;
 	int		prev_exit_status;
+	int		std_fd[2];
 	char	current_directory[256];
 }	t_data;
 
@@ -160,7 +161,7 @@ int			ft_pwd(t_data *data);
 void		ft_env(t_env_lst *env_lst);
 int			ft_cd(t_data *data, t_env_lst *env_lst, t_token *token);
 void		ft_echo(int flag, char **args);
-int			ft_exit(t_env_lst *env_lst, t_data *data, char **args);
+int			ft_exit(t_env_lst *env_lst, t_data *data, char **args, int e_flag);
 
 int			ft_redirect(t_data *data, int **fd_pipes, int index);
 int			process_heredoc(t_data *data, t_env_lst *env_lst, int exit_status);
@@ -195,16 +196,16 @@ int			write_syntax_error(char *err_str);
 char		**get_paths(t_env_lst *env_lst);
 char		**make_env_var_array(t_env_lst *env_lst);
 
-int			handle_command(t_data *data, t_env_lst *env_lst, int index);
+int			handle_command(t_data *data, t_env_lst *env_lst, int index, int e_flag);
 int			execute_command(char *cmd, char **args, t_env_lst *env_lst, t_data *data);
-int			execute_built_in(t_env_lst *env_lst, t_data *data, t_token *cur_token);
+int			execute_built_in(t_env_lst *env_lst, t_data *data, t_token *cur_token, int e_flag);
 
 int			check_for_built_in(char *cmd);
 int			is_echo(char *cmd);
 int			is_pwd(char *cmd);
 int			is_env(char *cmd);
 
-int			make_processes(t_data *data, t_env_lst *env_lst);
+int			make_processes(t_data *data, t_env_lst *env_lst, int *std_fd);
 pid_t		*get_pids(int proc_count);
 int			**get_pipes(int pipe_cnt);
 void		close_all_pipes(t_data *data, int **fd_pipes, int pipe_cnt);
@@ -262,8 +263,12 @@ int			is_builtin(t_data *data, t_env_lst *env_lst, int *std_fd, int *e_stat);
 int			check_env_var_change(t_data *data, t_env_lst *env_lst, int *exit_status);
 int			handle_heredoc(t_data *data, t_env_lst *env_lst, int *std_fd, int *e_stat);
 int			store_stdin_stdout(int *std_fd);
-char		*join_path_to_cur_dir(char *temp_cur_dir, char *path);
+char		*update_cur_dir(char *temp_cur_dir, char *path);
 int			check_path_backtrack(t_data *data, char *path);
+int			free_hd_str(char *str);
+void		close_std_fd(int *std_fd);
+void		set_signals_to_dfl(void);
+
 
 
 

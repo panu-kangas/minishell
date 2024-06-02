@@ -46,13 +46,13 @@ void	free_all_exit(t_data *data, t_env_lst *env_lst)
 	ft_free_data(data, 0);
 }
 
-int	ft_exit(t_env_lst *env_lst, t_data *data, char **args)
+int	ft_exit(t_env_lst *env_lst, t_data *data, char **args, int e_flag)
 {
 	int	count;
 	int	exit_status;
 
-// this doesn't appear if exit is piped, example: echo hello | exit --> WEIRD
-	ft_putendl_fd("exit", 2);
+	if (e_flag == 1)
+		ft_putendl_fd("exit", 2);
 	if (args[0] == NULL)
 	{
 		free_all_exit(data, env_lst);
