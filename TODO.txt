@@ -21,13 +21,7 @@ minishell: $$PANU: ambiguous redirect --> ylimääränen $
 	--> Tää ei ookaan ambiguous, vaan laajentuu yhdeks stringiks, vaikka $PANU koostuu useista sanoista
 	--> Eli jos PANU="  jee  jee   jeee" niin > "$PANU" luo filun    jee  jee   jeee
 
-- if we have only non_found env_var expansion, nothing should happen. We now have the followinng error:
-	--> minishell-1.1$: $jaha
-	--> minishell: : command not found
-	needs to be handled somehow in processes cause $jaha | ls should work too
 
---> <<> meilla heredoc  bash syntax error near unexpected token `>'
---> <<>>
 
 
 DONE
@@ -38,6 +32,8 @@ DONE
 		--> >><  makes file <   bash `<'
 		--> >>|      near unexpected token 'newline'
 		--> <<<<<<<    bash syntax error near unexpected token `<<<'
+		--> <<> meilla heredoc  bash syntax error near unexpected token `>'
+		--> <<>>
 MAYBE DONE    - Heredoc: limiter (in our logic, filename of heredoc) does not expand at all! SEGFAUL
 DONE 	- Parsing of file names: if a file name is non_expandable env_var, leave it be! I need it later in program
 I THINK THIS WORKS????    - Env_var expansion bug: _ is a valid character in env_var. So PANU_KANGAS should be one variable
@@ -125,6 +121,13 @@ XX Minishell: echo hello | --> should have some sort of syntax error
 XX Minishell: | --> solo pipe sign could maybe be a syntax error ?
 XX Unclosed quot: I think this could be just a syntax error! with error message like:
 		minishell: syntax error: unclosed quotation
+XX if we have only non_found env_var expansion, nothing should happen. We now have the followinng error:
+	--> minishell-1.1$: $jaha
+	--> minishell: : command not found
+	needs to be handled somehow in processes cause $jaha | ls should work too- if we have only non_found env_var expansion, nothing should happen. We now have the followinng error:
+	--> minishell-1.1$: $jaha
+	--> minishell: : command not found
+	needs to be handled somehow in processes cause $jaha | ls should work too
 
 
 ------------------------------------

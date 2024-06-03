@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_open_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:35:51 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 12:47:19 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 12:45:09 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	ft_just_create_file(char *file)
 	int			file_fd;
 	struct stat	statbuf;
 
-	if (file != NULL && file[0] == '$')
+	if (file != NULL && file[0] == '$') // KORJAA 
 		return (write_amb_error(file));
 	if (access(file, F_OK) == 0)
 	{
