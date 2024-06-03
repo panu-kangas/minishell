@@ -14,7 +14,7 @@ int	write_error(char *cmd, char *specifier, char *err_str)
 	return (1);
 }
 
-int	write_export_error(char *cmd, char *specifier, char *err_str)
+int	write_exp_error(char *cmd, char *specifier)
 {
 	ft_putstr_fd("minishell: ", 2);
 	if (cmd != NULL)
@@ -26,7 +26,7 @@ int	write_export_error(char *cmd, char *specifier, char *err_str)
 	ft_putstr_fd(specifier, 2);
 	ft_putstr_fd("\'", 2);
 	ft_putstr_fd(": ", 2);
-	ft_putendl_fd(err_str, 2);
+	ft_putendl_fd("not a valid identifier", 2);
 	return (1);
 }
 

@@ -2,24 +2,6 @@
 TIMO:
 
 
-- echo hello >hello$not_found
-	--> meillä $not_found jää laajentamatta. Lopputuloksena pitäis syntyä filu hello
-	--> samoin: >$not_found:hello pitäis luoda filu :hello, meillä tulee ambiguous redirect
-
-- export PANU="   jee   jee   jeee   " ja perään echo hello > '$PANU'
-	--> Pitäis luoda tiedosto $PANU, mut meillä tulee ambiguous, koska aina kun nimessä on $, niin meil tulee ambiguous
-	--> Täytyy käyttää jotain "amb redirect" flagia, jotta tiedetään et millon pitää heittää se error!
-
-- minishell-1.1$: $P_K
-minishell: _K: command not found
-	--> Eli command expand ei ymmärrä alaviivaa normi characteriks
-
-- echo hello > $PANU
-minishell: $$PANU: ambiguous redirect --> ylimääränen $
-
-- echo hello > "$PANU"
-	--> Tää ei ookaan ambiguous, vaan laajentuu yhdeks stringiks, vaikka $PANU koostuu useista sanoista
-	--> Eli jos PANU="  jee  jee   jeee" niin > "$PANU" luo filun    jee  jee   jeee
 
 
 
@@ -45,8 +27,22 @@ DONE     - Env_var expansion / parsing: if we do solo expansion of env_var that 
 		--> hello	meilla HEREDOC	--> so the "echo hello" got parsed into a command and arg
 
 
+XX echo hello >hello$not_found
+	--> meillä $not_found jää laajentamatta. Lopputuloksena pitäis syntyä filu hello
+	--> samoin: >$not_found:hello pitäis luoda filu :hello, meillä tulee ambiguous redirect
 
-
+XX export PANU="   jee   jee   jeee   " ja perään echo hello > '$PANU'
+	--> Pitäis luoda tiedosto $PANU, mut meillä tulee ambiguous, koska aina kun nimessä on $, niin meil tulee ambiguous
+	--> Täytyy käyttää jotain "amb redirect" flagia, jotta tiedetään et millon pitää heittää se error!
+	
+XX echo hello > $PANU
+minishell: $$PANU: ambiguous redirect --> ylimääränen $
+XX echo hello > "$PANU"
+	--> Tää ei ookaan ambiguous, vaan laajentuu yhdeks stringiks, vaikka $PANU koostuu useista sanoista
+	--> Eli jos PANU="  jee  jee   jeee" niin > "$PANU" luo filun    jee  jee   jeee
+XX minishell-1.1$: $P_K
+   minishell: _K: command not found
+	--> Eli command expand ei ymmärrä alaviivaa normi characteriks
 XX Env_var expansions with quotes: $PATH expands, "$PATH" expands, '$PATH' does not
 XX Handle $?
 XX Remove quotes from files (example: > "file 1" should create a file named file 1, so no quotes)
