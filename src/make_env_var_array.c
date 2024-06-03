@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   make_env_var_array.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:44:24 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 12:44:27 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:14:27 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	env_lstsize_all(t_env_lst *lst)
+int	env_lstsize_all(t_env *lst)
 {
 	int	size;
 
@@ -26,7 +26,7 @@ int	env_lstsize_all(t_env_lst *lst)
 	return (size);
 }
 
-char	*get_full_env_str(t_env_lst *node)
+char	*get_full_env_str(t_env *node)
 {
 	char	*full_str;
 	char	*temp;
@@ -50,10 +50,10 @@ char	*get_full_env_str(t_env_lst *node)
 	return (full_str);
 }
 
-char	**make_env_var_array(t_env_lst *env_lst)
+char	**make_env_var_array(t_env *env_lst)
 {
 	char		**env_var_arr;
-	t_env_lst	*temp;
+	t_env	*temp;
 	int			i;
 
 	env_var_arr = malloc((env_lstsize_all(env_lst) + 1) * sizeof(char *));

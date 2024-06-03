@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   save_env_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:52:58 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 15:13:27 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:17:42 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	change_shlvl(t_env_lst *shlvl)
+int	change_shlvl(t_env *shlvl)
 {
 	int	value;
 
@@ -41,9 +41,9 @@ int	change_shlvl(t_env_lst *shlvl)
 		return (0);
 }
 
-int	process_shlvl(t_env_lst *env_lst)
+int	process_shlvl(t_env *env_lst)
 {
-	t_env_lst	*shlvl;
+	t_env	*shlvl;
 
 	shlvl = check_if_var_exist(env_lst, "SHLVL");
 	if (shlvl == NULL)
@@ -59,7 +59,7 @@ int	process_shlvl(t_env_lst *env_lst)
 	return (0);
 }
 
-int	create_pwd(t_env_lst *temp)
+int	create_pwd(t_env *temp)
 {
 	char		*cur_dir;
 	char		*pwd;
@@ -78,9 +78,9 @@ int	create_pwd(t_env_lst *temp)
 	return (0);
 }
 
-int	make_pwd_variables(t_env_lst *env_lst)
+int	make_pwd_variables(t_env *env_lst)
 {
-	t_env_lst	*temp;
+	t_env	*temp;
 
 	temp = env_lst;
 	while (temp->next != NULL)
@@ -97,11 +97,11 @@ int	make_pwd_variables(t_env_lst *env_lst)
 	return (0);
 }
 
-t_env_lst	*save_env_list(char **environ)
+t_env	*save_env_list(char **environ)
 {
 	int			i;
-	t_env_lst	*env_lst;
-	t_env_lst	*temp;
+	t_env	*env_lst;
+	t_env	*temp;
 
 	env_lst = NULL;
 	if (environ != NULL && environ[0] != NULL)

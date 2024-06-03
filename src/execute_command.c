@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:36:30 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 10:36:31 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:10:12 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*find_cmd_path(char *cmd, char **paths, int *exit_status)
 	return (cmd_path);
 }
 
-int	handle_paths(t_env_lst *env_lst, char *cmd, char ***final_paths)
+int	handle_paths(t_env *env_lst, char *cmd, char ***final_paths)
 {
 	char	**paths;
 
@@ -98,7 +98,7 @@ int	handle_cmd_path(char **paths, char *cmd_path, int exit_status)
 // CHECK LEAKS (for every possible fail condition separately)
 // Run few tests to ensure correct exit codes etc
 
-int	execute_command(char *cmd, char **e_args, t_env_lst *env_lst, t_data *data)
+int	execute_command(char *cmd, char **e_args, t_env *env_lst, t_data *data)
 {
 	char	*cmd_path;
 	char	**paths;

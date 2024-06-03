@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:51:38 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 12:24:09 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 13:14:01 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	update_prev_exit_status(t_data *data)
 	g_signal_marker = 0;
 }
 
-int	set_input_and_env(t_env_lst *env_lst, int exit_status)
+int	set_input_and_env(t_env *env_lst, int exit_status)
 {
 	t_data		*data;
 	char		parsing_cur_dir[256];
@@ -59,7 +59,7 @@ int	set_input_and_env(t_env_lst *env_lst, int exit_status)
 int	main(int argc, char **argv)
 {
 	extern char	**environ;
-	t_env_lst	*env_lst;
+	t_env	*env_lst;
 	int			exit_status;
 
 	exit_status = 0;

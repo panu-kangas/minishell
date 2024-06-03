@@ -6,13 +6,13 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:27 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 11:35:43 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 13:15:12 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*expand_substr(char *str, t_env_lst *env_lst)
+static char	*expand_substr(char *str, t_env *env_lst)
 {
 	char	*temp;
 
@@ -26,7 +26,7 @@ static char	*expand_substr(char *str, t_env_lst *env_lst)
 	return (temp);
 }
 
-static char	*expand_substr_file(char *str, t_env_lst *env_lst)
+static char	*expand_substr_file(char *str, t_env *env_lst)
 {
 	char	*temp;
 
@@ -70,7 +70,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	return (final_str);
 }
 
-char	*expand_str(char *str, t_env_lst *env_lst)
+char	*expand_str(char *str, t_env *env_lst)
 {
 	char	*new;
 	char	*temp;
@@ -99,7 +99,7 @@ char	*expand_str(char *str, t_env_lst *env_lst)
 	return (temp);
 }
 
-char	*expand_str_file(char *str, t_env_lst *env_lst)
+char	*expand_str_file(char *str, t_env *env_lst)
 {
 	char	*new;
 	char	*temp;

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_empty_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:34:57 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 11:34:59 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:12:05 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	env_lstsize(t_env_lst *lst)
+int	env_lstsize(t_env *lst)
 {
 	int	size;
 
@@ -26,7 +26,7 @@ int	env_lstsize(t_env_lst *lst)
 	return (size);
 }
 
-char	**copy_env_var(t_env_lst *env_lst, char **alph_order)
+char	**copy_env_var(t_env *env_lst, char **alph_order)
 {
 	int	i;
 
@@ -49,7 +49,7 @@ char	**copy_env_var(t_env_lst *env_lst, char **alph_order)
 	return (alph_order);
 }
 
-char	**get_env_var_alph_order(t_env_lst *env_lst, char **alph_order)
+char	**get_env_var_alph_order(t_env *env_lst, char **alph_order)
 {
 	char	*temp;
 	int		lstsize;
@@ -78,11 +78,11 @@ char	**get_env_var_alph_order(t_env_lst *env_lst, char **alph_order)
 	return (alph_order);
 }
 
-int	ft_empty_export(t_env_lst *env_lst)
+int	ft_empty_export(t_env *env_lst)
 {
 	char		**alph_order;
 	int			i;
-	t_env_lst	*temp;
+	t_env	*temp;
 
 	alph_order = NULL;
 	alph_order = get_env_var_alph_order(env_lst, alph_order);

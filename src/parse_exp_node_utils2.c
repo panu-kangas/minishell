@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/01 13:33:41 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 12:57:21 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,4 +94,16 @@ t_parse	*new_node(char *str, int isexpand, int istrim)
 	new->isexpand = isexpand;
 	new->next = NULL;
 	return (new);
+}
+
+void	change_expand_status(t_parse *head)
+{
+	t_parse	*temp;
+
+	temp = head;
+	while (temp != NULL)
+	{
+		temp->isexpand = 0;
+		temp = temp->next;
+	}
 }
