@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:22:11 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 10:49:56 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 12:51:41 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,12 @@ int	expand_com(t_token *cur, t_env_lst *e_lst, t_data *d, int e_status)
 
 static int	handle_arg_exp(t_parse *head, t_env_lst *e_lst, t_data *d)
 {
-	int	i;
 	int	e_st;
 
-	i = 0;
 	e_st = expand_prev_exit_code(head, d);
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
-	e_st = ft_iter_and_exp_arg(head, e_lst, i);
+	e_st = ft_iter_and_exp_arg(head, e_lst, -1);
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
 	e_st = ft_lst_iter_remove_quotes(head);
@@ -116,15 +114,12 @@ int	expand_files(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st)
 	while (tempfile != NULL)
 	{
 		head = NULL;
-		if (tempfile->is_append == 1 && tempfile->is_infile == 1 \
-		&& (tempfile->filename[0] == '"' || tempfile->filename[0] == '\''))
-			tempfile->quoted_heredoc = 1;
 		e_st = handle_substrings(tempfile->filename, &head);
 		if (e_st != 0)
 			return (ft_free_parse(head, e_st));
 		if (tempfile->is_append == 1 && tempfile->is_infile == 1)
 			change_expand_status(head);
-		if (tempfile->is_append == -1 && tempfile->is_infile == -1)
+		if (tempfile->is_append == -1)
 			change_amb_status(head, tempfile);
 		e_st = expand_file(head, e_lst, d, &temp);
 		if (e_st != 0)

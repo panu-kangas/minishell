@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 10:07:49 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 12:41:57 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,11 @@ void	change_amb_status(t_parse *head, t_file *file)
 	t_parse	*temp;
 
 	temp = head;
+	if (file->filename[0] == '"' || file->filename[0] == '\'')
+			file->quoted_heredoc = 1;
 	while (temp != NULL)
 	{
-		if (temp->str[0] != '"' && temp->str[0] != '\'' && ft_char_counter(temp->str, '$') > 0)
+		if ((temp->str[0] != '"' || temp->str[0] != '\'') && ft_char_counter(temp->str, '$') > 0)
 			file->is_amb = 1;
 		temp = temp->next;
 	}

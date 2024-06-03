@@ -6,7 +6,7 @@
 #    By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/06/03 09:44:55 by tsaari           ###   ########.fr        #
+#    Updated: 2024/06/03 10:53:39 by tsaari           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = minishell
 CC = cc
 RM = rm -rf
 CFLAGS =  -g -Wall -Wextra -Werror # remove the -g flag eventually ??
-FSFLAGS =-fsanitize=address
+#FSFLAGS =-fsanitize=address
 
 LIBFT = libft/libft.a
 # Koulussa tää --> -I /Users/$(USER)/.brew/opt/readline/include ||| Panun kotona --> -I /usr/local/Cellar/readline/8.2.10/include
