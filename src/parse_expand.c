@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:27 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 13:15:12 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 14:45:56 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static char	*expand_substr(char *str, t_env *env_lst)
 	return (temp);
 }
 
-static char	*expand_substr_file(char *str, t_env *env_lst)
+static char	*expand_substr_file(char *str, t_env *env_lst, int put_d)
 {
 	char	*temp;
 
@@ -36,7 +36,10 @@ static char	*expand_substr_file(char *str, t_env *env_lst)
 		temp = ft_strdup(expand_env_var(env_lst, str));
 	else
 	{
-		temp = ft_strjoin("$", str);
+		if(put_d != 0)
+			temp = ft_strjoin("$", str);
+		else
+			temp = ft_strdup("");
 	}
 	free(str);
 	return (temp);
@@ -99,12 +102,13 @@ char	*expand_str(char *str, t_env *env_lst)
 	return (temp);
 }
 
-char	*expand_str_file(char *str, t_env *env_lst)
+char	*expand_str_file(char *str, t_env *env_lst, char quote)
 {
 	char	*new;
 	char	*temp;
 	int		i;
 	int		j;
+	int put_d = 1;
 
 	i = 0;
 	j = 0;
@@ -116,8 +120,10 @@ char	*expand_str_file(char *str, t_env *env_lst)
 	i++;
 	while ((ft_isalnum(str[i]) == 1 || str[i] == '_') && str[i] != 0)
 		i++;
+	if (quote == '"' || str[i] != 0)
+		put_d = 0;
 	temp = ft_strjoin_free(ft_strdup(new), \
-	expand_substr_file(ft_substr(str, j, i - j), env_lst));
+	expand_substr_file(ft_substr(str, j, i - j), env_lst, put_d));
 	free (new);
 	if (!temp)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 12:47:03 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 14:13:26 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include <stdio.h>
 # include <stdlib.h>
-//# include <string.h>  do we need??
 # include <unistd.h>
 # include <fcntl.h>
 # include <signal.h>
@@ -27,8 +26,6 @@
 # include "../libft/libft.h"
 
 # define ERR_STAT 1
-//# define MALLOC_ERR 0  is this needed?
-//# define SPECIAL_TOKENS "<>()=" And this?
 
 typedef struct s_file
 {
@@ -123,7 +120,7 @@ int			ft_lst_iter_remove_quotes(t_parse *lst);
 
 //expand
 char		*expand_str(char *str, t_env *env_lst);
-char		*expand_str_file(char *str, t_env *env_lst);
+char		*expand_str_file(char *str, t_env *env_lst, char quote);
 char		*ft_strjoin_free(char *s1, char *s2);
 int			expand_com(t_token *cur, t_env *e_lst, t_data *d, int e_status);
 int			expand_args(t_token *cur, t_env *e_lst, t_data *d, int e_st);
@@ -177,9 +174,9 @@ int			process_global_env_node(t_env *env_lst, char *new_env_var);
 int			process_non_global_env_node(t_env *env_lst, char *new_env_var);
 int			process_null_value_env_node(t_env *env_lst, char *new_env_var);
 
-t_env	*get_global_env_node(char *environ_var);
-t_env	*get_non_global_env_node(char *environ_var);
-t_env	*get_null_value_env_node(char *environ_var);
+t_env		*get_global_env_node(char *environ_var);
+t_env		*get_non_global_env_node(char *environ_var);
+t_env		*get_null_value_env_node(char *environ_var);
 
 void		delete_env_node(t_env *temp);
 void		free_env_lst(t_env *env_lst);
@@ -197,9 +194,9 @@ int			write_syntax_error(char *err_str);
 char		**get_paths(t_env *env_lst);
 char		**make_env_var_array(t_env *env_lst);
 
-int			handle_command(t_data *data, t_env *env_lst, int index, int e_flag);
-int			execute_command(char *cmd, char **args, t_env *env_lst, t_data *data);
-int			execute_built_in(t_env *env_lst, t_data *data, t_token *cur_token, int e_flag);
+int			handle_command(t_data *data, t_env *env_lst, int index, int e_f);
+int			execute_command(char *cmd, char **args, t_env *env_lst, t_data *d);
+int			execute_built_in(t_env *env, t_data *d, t_token *c_n, int e_f);
 
 int			check_for_built_in(char *cmd);
 int			is_echo(char *cmd);
@@ -234,7 +231,7 @@ void		get_parsing_cur_dir(char *parsing_cur_dir);
 
 // from norminetting
 
-void		free_all_from_process(char *cmd_path, char **e_args, char **env_var);
+void		free_all_from_process(char *cmd_path, char **e_a, char **e_v);
 int			check_empty_input(char *cmd);
 int			check_cmd_path(char *cmd);
 void		copy_cur_dir_to_data(t_data *data, char *cur_dir);
@@ -258,11 +255,11 @@ int			check_for_infile(t_token *cur_token);
 int			export_check_valid_input(char *new_env_var);
 int			unset_check_valid_input(char *var_name);
 int			get_args_size(char **args);
-int			free_close_wait(pid_t *pids, int **fd_pipes, t_data *data, int exit_status);
+int			free_close_wait(pid_t *pids, int **fd_pipes, t_data *d, int e_st);
 int			fork_exit(int **fd_pipes, int index, pid_t *pids, t_data *data);
 int			is_builtin(t_data *data, t_env *env_lst, int *std_fd, int *e_stat);
-int			check_env_var_change(t_data *data, t_env *env_lst, int *exit_status);
-int			handle_heredoc(t_data *data, t_env *env_lst, int *std_fd, int *e_stat);
+int			check_env_var_change(t_data *data, t_env *env_lst, int *exit_s);
+int			handle_heredoc(t_data *data, t_env *env, int *std_fd, int *e_st);
 int			store_stdin_stdout(int *std_fd);
 char		*update_cur_dir(char *temp_cur_dir, char *path);
 int			check_path_backtrack(t_data *data, char *path);
