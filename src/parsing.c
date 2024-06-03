@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/01 13:40:40 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 12:46:39 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int	parsing(t_data *data, t_env_lst *env_lst, int exit_status)
 		{
 			exit_status = parsing_pipeline(data, env_lst);
 			//ft_lstiter_ms(data->tokens, printnode);
-			if (exit_status == 0)
+			if (exit_status == 0 && check_empty_rl_input(data) == 0)
 			{
 				store_stdin_stdout(data->std_fd);
 				exit_status = make_processes(data, env_lst, data->std_fd);

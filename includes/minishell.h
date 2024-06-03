@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 10:49:20 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 12:47:03 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,6 +270,8 @@ int			free_hd_str(char *str);
 void		close_std_fd(int *std_fd);
 void		set_signals_to_dfl(void);
 
+int			check_bad_redir_syntax(char **tokenarr, int i);
+int			check_empty_rl_input(t_data *data);
 
 
 

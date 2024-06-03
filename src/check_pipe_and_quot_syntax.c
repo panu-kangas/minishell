@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_pipe_and_quot_syntax.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:18:22 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/01 13:21:42 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 11:21:05 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

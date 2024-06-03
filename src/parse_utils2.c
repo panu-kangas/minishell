@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:44:13 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 14:50:52 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 12:32:59 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int	skip_file(char **tokenarr, int i)
 
 int	check_no_filename(char **tokenarr, int i, int exit_status)
 {
-	while (tokenarr[++i] != 0)
+	exit_status = check_bad_redir_syntax(tokenarr, i);
+	while (tokenarr[++i] != 0 && exit_status == 0)
 	{
 		if (check_redir(tokenarr[i]) == -2 && tokenarr[i][0] == '>')
 		{
@@ -98,6 +99,7 @@ char	*check_non_spaced_files(char *str)
 		result[j++] = str[i++];
 	}
 	result[j] = '\0';
+//	result = separate_redirects(result); // NT NEEDED ??
 	ret = ft_strdup(result);
 	free (result);
 	if (!ret)

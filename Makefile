@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+         #
+#    By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/06/03 09:44:55 by tsaari           ###   ########.fr        #
+#    Updated: 2024/06/03 12:47:16 by pkangas          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,8 @@ SRCS = main.c parsing.c parse_utils.c parse_utils2.c parse_utils3.c parse_node_u
 	execute_command_utils.c ft_cd_utils.c cd_analyze_path_utils.c \
 	check_path_permissions.c ft_redirect_utils.c check_for_file.c \
 	handle_command_utils.c get_var_name_value.c make_processes_utils.c \
-	fork_utils.c ft_unset_export_utils.c check_path_backtrack.c free_and_close_utils.c
+	fork_utils.c ft_unset_export_utils.c check_path_backtrack.c free_and_close_utils.c \
+	check_bad_redir_syntax.c check_empty_rl_input.c
 
 
 
