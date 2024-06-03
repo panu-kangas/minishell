@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/01 14:04:57 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 10:49:20 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 typedef struct s_file
 {
 	char			*filename;
+	int				is_amb;
 	int				is_infile;
 	int				is_append;
 	int				no_filename;
@@ -117,6 +118,7 @@ char	*ft_lstiter_and_make_new_str(t_parse *lst);
 t_parse	*new_node(char *str,  int isexpand, int istrim);
 void	ft_lstadd_back_parse(t_parse **lst, t_parse *new);
 void	change_expand_status(t_parse *head);
+void	change_amb_status(t_parse *head, t_file *file);
 int		ft_lst_iter_remove_quotes(t_parse *lst);
 
 //expand
@@ -125,7 +127,6 @@ char	*expand_str_file(char *str, t_env_lst *env_lst);
 char	*ft_strjoin_free(char *s1, char *s2);
 int		expand_com(t_token *cur, t_env_lst *e_lst, t_data *d, int e_status);
 int		expand_args(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st);
-int		expand_file(t_parse *head, t_env_lst *e_lst, t_data *d, char **temp);
 int		expand_files(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st);
 
 //parse_utils
@@ -212,9 +213,9 @@ void		close_all_pipes(t_data *data, int **fd_pipes, int pipe_cnt);
 void		close_and_init_fd(int *fd);
 
 int			open_infile(char *file);
-int			open_outfile(char *file);
+int			open_outfile(char *filename, t_file *file);
 int			ft_just_create_file(char *file);
-int			open_outfile_append(char *file);
+int			open_outfile_append(char *filename, t_file *file);
 t_token		*get_cur_token(t_data *data, int index);
 
 int			process_signal_main(void);

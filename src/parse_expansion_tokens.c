@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:22:11 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/01 14:05:15 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 10:49:56 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	expand_args(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st)
 	return (0);
 }
 
-int	expand_file(t_parse *head, t_env_lst *e_lst, t_data *d, char **temp)
+static int	expand_file(t_parse *head, t_env_lst *e_lst, t_data *d, char **temp)
 {
 	int	exit_status;
 
@@ -124,6 +124,8 @@ int	expand_files(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st)
 			return (ft_free_parse(head, e_st));
 		if (tempfile->is_append == 1 && tempfile->is_infile == 1)
 			change_expand_status(head);
+		if (tempfile->is_append == -1 && tempfile->is_infile == -1)
+			change_amb_status(head, tempfile);
 		e_st = expand_file(head, e_lst, d, &temp);
 		if (e_st != 0)
 			return (ft_free_parse(head, e_st));

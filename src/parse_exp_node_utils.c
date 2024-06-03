@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/01 11:46:04 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 10:07:49 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,19 @@ void	change_expand_status(t_parse *head)
 	while (temp != NULL)
 	{
 		temp->isexpand = 0;
+		temp = temp->next;
+	}
+}
+
+void	change_amb_status(t_parse *head, t_file *file)
+{
+	t_parse	*temp;
+
+	temp = head;
+	while (temp != NULL)
+	{
+		if (temp->str[0] != '"' && temp->str[0] != '\'' && ft_char_counter(temp->str, '$') > 0)
+			file->is_amb = 1;
 		temp = temp->next;
 	}
 }
