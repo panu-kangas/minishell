@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:19:26 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 09:45:30 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 12:47:57 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	process_infile(t_token *cur_token)
 		if (file->is_infile == 1)
 		{
 			if (file->is_append == -1)
-				exit_status = open_infile(file->filename);
+				exit_status = open_infile(file->filename, file);
 			else if (file->is_append == 1)
 			{
 				if (dup2(file->hd_pipe[0], 0) == -1)

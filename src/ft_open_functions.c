@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:35:51 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 10:47:01 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 12:47:19 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	check_for_bad_filename(char *filename, t_file *file)
 {
 	if (filename != NULL && filename[0] == '\0')
 		return (write_error(NULL, "", "No such file or directory"));
-	if (filename != NULL && ft_strchr(filename, '$') != NULL && file->is_amb == 1) // KORJAA TÄMÄ
+	if (filename != NULL && ft_strchr(filename, '$') != NULL && file->is_amb == 1)
 		return (write_amb_error(filename));
 	return (0);
 }
@@ -103,17 +103,19 @@ int	open_outfile(char *filename, t_file *file)
 	return (0);
 }
 
-int	open_infile(char *file)
+int	open_infile(char *filename, t_file *file)
 {
 	int	file_fd;
 
-	if (file != NULL && file[0] == '$')
-		return (write_amb_error(file));
-	if (access(file, F_OK) == -1)
-		return (write_error(NULL, file, "No such file or directory"));
-	if (access(file, R_OK) == -1)
-		return (write_error(NULL, file, "Permission denied"));
-	file_fd = open(file, O_RDONLY);
+	if (check_for_bad_filename(filename, file) == 1)
+		return (1);
+	//if (filename != NULL && filename[0] == '$' && file->is_amb = 1)
+	//	return (write_amb_error(filename));
+	if (access(filename, F_OK) == -1)
+		return (write_error(NULL, filename, "No such file or directory"));
+	if (access(filename, R_OK) == -1)
+		return (write_error(NULL, filename, "Permission denied"));
+	file_fd = open(filename, O_RDONLY);
 	if (file_fd == -1)
 		return (write_sys_error("open failed"));
 	if (dup2(file_fd, 0) == -1)

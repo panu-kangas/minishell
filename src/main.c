@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:51:38 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/30 19:25:57 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 12:24:09 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	set_input_and_env(t_env_lst *env_lst, int exit_status)
 
 	get_parsing_cur_dir(parsing_cur_dir);
 	if (parsing_cur_dir[0] == 0)
-		write_sys_error("malloc error; current dir storage set up failed"); // should we exit...?
+		write_sys_error("malloc error; current dir storage set up failed");
 	g_signal_marker = 0;
 	while (1)
 	{
@@ -48,7 +48,7 @@ int	set_input_and_env(t_env_lst *env_lst, int exit_status)
 		data->input = readline("minishell-1.1$: ");
 		if (g_signal_marker == 2)
 			update_prev_exit_status(data);
-		exit_status = parsing(data, env_lst, exit_status); //should we do something if not 0
+		exit_status = parsing(data, env_lst, exit_status);
 		copy_cur_dir_from_data(data, parsing_cur_dir);
 		ft_free_data(data, 0);
 	}

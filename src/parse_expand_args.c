@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:41:18 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/01 14:05:55 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 12:24:59 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,11 @@ int	ft_iter_and_exp_arg(t_parse *head, t_env_lst *e_lst, int i)
 	temp = head;
 	while (temp != NULL)
 	{
-		while (temp->str[i] != 0)
+		while (temp->str[++i] != 0)
 		{
-			if (temp->str[i] == '$' && temp->isexpand == 1)
+			if ((temp->str[i] == '$' && temp->isexpand == 1) && \
+			(temp->str[i + 1] != ' ' || temp->str[i + 1] != 0))
 			{
-				if (*(ft_strchr(temp->str, '$') + 1) == ' '\
-				|| *(ft_strchr(temp->str, '$') + 1) == 0)
-					break ;
 				if (temp->istrim != 0)
 					tempstr = trim_str(expand_str(temp->str, e_lst));
 				else
@@ -36,7 +34,6 @@ int	ft_iter_and_exp_arg(t_parse *head, t_env_lst *e_lst, int i)
 				free(temp->str);
 				temp->str = tempstr;
 			}
-			i++;
 		}
 		temp = temp->next;
 	}

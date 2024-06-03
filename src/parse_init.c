@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:01:29 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 09:56:15 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 11:58:59 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	init_file(t_file *new)
 	new->filename = NULL;
 	new->is_append = 0;
 	new->is_infile = 0;
-	new->is_amb =  0;
+	new->is_amb = 0;
 	new->no_filename = 0;
 	new->hd_pipe[0] = -2;
 	new->hd_pipe[1] = -2;
