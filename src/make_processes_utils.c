@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_processes_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 15:10:26 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 15:51:37 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:15:02 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	store_stdin_stdout(int *std_fd)
 	return (0);
 }
 
-int	handle_heredoc(t_data *data, t_env_lst *env_lst, int *std_fd, int *e_stat)
+int	handle_heredoc(t_data *data, t_env *env_lst, int *std_fd, int *e_stat)
 {
 	signal(SIGINT, &sig_handler_hd);
 	*e_stat = process_heredoc(data, env_lst, 0);
@@ -40,7 +40,7 @@ int	handle_heredoc(t_data *data, t_env_lst *env_lst, int *std_fd, int *e_stat)
 	return (0);
 }
 
-int	check_env_var_change(t_data *data, t_env_lst *env_lst, int *exit_status)
+int	check_env_var_change(t_data *data, t_env *env_lst, int *exit_status)
 {
 	if (data->tokens->com != NULL && ft_strchr(data->tokens->com, '=') != NULL \
 	&& data->tokens->next == NULL)
@@ -48,7 +48,7 @@ int	check_env_var_change(t_data *data, t_env_lst *env_lst, int *exit_status)
 	return (*exit_status);
 }
 
-int	is_builtin(t_data *data, t_env_lst *env_lst, int *std_fd, int *e_stat)
+int	is_builtin(t_data *data, t_env *env_lst, int *std_fd, int *e_stat)
 {
 	int	flag;
 

@@ -6,13 +6,13 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:22:11 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 10:49:56 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 13:16:32 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	expand_com(t_token *cur, t_env_lst *e_lst, t_data *d, int e_status)
+int	expand_com(t_token *cur, t_env *e_lst, t_data *d, int e_status)
 {
 	t_parse	*head;
 	char	*temp;
@@ -41,16 +41,14 @@ int	expand_com(t_token *cur, t_env_lst *e_lst, t_data *d, int e_status)
 	return (e_status);
 }
 
-static int	handle_arg_exp(t_parse *head, t_env_lst *e_lst, t_data *d)
+static int	handle_arg_exp(t_parse *head, t_env *e_lst, t_data *d)
 {
-	int	i;
 	int	e_st;
 
-	i = 0;
 	e_st = expand_prev_exit_code(head, d);
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
-	e_st = ft_iter_and_exp_arg(head, e_lst, i);
+	e_st = ft_iter_and_exp_arg(head, e_lst, -1);
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
 	e_st = ft_lst_iter_remove_quotes(head);
@@ -59,7 +57,7 @@ static int	handle_arg_exp(t_parse *head, t_env_lst *e_lst, t_data *d)
 	return (0);
 }
 
-int	expand_args(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st)
+int	expand_args(t_token *cur, t_env *e_lst, t_data *d, int e_st)
 {
 	t_parse	*head;
 	int		i;
@@ -86,7 +84,7 @@ int	expand_args(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st)
 	return (0);
 }
 
-static int	expand_file(t_parse *head, t_env_lst *e_lst, t_data *d, char **temp)
+static int	expand_file(t_parse *head, t_env *e_lst, t_data *d, char **temp)
 {
 	int	exit_status;
 
@@ -106,7 +104,7 @@ static int	expand_file(t_parse *head, t_env_lst *e_lst, t_data *d, char **temp)
 	return (0);
 }
 
-int	expand_files(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st)
+int	expand_files(t_token *cur, t_env *e_lst, t_data *d, int e_st)
 {
 	t_file	*tempfile;
 	t_parse	*head;
@@ -116,15 +114,12 @@ int	expand_files(t_token *cur, t_env_lst *e_lst, t_data *d, int e_st)
 	while (tempfile != NULL)
 	{
 		head = NULL;
-		if (tempfile->is_append == 1 && tempfile->is_infile == 1 \
-		&& (tempfile->filename[0] == '"' || tempfile->filename[0] == '\''))
-			tempfile->quoted_heredoc = 1;
 		e_st = handle_substrings(tempfile->filename, &head);
 		if (e_st != 0)
 			return (ft_free_parse(head, e_st));
 		if (tempfile->is_append == 1 && tempfile->is_infile == 1)
 			change_expand_status(head);
-		if (tempfile->is_append == -1 && tempfile->is_infile == -1)
+		if (tempfile->is_append == -1)
 			change_amb_status(head, tempfile);
 		e_st = expand_file(head, e_lst, d, &temp);
 		if (e_st != 0)

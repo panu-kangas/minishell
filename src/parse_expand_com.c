@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:38:10 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 11:31:49 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 13:15:36 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	add_to_arg(t_token *current, char **arr)
 	return (0);
 }
 
-static char	*expand_substr_com(char *str, t_env_lst *env_lst, t_token *current)
+static char	*expand_substr_com(char *str, t_env *env_lst, t_token *current)
 {
 	char	*temp;
 	char	**split;
@@ -80,7 +80,7 @@ static char	*expand_substr_com(char *str, t_env_lst *env_lst, t_token *current)
 	return (temp);
 }
 
-char	*expand_str_com(char *str, t_env_lst *env_lst, t_token *current)
+char	*expand_str_com(char *str, t_env *env_lst, t_token *current)
 {
 	char	*new;
 	char	*temp;
@@ -95,7 +95,7 @@ char	*expand_str_com(char *str, t_env_lst *env_lst, t_token *current)
 	ft_strlcpy(new, str, i - j + 1);
 	j = i + 1;
 	i++;
-	while (ft_isalnum(str[i]) == 1 && str[i] != 0)
+	while ((ft_isalnum(str[i]) == 1 || str[i] == '_') && str[i] != 0)
 		i++;
 	temp = ft_strjoin_free(ft_strdup(new), \
 	expand_substr_com(ft_substr(str, j, i - j), env_lst, current));
@@ -109,7 +109,7 @@ char	*expand_str_com(char *str, t_env_lst *env_lst, t_token *current)
 	return (temp);
 }
 
-int	ft_iter_and_exp_com(t_parse *lst, t_env_lst *e_lst, t_token *cur)
+int	ft_iter_and_exp_com(t_parse *lst, t_env *e_lst, t_token *cur)
 {
 	char	*temp;
 	t_parse	*head;

@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   make_env_node.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:40:38 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 12:40:39 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:14:13 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	process_global_env_node(t_env_lst *env_lst, char *new_env_var)
+int	process_global_env_node(t_env *env_lst, char *new_env_var)
 {
-	t_env_lst	*temp;
+	t_env	*temp;
 	char		*var_name;
 
 	var_name = get_var_name(new_env_var);
@@ -40,9 +40,9 @@ int	process_global_env_node(t_env_lst *env_lst, char *new_env_var)
 	return (0);
 }
 
-int	process_non_global_env_node(t_env_lst *env_lst, char *new_env_var)
+int	process_non_global_env_node(t_env *env_lst, char *new_env_var)
 {
-	t_env_lst	*temp;
+	t_env	*temp;
 	char		*var_name;
 
 	var_name = get_var_name(new_env_var);
@@ -68,9 +68,9 @@ int	process_non_global_env_node(t_env_lst *env_lst, char *new_env_var)
 	return (0);
 }
 
-int	process_null_value_env_node(t_env_lst *env_lst, char *new_env_var)
+int	process_null_value_env_node(t_env *env_lst, char *new_env_var)
 {
-	t_env_lst	*temp;
+	t_env	*temp;
 	char		*var_name;
 
 	var_name = get_var_name(new_env_var);

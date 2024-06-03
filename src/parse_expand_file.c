@@ -6,11 +6,12 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:39:13 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 10:42:31 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 13:15:47 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
 static int	check_file_name(char **temp, char *orig)
 {
 	char	**split;
@@ -27,7 +28,7 @@ static int	check_file_name(char **temp, char *orig)
 	if (len > 1)
 	{
 		free(*temp);
-		*temp = ft_strjoin("$", orig);
+		*temp = ft_strdup(orig);
 		if (!(*temp))
 			exit_status = (1);
 	}
@@ -35,40 +36,35 @@ static int	check_file_name(char **temp, char *orig)
 	return (exit_status);
 }
 
-
-static int	expand_filename(t_parse *temp_parse, t_env_lst *env_lst, int e_st)
+static int	expand_filename(t_parse *t_p, t_env *env_lst, int e_st, int i)
 {
 	char	*temp;
-	int		i;
-	char 	quote;
+	char	quote;
 
-	i = 0;
-	quote = temp_parse->str[0];
-	while (temp_parse->str[i] != 0)
+	quote = t_p->str[0];
+	while (t_p->str[++i] != 0)
 	{
-		if (temp_parse->str[i] == '$')
+		if (t_p->str[i] == '$' && \
+		(t_p->str[i + 1] != ' ' || t_p->str[i + 1] != 0))
 		{
-			if (temp_parse->str[i + 1] == ' ' || temp_parse->str[i + 1] == 0)
-				break ;
-			if (temp_parse->istrim != 0)
-				temp = trim_str(expand_str_file(temp_parse->str, env_lst));
+			if (t_p->istrim != 0)
+				temp = trim_str(expand_str_file(t_p->str, env_lst));
 			else
-				temp = expand_str_file(temp_parse->str, env_lst);
+				temp = expand_str_file(t_p->str, env_lst);
 			if (!temp)
 				return (write_sys_error("malloc error"));
-			if (quote != '"')
-				e_st = check_file_name(&temp, temp_parse->str);
+			if (quote != '\'' && quote != '"')
+				e_st = check_file_name(&temp, t_p->str);
 			if (e_st != 0)
 				return (write_sys_error("malloc error"));
-			free(temp_parse->str);
-			temp_parse->str = temp;
+			free(t_p->str);
+			t_p->str = temp;
 		}
-		i++;
 	}
 	return (e_st);
 }
 
-int	ft_iter_and_exp_files(t_parse *head, t_env_lst *e_lst, t_data *d, int e_st)
+int	ft_iter_and_exp_files(t_parse *head, t_env *e_lst, t_data *d, int e_st)
 {
 	t_parse	*temp_parse;
 
@@ -80,7 +76,7 @@ int	ft_iter_and_exp_files(t_parse *head, t_env_lst *e_lst, t_data *d, int e_st)
 	{
 		if (temp_parse->isexpand == 1)
 		{
-			e_st = expand_filename(temp_parse, e_lst, e_st);
+			e_st = expand_filename(temp_parse, e_lst, e_st, -1);
 			if (e_st != 0)
 				return (e_st);
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:35:21 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 11:35:22 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:12:24 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ int	is_arg_numeric(char *arg)
 	return (1);
 }
 
-void	free_all_exit(t_data *data, t_env_lst *env_lst)
+void	free_all_exit(t_data *data, t_env *env_lst)
 {
 	free_env_lst(env_lst);
 	ft_free_data(data, 0);
 }
 
-int	ft_exit(t_env_lst *env_lst, t_data *data, char **args, int e_flag)
+int	ft_exit(t_env *env_lst, t_data *data, char **args, int e_flag)
 {
 	int	count;
 	int	exit_status;

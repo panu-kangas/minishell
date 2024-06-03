@@ -6,13 +6,13 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:27 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 10:44:29 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 13:15:12 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*expand_substr(char *str, t_env_lst *env_lst)
+static char	*expand_substr(char *str, t_env *env_lst)
 {
 	char	*temp;
 
@@ -26,7 +26,7 @@ static char	*expand_substr(char *str, t_env_lst *env_lst)
 	return (temp);
 }
 
-static char	*expand_substr_file(char *str, t_env_lst *env_lst)
+static char	*expand_substr_file(char *str, t_env *env_lst)
 {
 	char	*temp;
 
@@ -36,7 +36,7 @@ static char	*expand_substr_file(char *str, t_env_lst *env_lst)
 		temp = ft_strdup(expand_env_var(env_lst, str));
 	else
 	{
-		temp = ft_strdup(str);
+		temp = ft_strjoin("$", str);
 	}
 	free(str);
 	return (temp);
@@ -48,8 +48,8 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	int		j;
 	char	*final_str;
 
-	if (s1 == 0 || s2 == 0)
-		return (0);
+	if (s1 == NULL || s2 == NULL)
+		return (NULL);
 	i = 0;
 	j = 0;
 	final_str = (char *) malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
@@ -70,7 +70,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	return (final_str);
 }
 
-char	*expand_str(char *str, t_env_lst *env_lst)
+char	*expand_str(char *str, t_env *env_lst)
 {
 	char	*new;
 	char	*temp;
@@ -99,7 +99,7 @@ char	*expand_str(char *str, t_env_lst *env_lst)
 	return (temp);
 }
 
-char	*expand_str_file(char *str, t_env_lst *env_lst)
+char	*expand_str_file(char *str, t_env *env_lst)
 {
 	char	*new;
 	char	*temp;
@@ -114,7 +114,7 @@ char	*expand_str_file(char *str, t_env_lst *env_lst)
 	ft_strlcpy(new, str, i - j + 1);
 	j = i + 1;
 	i++;
-	while (ft_isalnum(str[i]) == 1 && str[i] != 0)
+	while ((ft_isalnum(str[i]) == 1 || str[i] == '_') && str[i] != 0)
 		i++;
 	temp = ft_strjoin_free(ft_strdup(new), \
 	expand_substr_file(ft_substr(str, j, i - j), env_lst));

@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   expand_env_var.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:37:32 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 10:37:33 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:10:23 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*expand_env_var(t_env_lst *env_lst, char *var_name)
+char	*expand_env_var(t_env *env_lst, char *var_name)
 {
-	t_env_lst	*temp;
+	t_env	*temp;
 
 	temp = env_lst;
 	while (temp != NULL)

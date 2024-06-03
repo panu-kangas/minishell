@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_paths.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:33:20 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 12:33:21 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:13:37 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ int	add_slash(char **paths)
 	return (0);
 }
 
-char	**get_paths(t_env_lst *env_lst)
+char	**get_paths(t_env *env_lst)
 {
 	char		**paths;
-	t_env_lst	*temp;
+	t_env	*temp;
 
 	temp = check_if_var_exist(env_lst, "PATH");
 	paths = ft_split(temp->value, ':');

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   make_processes.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 15:10:39 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 16:17:52 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:14:48 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	enter_fork_loop(t_data *data, t_env_lst *env_lst, int *pids, int **fd_pipes)
+int	enter_fork_loop(t_data *data, t_env *env_lst, int *pids, int **fd_pipes)
 {
 	int	exit_status;
 	int	index;
@@ -41,7 +41,7 @@ int	enter_fork_loop(t_data *data, t_env_lst *env_lst, int *pids, int **fd_pipes)
 	return (0);
 }
 
-int	create_processes(t_data *data, t_env_lst *env_lst)
+int	create_processes(t_data *data, t_env *env_lst)
 {
 	pid_t	*pids;
 	int		**fd_pipes;
@@ -62,7 +62,7 @@ int	create_processes(t_data *data, t_env_lst *env_lst)
 	return (free_close_wait(pids, fd_pipes, data, 0));
 }
 
-int	make_processes(t_data *data, t_env_lst *env_lst, int *std_fd)
+int	make_processes(t_data *data, t_env *env_lst, int *std_fd)
 {
 	int	exit_status;
 

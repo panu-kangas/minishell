@@ -97,7 +97,7 @@ static int	lexer_input(t_data *data, int e_status)
 	return (0);
 }
 
-int	parsing_pipeline(t_data *data, t_env_lst *env_lst)
+int	parsing_pipeline(t_data *data, t_env *env_lst)
 {
 	int	exit_status;
 	int	i;
@@ -115,7 +115,7 @@ int	parsing_pipeline(t_data *data, t_env_lst *env_lst)
 	return (exit_status);
 }
 
-int	parsing(t_data *data, t_env_lst *env_lst, int exit_status)
+int	parsing(t_data *data, t_env *env_lst, int exit_status)
 {
 	alter_termios(1);
 	if (!data->input)

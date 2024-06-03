@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:43:26 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 11:43:27 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:12:48 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	ft_pwd(t_data *data)
 	return (0);
 }
 
-void	ft_env(t_env_lst *env_lst)
+void	ft_env(t_env *env_lst)
 {
 	while (env_lst != NULL)
 	{

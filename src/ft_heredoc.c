@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:35:35 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 11:35:36 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:12:36 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	*get_whole_hd_str(char *read_line, char *hd_str)
 	return (temp);
 }
 
-int	ft_heredoc(t_env_lst *env_lst, char *limiter, int *hd_pipe_fd, int flag)
+int	ft_heredoc(t_env *env_lst, char *limiter, int *hd_pipe_fd, int flag)
 {
 	char	*hd_str;
 	char	*read_line;
@@ -119,7 +119,7 @@ int	ft_heredoc(t_env_lst *env_lst, char *limiter, int *hd_pipe_fd, int flag)
 		return (write_hd(hd_str, read_line, limiter, hd_pipe_fd[1]));
 }
 
-int	process_heredoc(t_data *data, t_env_lst *env_lst, int exit_status)
+int	process_heredoc(t_data *data, t_env *env_lst, int exit_status)
 {
 	t_token	*cur_token;
 	t_file	*cur_file;
