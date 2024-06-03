@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expand.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:27 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 14:45:56 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 15:21:07 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ char	*expand_str_file(char *str, t_env *env_lst, char quote)
 	i++;
 	while ((ft_isalnum(str[i]) == 1 || str[i] == '_') && str[i] != 0)
 		i++;
-	if (quote == '"' || str[i] != 0)
+	if (quote == '"' || str[i] != 0 || j > 1)
 		put_d = 0;
 	temp = ft_strjoin_free(ft_strdup(new), \
 	expand_substr_file(ft_substr(str, j, i - j), env_lst, put_d));

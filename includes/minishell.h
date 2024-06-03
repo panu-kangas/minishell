@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 14:13:26 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 15:54:39 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,7 @@ void		close_and_init_fd(int *fd);
 
 int			open_infile(char *filename, t_file *file);
 int			open_outfile(char *filename, t_file *file);
-int			ft_just_create_file(char *file);
+int			ft_just_create_file(char *filename, t_file *file);
 int			open_outfile_append(char *filename, t_file *file);
 t_token		*get_cur_token(t_data *data, int index);
 

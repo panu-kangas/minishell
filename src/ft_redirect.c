@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redirect.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:19:26 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 12:47:57 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 15:54:51 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	create_extra_outfiles(t_token *cur_token, int ofile_count)
 		{
 			if (file != NULL && ofile_count > 1)
 			{
-				if (ft_just_create_file(file->filename) == 1)
+				if (ft_just_create_file(file->filename, file) == 1)
 					return (1);
 				ofile_count--;
 			}
