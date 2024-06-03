@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redirect.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:19:26 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 15:53:33 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 09:45:30 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,9 @@ int	handle_outfile(t_data *data, t_token *cur_token, int index, int **fd_pipes)
 	else if (file != NULL)
 	{
 		if (file->is_append == -1)
-			exit_status = open_outfile(file->filename);
+			exit_status = open_outfile(file->filename, file);
 		else if (file->is_append == 1)
-			exit_status = open_outfile_append(file->filename);
+			exit_status = open_outfile_append(file->filename, file);
 	}
 	return (exit_status);
 }

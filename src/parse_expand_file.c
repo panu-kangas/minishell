@@ -6,12 +6,11 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:39:13 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 11:09:10 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 10:42:31 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
 static int	check_file_name(char **temp, char *orig)
 {
 	char	**split;
@@ -36,12 +35,15 @@ static int	check_file_name(char **temp, char *orig)
 	return (exit_status);
 }
 
+
 static int	expand_filename(t_parse *temp_parse, t_env_lst *env_lst, int e_st)
 {
 	char	*temp;
 	int		i;
+	char 	quote;
 
 	i = 0;
+	quote = temp_parse->str[0];
 	while (temp_parse->str[i] != 0)
 	{
 		if (temp_parse->str[i] == '$')
@@ -54,7 +56,8 @@ static int	expand_filename(t_parse *temp_parse, t_env_lst *env_lst, int e_st)
 				temp = expand_str_file(temp_parse->str, env_lst);
 			if (!temp)
 				return (write_sys_error("malloc error"));
-			e_st = check_file_name(&temp, temp_parse->str);
+			if (quote != '"')
+				e_st = check_file_name(&temp, temp_parse->str);
 			if (e_st != 0)
 				return (write_sys_error("malloc error"));
 			free(temp_parse->str);
