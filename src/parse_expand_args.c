@@ -6,13 +6,13 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:41:18 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 12:24:59 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 13:15:26 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_iter_and_exp_arg(t_parse *head, t_env_lst *e_lst, int i)
+int	ft_iter_and_exp_arg(t_parse *head, t_env *e_lst, int i)
 {
 	char	*tempstr;
 	t_parse	*temp;

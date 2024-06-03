@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execute_built_in.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:18:45 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/30 15:18:47 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:10:00 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_export(t_env_lst *env_lst, char **args)
+int	handle_export(t_env *env_lst, char **args)
 {
 	int	i;
 	int	temp;
@@ -33,7 +33,7 @@ int	handle_export(t_env_lst *env_lst, char **args)
 	return (exit_status);
 }
 
-int	handle_unset(t_env_lst *env_lst, char **args)
+int	handle_unset(t_env *env_lst, char **args)
 {
 	int	i;
 	int	temp;
@@ -62,7 +62,7 @@ void	handle_echo(char **args)
 		ft_echo(0, args);
 }
 
-int	execute_built_in(t_env_lst *env_lst, t_data *data, t_token *t, int e_flag)
+int	execute_built_in(t_env *env_lst, t_data *data, t_token *t, int e_flag)
 {
 	int		exit_status;
 	char	*cmd;

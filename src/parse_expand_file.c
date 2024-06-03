@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:39:13 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 12:21:35 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 13:15:47 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	check_file_name(char **temp, char *orig)
 	return (exit_status);
 }
 
-static int	expand_filename(t_parse *t_p, t_env_lst *env_lst, int e_st, int i)
+static int	expand_filename(t_parse *t_p, t_env *env_lst, int e_st, int i)
 {
 	char	*temp;
 	char	quote;
@@ -64,7 +64,7 @@ static int	expand_filename(t_parse *t_p, t_env_lst *env_lst, int e_st, int i)
 	return (e_st);
 }
 
-int	ft_iter_and_exp_files(t_parse *head, t_env_lst *e_lst, t_data *d, int e_st)
+int	ft_iter_and_exp_files(t_parse *head, t_env *e_lst, t_data *d, int e_st)
 {
 	t_parse	*temp_parse;
 

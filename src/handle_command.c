@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:38:51 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 12:38:52 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:13:47 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	change_command(t_token *cur_token)
 	return (2);
 }
 
-int	check_for_env_var(t_token *cur_token, t_env_lst *env_lst)
+int	check_for_env_var(t_token *cur_token, t_env *env_lst)
 {
 	int	exit_status;
 
@@ -90,7 +90,7 @@ int	check_for_env_var(t_token *cur_token, t_env_lst *env_lst)
 	return (exit_status);
 }
 
-int	handle_command(t_data *data, t_env_lst *env_lst, int index, int e_flag)
+int	handle_command(t_data *data, t_env *env_lst, int index, int e_flag)
 {
 	int		exit_status;
 	char	**e_args;

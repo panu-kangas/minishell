@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:32:29 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 12:32:30 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:12:59 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	move_env_lst(t_env_lst *env_lst)
+int	move_env_lst(t_env *env_lst)
 {
-	t_env_lst	*next_node;
+	t_env	*next_node;
 
 	next_node = env_lst->next;
 	free(env_lst->name);
@@ -33,10 +33,10 @@ int	move_env_lst(t_env_lst *env_lst)
 	return (0);
 }
 
-int	ft_unset(t_env_lst *env_lst, char *var_name)
+int	ft_unset(t_env *env_lst, char *var_name)
 {
-	t_env_lst	*temp;
-	t_env_lst	*temp_prev;
+	t_env	*temp;
+	t_env	*temp_prev;
 
 	if (unset_check_valid_input(var_name) == 1)
 		return (1);
@@ -60,7 +60,7 @@ int	ft_unset(t_env_lst *env_lst, char *var_name)
 	return (0);
 }
 
-t_env_lst	*check_if_var_exist(t_env_lst *env_lst, char *var_name)
+t_env	*check_if_var_exist(t_env *env_lst, char *var_name)
 {
 	while (env_lst != NULL)
 	{
@@ -71,7 +71,7 @@ t_env_lst	*check_if_var_exist(t_env_lst *env_lst, char *var_name)
 	return (NULL);
 }
 
-int	execute_export(t_env_lst *env_lst, t_env_lst *temp, char *new_env_var)
+int	execute_export(t_env *env_lst, t_env *temp, char *new_env_var)
 {
 	int	flag;
 
@@ -97,11 +97,11 @@ int	execute_export(t_env_lst *env_lst, t_env_lst *temp, char *new_env_var)
 	return (flag);
 }
 
-int	ft_export(t_env_lst *env_lst, char *new_env_var)
+int	ft_export(t_env *env_lst, char *new_env_var)
 {
 	int			flag;
 	char		*var_name;
-	t_env_lst	*temp;
+	t_env	*temp;
 
 	if (export_check_valid_input(new_env_var) == 1)
 		return (1);

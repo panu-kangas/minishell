@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:34:00 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 11:34:01 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:11:30 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ void	add_path_to_data_cur_dir(t_data *data, char *path)
 	data->current_directory[i] = '\0';
 }
 
-int	handle_oldpwd(t_env_lst *env_lst, t_env_lst *pwd)
+int	handle_oldpwd(t_env *env_lst, t_env *pwd)
 {
-	t_env_lst	*old_pwd;
+	t_env	*old_pwd;
 
 	old_pwd = check_if_var_exist(env_lst, "OLDPWD");
 	if (old_pwd == NULL)
@@ -59,9 +59,9 @@ int	handle_oldpwd(t_env_lst *env_lst, t_env_lst *pwd)
 	return (0);
 }
 
-int	update_pwd_env_var(t_data *data, t_env_lst *env_lst, char *cur_dir)
+int	update_pwd_env_var(t_data *data, t_env *env_lst, char *cur_dir)
 {
-	t_env_lst	*pwd;
+	t_env	*pwd;
 	char		*pwd_env_var;
 
 	if (cur_dir == NULL)

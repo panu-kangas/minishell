@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   get_env_node.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:33:05 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 12:33:07 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:13:19 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env_lst	*get_global_env_node(char *environ_var)
+t_env	*get_global_env_node(char *environ_var)
 {
-	t_env_lst	*new_node;
+	t_env	*new_node;
 
-	new_node = malloc(sizeof(t_env_lst));
+	new_node = malloc(sizeof(t_env));
 	if (new_node == NULL)
 		return (NULL);
 	new_node->name = get_var_name(environ_var);
@@ -37,11 +37,11 @@ t_env_lst	*get_global_env_node(char *environ_var)
 	return (new_node);
 }
 
-t_env_lst	*get_non_global_env_node(char *environ_var)
+t_env	*get_non_global_env_node(char *environ_var)
 {
-	t_env_lst	*new_node;
+	t_env	*new_node;
 
-	new_node = malloc(sizeof(t_env_lst));
+	new_node = malloc(sizeof(t_env));
 	if (new_node == NULL)
 		return (NULL);
 	new_node->name = get_var_name(environ_var);
@@ -62,11 +62,11 @@ t_env_lst	*get_non_global_env_node(char *environ_var)
 	return (new_node);
 }
 
-t_env_lst	*get_null_value_env_node(char *environ_var)
+t_env	*get_null_value_env_node(char *environ_var)
 {
-	t_env_lst	*new_node;
+	t_env	*new_node;
 
-	new_node = malloc(sizeof(t_env_lst));
+	new_node = malloc(sizeof(t_env));
 	if (new_node == NULL)
 		return (NULL);
 	new_node->name = get_var_name(environ_var);

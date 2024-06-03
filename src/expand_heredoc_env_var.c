@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_heredoc_env_var.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:37:44 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 10:37:45 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:10:40 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*find_env_var_name(char *hd_str, int i)
 	return (ft_substr(hd_str, i, var_name_len));
 }
 
-int	write_expanded_env_var(t_env_lst *env_lst, char *hd_str, int i, int fd)
+int	write_expanded_env_var(t_env *env_lst, char *hd_str, int i, int fd)
 {
 	char	*var_name;
 	char	*var_value;
@@ -90,7 +90,7 @@ int	write_expanded_env_var(t_env_lst *env_lst, char *hd_str, int i, int fd)
 	return (var_name_len);
 }
 
-int	write_expanded_hd(t_env_lst *env_lst, char *hd_str, char *limiter, int fd)
+int	write_expanded_hd(t_env *env_lst, char *hd_str, char *limiter, int fd)
 {
 	int	i;
 	int	prev_i;

@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:20:40 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 11:25:29 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 13:16:01 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_array_len(char **arr)
 	return (len);
 }
 
-static int	expand_token(t_token *current, t_env_lst *env_lst, t_data *data)
+static int	expand_token(t_token *current, t_env *env_lst, t_data *data)
 {
 	int	exit_status;
 
@@ -50,7 +50,7 @@ static int	expand_token(t_token *current, t_env_lst *env_lst, t_data *data)
 	return (0);
 }
 
-int	parse_expansions(t_data *data, t_env_lst *env_lst)
+int	parse_expansions(t_data *data, t_env *env_lst)
 {
 	t_token	*temp_token;
 	int		exit_status;

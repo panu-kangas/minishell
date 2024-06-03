@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/01 13:40:40 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 13:16:48 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ static int	lexer_input(t_data *data, int e_status)
 	return (0);
 }
 
-int	parsing_pipeline(t_data *data, t_env_lst *env_lst)
+int	parsing_pipeline(t_data *data, t_env *env_lst)
 {
 	int	exit_status;
 	int	i;
@@ -115,7 +115,7 @@ int	parsing_pipeline(t_data *data, t_env_lst *env_lst)
 	return (exit_status);
 }
 
-int	parsing(t_data *data, t_env_lst *env_lst, int exit_status)
+int	parsing(t_data *data, t_env *env_lst, int exit_status)
 {
 	alter_termios(1);
 	if (!data->input)

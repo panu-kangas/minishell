@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:34:19 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 11:34:20 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:11:03 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	change_dir_to_home(t_env_lst *home, t_data *data)
+int	change_dir_to_home(t_env *home, t_data *data)
 {
 	int	flag;
 
@@ -52,7 +52,7 @@ int	get_absolute_parent_path(t_data *data, t_token *token)
 	return (0);
 }
 
-int	handle_cur_dir(t_data *data, t_env_lst *env_lst, char *path)
+int	handle_cur_dir(t_data *data, t_env *env_lst, char *path)
 {
 	char		*cur_dir;
 
@@ -77,9 +77,9 @@ int	handle_cur_dir(t_data *data, t_env_lst *env_lst, char *path)
 	return (0);
 }
 
-int	change_directory(t_data *data, t_env_lst *env_lst, char *path, int flag)
+int	change_directory(t_data *data, t_env *env_lst, char *path, int flag)
 {
-	t_env_lst	*home;
+	t_env	*home;
 
 	home = check_if_var_exist(env_lst, "HOME");
 	if (path == NULL && home == NULL)
@@ -99,7 +99,7 @@ int	change_directory(t_data *data, t_env_lst *env_lst, char *path, int flag)
 	return (0);
 }
 
-int	ft_cd(t_data *data, t_env_lst *env_lst, t_token *token)
+int	ft_cd(t_data *data, t_env *env_lst, t_token *token)
 {
 	int		flag;
 	char	*path;
