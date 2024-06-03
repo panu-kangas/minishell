@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:39:13 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 10:42:31 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/03 11:52:46 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	check_file_name(char **temp, char *orig)
 	if (len > 1)
 	{
 		free(*temp);
-		*temp = ft_strjoin("$", orig);
+		*temp = ft_strdup(orig);
 		if (!(*temp))
 			exit_status = (1);
 	}
@@ -56,7 +56,7 @@ static int	expand_filename(t_parse *temp_parse, t_env_lst *env_lst, int e_st)
 				temp = expand_str_file(temp_parse->str, env_lst);
 			if (!temp)
 				return (write_sys_error("malloc error"));
-			if (quote != '"')
+			if (quote != '\'' && quote != '"')
 				e_st = check_file_name(&temp, temp_parse->str);
 			if (e_st != 0)
 				return (write_sys_error("malloc error"));
