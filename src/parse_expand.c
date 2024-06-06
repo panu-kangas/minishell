@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expand.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:27 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 15:21:07 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/06 14:20:17 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char	*expand_substr_file(char *str, t_env *env_lst, int put_d)
 		temp = ft_strdup(expand_env_var(env_lst, str));
 	else
 	{
-		if(put_d != 0)
+		if (put_d != 0)
 			temp = ft_strjoin("$", str);
 		else
 			temp = ft_strdup("");
@@ -102,13 +102,12 @@ char	*expand_str(char *str, t_env *env_lst)
 	return (temp);
 }
 
-char	*expand_str_file(char *str, t_env *env_lst, char quote)
+char	*expand_str_file(char *str, t_env *env_lst, char quote, int put_d)
 {
 	char	*new;
 	char	*temp;
 	int		i;
 	int		j;
-	int put_d = 1;
 
 	i = 0;
 	j = 0;
@@ -127,9 +126,6 @@ char	*expand_str_file(char *str, t_env *env_lst, char quote)
 	free (new);
 	if (!temp)
 		return (NULL);
-	j = i;
-	while (str[i] != 0)
-		i++;
-	temp = ft_strjoin_free(temp, ft_substr(str + j, 0, i));
+	temp = ft_strjoin_free(temp, ft_strdup(str + i));
 	return (temp);
 }

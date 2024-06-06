@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:39:13 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 14:06:48 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/04 12:09:05 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ static int	expand_filename(t_parse *t_p, t_env *env_lst, int e_st, int i)
 		(t_p->str[i + 1] != ' ' || t_p->str[i + 1] != 0))
 		{
 			if (t_p->istrim != 0)
-				temp = trim_str(expand_str_file(t_p->str, env_lst, quote));
+				temp = trim_str(expand_str_file(t_p->str, env_lst, quote, 1));
 			else
-				temp = expand_str_file(t_p->str, env_lst, quote);
+				temp = expand_str_file(t_p->str, env_lst, quote, 1);
 			if (!temp)
 				return (write_sys_error("malloc error"));
 			if (quote != '\'' && quote != '"')

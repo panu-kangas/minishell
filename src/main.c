@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:51:38 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 13:14:01 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/06 14:17:16 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	set_input_and_env(t_env *env_lst, int exit_status)
 int	main(int argc, char **argv)
 {
 	extern char	**environ;
-	t_env	*env_lst;
+	t_env		*env_lst;
 	int			exit_status;
 
 	exit_status = 0;

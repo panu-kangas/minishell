@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:34:00 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 13:11:30 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/06 14:18:49 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	handle_oldpwd(t_env *env_lst, t_env *pwd)
 int	update_pwd_env_var(t_data *data, t_env *env_lst, char *cur_dir)
 {
 	t_env	*pwd;
-	char		*pwd_env_var;
+	char	*pwd_env_var;
 
 	if (cur_dir == NULL)
 		cur_dir = data->current_directory;
