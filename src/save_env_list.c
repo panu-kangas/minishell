@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:52:58 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 13:17:42 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/06 14:14:58 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	make_pwd_variables(t_env *env_lst)
 
 t_env	*save_env_list(char **environ)
 {
-	int			i;
+	int		i;
 	t_env	*env_lst;
 	t_env	*temp;
 

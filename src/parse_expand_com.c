@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:38:10 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 13:15:36 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/06 13:05:34 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	add_to_arg(t_token *current, char **arr)
 	return (0);
 }
 
-static char	*expand_substr_com(char *str, t_env *env_lst, t_token *current)
+static char	*expand_substr_com(char *str, t_env *env_lst, t_token *cur)
 {
 	char	*temp;
 	char	**split;
@@ -71,7 +71,7 @@ static char	*expand_substr_com(char *str, t_env *env_lst, t_token *current)
 	split = ft_split(temp, ' ');
 	if (ft_array_len(split) > 1)
 	{
-		add_to_arg(current, split + 1);
+		add_to_arg(cur, split + 1);
 		free(temp);
 		temp = ft_strdup(split[0]);
 	}

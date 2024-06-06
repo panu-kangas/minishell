@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:34:57 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 13:12:05 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/06 14:18:32 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ char	**get_env_var_alph_order(t_env *env_lst, char **alph_order)
 
 int	ft_empty_export(t_env *env_lst)
 {
-	char		**alph_order;
-	int			i;
+	char	**alph_order;
+	int		i;
 	t_env	*temp;
 
 	alph_order = NULL;
