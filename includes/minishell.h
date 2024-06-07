@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 15:54:39 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/04 12:30:59 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,18 +80,17 @@ typedef struct s_env
 
 extern int	g_signal_marker;
 
-//free and error
+
+//PARSING
 int			ft_free_data(t_data *data, int code);
 int			ft_free_parse(t_parse *head, int exit_status);
 int			write_amb_error(char *err_str); // is this in use ?
 
-//init
 void		init_data(t_data *data, int exit_status, char *parsing_cur_dir);
 void		init_file(t_file *new);
 void		init_token(t_token *new);
 void		init_parse(t_parse *new);
 
-//parsing
 int			parsing(t_data *data, t_env *env_lst, int exit_status);
 int			parse_expansions(t_data *data, t_env *env_lst);
 char		**ft_pipex_split(char const *s, char c);
@@ -104,10 +103,8 @@ char		*check_non_spaced_files(char *str);
 int			explore_tokenarr(t_token *new, char **tokenarr);
 int			parse_com_and_args(t_token *new, char **tokenarr, int exit_status);
 
-//parse split quotes to nodes
 int			handle_substrings(char *str, t_parse **head);
 
-//expand node utils
 int			ft_iter_and_exp_com(t_parse *lst, t_env *e_lst, t_token *cur);
 int			ft_iter_and_exp_files(t_parse *head, t_env *e, t_data *d, int e_st);
 char		*expand_str_com(char *str, t_env *env_lst, t_token *current);
@@ -118,15 +115,13 @@ void		change_expand_status(t_parse *head);
 void		change_amb_status(t_parse *head, t_file *file);
 int			ft_lst_iter_remove_quotes(t_parse *lst);
 
-//expand
 char		*expand_str(char *str, t_env *env_lst);
-char		*expand_str_file(char *str, t_env *env_lst, char quote);
+char		*expand_str_file(char *str, t_env *env_lst, char quote, int put_d);
 char		*ft_strjoin_free(char *s1, char *s2);
 int			expand_com(t_token *cur, t_env *e_lst, t_data *d, int e_status);
 int			expand_args(t_token *cur, t_env *e_lst, t_data *d, int e_st);
 int			expand_files(t_token *cur, t_env *e_lst, t_data *d, int e_st);
 
-//parse_utils
 int			add_files_to_token(t_token *new, char **tokenarr, int i);
 t_file		*add_file(char *str, int is_append, int is_infile);
 int			check_redir(char *str);
@@ -135,7 +130,6 @@ int			expand_prev_exit_code(t_parse *lst, t_data *data);
 char		*trim_str(char *str);
 int			check_no_filename(char **tokenarr, int i, int exit_status);
 
-//nodes
 void		ft_lstadd_back_ms(t_token **tokens, t_token *newnode);
 void		ft_lstadd_file_ms(t_file **lst, t_file *new);
 
@@ -273,6 +267,5 @@ int			check_bad_redir_syntax(char **tokenarr, int i);
 int			check_empty_rl_input(t_data *data);
 int			search_for_limiter(char *hd_str, char *lim, int hd_len, int lim_len);
 int			check_for_hd_error(int i, int prev_i, int *whole_len);
-
 
 #endif

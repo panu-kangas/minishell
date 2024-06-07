@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:32:29 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 13:12:59 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/06 14:17:57 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ int	execute_export(t_env *env_lst, t_env *temp, char *new_env_var)
 
 int	ft_export(t_env *env_lst, char *new_env_var)
 {
-	int			flag;
-	char		*var_name;
+	int		flag;
+	char	*var_name;
 	t_env	*temp;
 
 	if (export_check_valid_input(new_env_var) == 1)

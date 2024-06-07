@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   write_error.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/06 14:14:13 by tsaari            #+#    #+#             */
+/*   Updated: 2024/06/06 14:34:52 by tsaari           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	write_error(char *cmd, char *specifier, char *err_str)
@@ -45,14 +57,6 @@ int	write_syntax_error(char *err_str)
 	return (258);
 }
 
-int	write_weird_cd_error(char *err_str)
-{
-	ft_putstr_fd("cd: error retrieving current directory: ", 2);
-	ft_putstr_fd("getcwd: cannot access parent directories: ", 2);
-	ft_putendl_fd(err_str, 2);
-	return (0);
-}
-
 int	write_amb_error(char *err_str)
 {
 	ft_putstr_fd("minishell: ", 2);
@@ -60,3 +64,10 @@ int	write_amb_error(char *err_str)
 	ft_putstr_fd(": ambiguous redirect\n", 2);
 	return (ERR_STAT); // this is probably a bit different depending on failure? Needs research
 }
+/*int	write_weird_cd_error(char *err_str)
+{
+	ft_putstr_fd("cd: error retrieving current directory: ", 2);
+	ft_putstr_fd("getcwd: cannot access parent directories: ", 2);
+	ft_putendl_fd(err_str, 2);
+	return (0);
+}*/
