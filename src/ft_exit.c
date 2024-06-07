@@ -55,8 +55,9 @@ int	ft_exit(t_env *env_lst, t_data *data, char **args, int e_flag)
 		ft_putendl_fd("exit", 2);
 	if (args[0] == NULL)
 	{
+		exit_status = data->prev_exit_status;
 		free_all_exit(data, env_lst);
-		exit(0);
+		exit(exit_status);
 	}
 	else if (is_arg_numeric(args[0]) == 0)
 	{

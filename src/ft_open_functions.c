@@ -32,13 +32,10 @@ int	ft_just_create_file(char *filename, t_file *file)
 
 	if (check_for_bad_filename(filename, file) == 1)
 		return (1);
-	if (access(filename, F_OK) == 0)
+	if (stat(filename, &statbuf) == 0)
 	{
-		if (stat(filename, &statbuf) == 0)
-		{
-			if (S_ISDIR(statbuf.st_mode) == 1)
-				return (write_error(NULL, filename, "Is a directory"));
-		}
+		if (S_ISDIR(statbuf.st_mode) == 1)
+			return (write_error(NULL, filename, "Is a directory"));
 		if (access(filename, W_OK) == -1)
 			return (write_error(NULL, filename, "Permission denied"));
 	}
@@ -56,13 +53,10 @@ int	open_outfile_append(char *filename, t_file *file)
 
 	if (check_for_bad_filename(filename, file) == 1)
 		return (1);
-	if (access(filename, F_OK) == 0)
+	if (stat(filename, &statbuf) == 0)
 	{
-		if (stat(filename, &statbuf) == 0)
-		{
-			if (S_ISDIR(statbuf.st_mode) == 1)
-				return (write_error(NULL, filename, "Is a directory"));
-		}
+		if (S_ISDIR(statbuf.st_mode) == 1)
+			return (write_error(NULL, filename, "Is a directory"));
 		if (access(filename, W_OK) == -1)
 			return (write_error(NULL, filename, "Permission denied"));
 	}
@@ -85,13 +79,10 @@ int	open_outfile(char *filename, t_file *file)
 
 	if (check_for_bad_filename(filename, file) == 1)
 		return (1);
-	if (access(filename, F_OK) == 0)
+	if (stat(filename, &statbuf) == 0)
 	{
-		if (stat(filename, &statbuf) == 0)
-		{
-			if (S_ISDIR(statbuf.st_mode) == 1)
-				return (write_error(NULL, filename, "Is a directory"));
-		}
+		if (S_ISDIR(statbuf.st_mode) == 1)
+			return (write_error(NULL, filename, "Is a directory"));
 		if (access(filename, W_OK) == -1)
 			return (write_error(NULL, filename, "Permission denied"));
 	}
@@ -113,8 +104,6 @@ int	open_infile(char *filename, t_file *file)
 
 	if (check_for_bad_filename(filename, file) == 1)
 		return (1);
-	//if (filename != NULL && filename[0] == '$' && file->is_amb = 1)
-	//	return (write_amb_error(filename));
 	if (access(filename, F_OK) == -1)
 		return (write_error(NULL, filename, "No such file or directory"));
 	if (access(filename, R_OK) == -1)

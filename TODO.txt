@@ -4,8 +4,6 @@ TIMO:
 
 
 
-
-
 DONE
 - Syntax error: these don't work yet or have wrong message:
 		--> >>>>> does nothig, I suppose  bash `>>'

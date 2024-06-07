@@ -50,17 +50,17 @@ int	get_cur_dir_flag(t_data *data)
 	return (cur_dir_flag);
 }
 
-int	try_to_change_dir(char *path, int cur_dir_flag) // TEST THIS!
+int	try_to_change_dir(char *path, int cur_dir_flag)
 {
-	if (chdir(path) != 0)
+	if (is_relative_path(path) == 2 && cur_dir_flag == 1)
+		return (write_error("cd", path, "No such file or directory"));
+	else if (chdir(path) != 0)
 	{
 		if (cur_dir_flag == 1)
 			return (write_error("cd", path, "No such file or directory"));
 		else if (cur_dir_flag == 3)
 			return (write_error("cd", path, "Permission denied"));
 	}
-	else if (is_relative_path(path) == 2 && cur_dir_flag == 1) // is this needed...?
-		return (write_error("cd", path, "No such file or directory"));
 	return (-3);
 }
 
@@ -107,9 +107,7 @@ int	analyze_path(char *path, t_data *data)
 		return (-2);
 	else if (is_relative == 2 && cur_dir_flag == 1 && parent_dir_flag == 0)
 		return (-2);
-//	else if ((is_relative == 6 || is_relative == 2) && cur_dir_flag == 1)
-//		return (check_path_backtrack(data, path)); // run tests in school environ and decide what to do based on that
-	else if (is_relative > 6 && cur_dir_flag == 1)
+	else if (is_relative >= 6 && cur_dir_flag == 1)
 		return (write_error("cd", path, "No such file or directory"));
 	else if (is_relative != 0 && (cur_dir_flag == 3 || cur_dir_flag == 1))
 		return (try_to_change_dir(path, cur_dir_flag));

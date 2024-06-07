@@ -55,6 +55,8 @@ int	is_echo(char *cmd)
 
 int	check_for_built_in(char *cmd)
 {
+	if (cmd == NULL)
+		return (0);
 	if (is_echo(cmd) == 1)
 		return (1);
 	else if (ft_strncmp(cmd, "export", ft_strlen(cmd) + 1) == 0)
