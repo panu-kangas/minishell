@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   write_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:14:13 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/06 14:34:52 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 11:23:11 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,5 @@ int	write_amb_error(char *err_str)
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(err_str, 2);
 	ft_putstr_fd(": ambiguous redirect\n", 2);
-	return (ERR_STAT); // this is probably a bit different depending on failure? Needs research
+	return (1);
 }
-/*int	write_weird_cd_error(char *err_str)
-{
-	ft_putstr_fd("cd: error retrieving current directory: ", 2);
-	ft_putstr_fd("getcwd: cannot access parent directories: ", 2);
-	ft_putendl_fd(err_str, 2);
-	return (0);
-}*/

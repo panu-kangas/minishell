@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_exp_node_utils2.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 12:57:21 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 13:15:32 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int	expand_prev_exit_code(t_parse *lst, t_data *data)
 			{
 				temp = head->str;
 				head->str = expand_exit_str(head->str, data, i);
-				if (!head->str)
-					return (-1);
 				free (temp);
+				if (!head->str)
+					return (write_sys_error("malloc error"));
 				i = 0;
 				continue ;
 			}

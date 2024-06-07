@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_split_quotes.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 10:59:20 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 10:16:59 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 13:35:03 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,12 @@ static int	handle_quoted_substring(char *str, int i, t_parse **head)
 	t_parse	*new;
 
 	quote = str[i];
+	expand = 1;
 	if (quote == '\'')
 		expand = 0;
-	else
-		expand = 1;
 	length = get_quoted_string(str, i, &substring, quote);
+	if (length == -1)
+		return (-1);
 	if (length > 0)
 	{
 		new = new_node(substring, expand, 0);
@@ -95,14 +96,14 @@ int	handle_substrings(char *str, t_parse **head)
 		{
 			exit_status = handle_quoted_substring(str, i, head);
 			if (exit_status == -1)
-				return (exit_status);
+				return (write_sys_error("malloc error"));
 			i += exit_status;
 		}
 		else
 		{
 			exit_status = handle_non_quoted_substring(str, i, head);
 			if (exit_status == -1)
-				return (exit_status);
+				return (write_sys_error("malloc error"));
 			i += exit_status;
 		}
 	}

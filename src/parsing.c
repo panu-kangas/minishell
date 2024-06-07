@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 10:27:54 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 12:46:39 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/07 12:34:55 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,22 +117,17 @@ int	parsing_pipeline(t_data *data, t_env *env_lst)
 
 int	parsing(t_data *data, t_env *env_lst, int exit_status)
 {
-	if (alter_termios(1) == 1)
-		exit(1);
 	if (!data->input)
-	{
-		exit_status = data->prev_exit_status;
-		free(data);
-		ft_putstr_fd("exit\n", 2);
-		exit(exit_status);
-	}
+		free_and_exit(data, env_lst);
+	if (alter_termios(1) == 1)
+		return (1);
 	if (ft_strlen(data->input) != 0)
 	{
 		add_history(data->input);
 		if (handle_only_spaces(data) == 0)
 		{
 			exit_status = parsing_pipeline(data, env_lst);
-			if (exit_status == 0 && check_empty_rl_input(data) == 0)
+			if (exit_status == 0)
 			{
 				store_stdin_stdout(data->std_fd);
 				exit_status = make_processes(data, env_lst, data->std_fd);

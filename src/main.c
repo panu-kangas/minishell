@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:51:38 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/06 14:17:16 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 12:27:37 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,12 @@ void	copy_cur_dir_from_data(t_data *data, char *parsing_cur_dir)
 
 void	update_prev_exit_status(t_data *data)
 {
-	data->prev_exit_status = 1;
-	g_signal_marker = 0;
+	if (g_signal_marker == 2)
+	{
+		data->prev_exit_status = 1;
+		g_signal_marker = 0;
+	}
+	set_signals_to_dfl_or_ign(0);
 }
 
 int	set_input_and_env(t_env *env_lst, int exit_status)
@@ -39,25 +43,25 @@ int	set_input_and_env(t_env *env_lst, int exit_status)
 	while (1)
 	{
 		if (alter_termios(0) == 1)
-			return (1); // THINK THIS THROUGH
+			exit_status = 1;
 		process_signal_main();
 		data = (t_data *)malloc(sizeof (t_data));
 		if (!data)
 			return (write_sys_error("malloc failed"));
 		init_data(data, exit_status, parsing_cur_dir);
+		errno = 0;
 		data->input = readline("minishell-1.1$: ");
-		if (g_signal_marker == 2)
-			update_prev_exit_status(data);
-		set_signals_to_dfl_or_ign(1); // THINK THIS THROUGH
+		if (errno == ENOMEM)
+			write_sys_error("malloc failed in readline");
+		update_prev_exit_status(data);
 		exit_status = parsing(data, env_lst, exit_status);
 		copy_cur_dir_from_data(data, parsing_cur_dir);
 		ft_free_data(data, 0);
 	}
-	//rl_clear_history(); //do we need this??
 	return (exit_status);
 }
 
-int	main(int argc, char **argv)
+int	main(void)
 {
 	extern char	**environ;
 	t_env		*env_lst;
@@ -67,14 +71,7 @@ int	main(int argc, char **argv)
 	env_lst = save_env_list(environ);
 	if (env_lst == NULL)
 		return (write_sys_error("environmental variable set up unsuccessful"));
-	if (argc != 1 || argv == NULL) // this needs to be checked
-	{
-		//errorhandling
-		return (0);
-	}
-	else
-		exit_status = set_input_and_env(env_lst, exit_status);
-	//system("leaks executablename");
+	exit_status = set_input_and_env(env_lst, exit_status);
 	free_env_lst(env_lst);
 	return (exit_status);
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_empty_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:34:57 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/06 14:18:32 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 11:04:01 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	env_lstsize(t_env *lst)
+static int	env_lstsize(t_env *lst)
 {
 	int	size;
 

@@ -2,6 +2,11 @@
 TIMO:
 
 
+- minishell-1.1$: export PANU_KANGAS="echo hello"
+minishell-1.1$: $PANU_KANGAS
+minishell: $: command not found
+
+
 
 
 DONE

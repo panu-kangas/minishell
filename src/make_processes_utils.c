@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_processes_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 15:10:26 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 13:15:02 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 11:15:22 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,6 @@ int	handle_heredoc(t_data *data, t_env *env_lst, int *std_fd, int *e_stat)
 		return (*e_stat);
 	}
 	return (0);
-}
-
-int	check_env_var_change(t_data *data, t_env *env_lst, int *exit_status)
-{
-	if (data->tokens->com != NULL && ft_strchr(data->tokens->com, '=') != NULL \
-	&& data->tokens->next == NULL)
-		*exit_status = handle_command(data, env_lst, 0, 1);
-	return (*exit_status);
 }
 
 int	is_builtin(t_data *data, t_env *env_lst, int *std_fd, int *e_stat)

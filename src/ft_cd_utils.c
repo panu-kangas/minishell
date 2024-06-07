@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:34:00 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/06 14:18:49 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 11:11:09 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	add_path_to_data_cur_dir(t_data *data, char *path)
 	data->current_directory[i] = '\0';
 }
 
-int	handle_oldpwd(t_env *env_lst, t_env *pwd)
+static int	handle_oldpwd(t_env *env_lst, t_env *pwd)
 {
 	t_env	*old_pwd;
 

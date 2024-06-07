@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_exp_node_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 14:36:21 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 13:16:30 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	ft_lst_iter_remove_quotes(t_parse *head)
 		{
 			stret = ft_strtrim(temp->str, "'");
 			if (!stret)
-				return (-1);
+				return (write_sys_error("malloc error"));
 			free(temp->str);
 			temp->str = stret;
 		}
@@ -119,7 +119,7 @@ int	ft_lst_iter_remove_quotes(t_parse *head)
 		{
 			stret = ft_strtrim(temp->str, "\"");
 			if (!stret)
-				return (-1);
+				return (write_sys_error("malloc error"));
 			free(temp->str);
 			temp->str = stret;
 		}

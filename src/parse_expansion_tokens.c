@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expansion_tokens.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:22:11 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 13:16:32 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 13:40:02 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	expand_files(t_token *cur, t_env *e_lst, t_data *d, int e_st)
 			return (ft_free_parse(head, e_st));
 		if (tempfile->is_append == 1 && tempfile->is_infile == 1)
 			change_expand_status(head);
-		if (tempfile->is_append == -1)
+		else
 			change_amb_status(head, tempfile);
 		e_st = expand_file(head, e_lst, d, &temp);
 		if (e_st != 0)

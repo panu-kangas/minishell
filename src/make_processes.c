@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_processes.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 15:10:39 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 13:14:48 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 11:50:14 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ int	create_processes(t_data *data, t_env *env_lst)
 		free(pids);
 		return (write_sys_error("malloc failed"));
 	}
+	set_signals_to_dfl_or_ign(1);
 	if (enter_fork_loop(data, env_lst, pids, fd_pipes) == 1)
 		return (1);
+	set_signals_to_dfl_or_ign(0);
 	return (free_close_wait(pids, fd_pipes, data, 0));
 }
 

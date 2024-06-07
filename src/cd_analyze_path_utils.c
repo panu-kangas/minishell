@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 16:10:34 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 16:10:38 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/07 11:11:56 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	is_relative_path(char *path)
 	return (0);
 }
 
-int	free_paths_cd(char **paths, int paths_count)
+static int	free_paths_cd(char **paths, int paths_count)
 {
 	int	i;
 

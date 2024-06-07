@@ -6,13 +6,13 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:19:26 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 15:54:51 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/07 14:08:27 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	process_infile(t_token *cur_token)
+int	process_infile(t_data *data, t_token *cur_token)
 {
 	t_file	*file;
 	int		exit_status;
@@ -24,7 +24,7 @@ int	process_infile(t_token *cur_token)
 		if (file->is_infile == 1)
 		{
 			if (file->is_append == -1)
-				exit_status = open_infile(file->filename, file);
+				exit_status = open_infile(data, file->filename, file);
 			else if (file->is_append == 1)
 			{
 				if (dup2(file->hd_pipe[0], 0) == -1)
@@ -38,7 +38,7 @@ int	process_infile(t_token *cur_token)
 	return (exit_status);
 }
 
-int	create_extra_outfiles(t_token *cur_token, int ofile_count)
+int	create_extra_outfiles(t_data *data, t_token *cur_token, int ofile_count)
 {
 	t_file	*file;
 	t_file	*temp;
@@ -51,7 +51,7 @@ int	create_extra_outfiles(t_token *cur_token, int ofile_count)
 		{
 			if (file != NULL && ofile_count > 1)
 			{
-				if (ft_just_create_file(file->filename, file) == 1)
+				if (ft_just_create_file(data, file->filename, file) == 1)
 					return (1);
 				ofile_count--;
 			}
@@ -69,7 +69,7 @@ int	handle_infile(t_data *data, t_token *cur_token, int index, int **fd_pipes)
 	if (index != 0 && check_for_infile(cur_token) == 0)
 		exit_status = dup_pipe_in(fd_pipes, index);
 	else
-		exit_status = process_infile(cur_token);
+		exit_status = process_infile(data, cur_token);
 	if (exit_status != 0)
 	{
 		close_all_pipes(data, fd_pipes, (data->proc_count - 1));
@@ -89,7 +89,7 @@ int	handle_outfile(t_data *data, t_token *cur_token, int index, int **fd_pipes)
 	ofile_count = count_outfiles(cur_token);
 	if (ofile_count > 1)
 	{
-		exit_status = create_extra_outfiles(cur_token, ofile_count);
+		exit_status = create_extra_outfiles(data, cur_token, ofile_count);
 		if (exit_status != 0)
 			return (exit_status);
 	}
@@ -99,9 +99,9 @@ int	handle_outfile(t_data *data, t_token *cur_token, int index, int **fd_pipes)
 	else if (file != NULL)
 	{
 		if (file->is_append == -1)
-			exit_status = open_outfile(file->filename, file);
+			exit_status = open_outfile(data, file->filename, file);
 		else if (file->is_append == 1)
-			exit_status = open_outfile_append(file->filename, file);
+			exit_status = open_outfile_append(data, file->filename, file);
 	}
 	return (exit_status);
 }

@@ -6,13 +6,13 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:44:13 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 12:32:59 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/07 11:22:28 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	skip_file(char **tokenarr, int i)
+static int	skip_file(char **tokenarr, int i)
 {
 	if (check_redir(tokenarr[i]) > 0 && check_redir(tokenarr[i]) < 5)
 	{
@@ -99,7 +99,6 @@ char	*check_non_spaced_files(char *str)
 		result[j++] = str[i++];
 	}
 	result[j] = '\0';
-//	result = separate_redirects(result); // NT NEEDED ??
 	ret = ft_strdup(result);
 	free (result);
 	if (!ret)

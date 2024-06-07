@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expansion.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:20:40 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 13:16:01 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 13:37:55 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	expand_token(t_token *current, t_env *env_lst, t_data *data)
 	{
 		exit_status = expand_args(current, env_lst, data, exit_status);
 		if (exit_status != 0)
-			return (write_sys_error("malloc error"));
+			return (exit_status);
 	}
 	if (current->files != NULL)
 	{
