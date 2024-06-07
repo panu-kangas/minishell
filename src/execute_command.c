@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:36:30 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 13:10:12 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 18:11:11 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,6 @@ int	execute_command(char *cmd, char **e_args, t_env *env_lst, t_data *data)
 	free_env_lst(env_lst);
 	ft_free_data(data, 0);
 	execve(cmd_path, e_args, env_var);
-	free_all_from_process(cmd_path, e_args, env_var);
+	free_all_from_process(cmd_path, NULL, env_var);
 	return (write_sys_error("execve failed"));
 }

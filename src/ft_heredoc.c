@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:35:35 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 13:12:36 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 17:29:01 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	ft_heredoc(t_env *env_lst, char *limiter, int *hd_pipe_fd, int flag)
 			return (write_sys_error("malloc failed"));
 	}
 	if (g_signal_marker == 2)
-		free_hd_str(hd_str, 1);
+		return (free_hd_str(hd_str, 1));
 	if (ft_strlen(hd_str) <= 60000 && pipe(hd_pipe_fd) < 0)
 		return (write_sys_error("pipe failed"));
 	if (hd_str != NULL && ft_strchr(hd_str, '$') != NULL && flag == 0)

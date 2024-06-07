@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 15:10:26 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/07 11:15:22 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/07 17:27:58 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	store_stdin_stdout(int *std_fd)
 int	handle_heredoc(t_data *data, t_env *env_lst, int *std_fd, int *e_stat)
 {
 	signal(SIGINT, &sig_handler_hd);
+	signal(SIGQUIT, SIG_IGN);
 	*e_stat = process_heredoc(data, env_lst, 0);
 	if (*e_stat != 0)
 	{

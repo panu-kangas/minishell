@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:35:51 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/07 14:11:27 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/07 16:45:20 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	check_for_bad_filename(t_data *data, char *filename, t_file *file)
 	if (filename != NULL && ft_strchr(filename, '$') != NULL \
 	&& file->is_amb == 1)
 		return (write_amb_error(filename));
-	if (check_for_bad_path(data, filename, -1) != 0)
+	if (ft_strchr(filename, '/') != NULL && check_for_bad_path(data, filename, -1) != 0)
 		return (1);
 	if (access(filename, F_OK) == -1 && ft_strchr(filename, '/') != NULL)
 		return (write_error(NULL, filename, "No such file or directory"));

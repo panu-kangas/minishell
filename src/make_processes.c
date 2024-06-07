@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 15:10:39 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/07 11:50:14 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/07 18:11:32 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ int	enter_fork_loop(t_data *data, t_env *env_lst, int *pids, int **fd_pipes)
 			if (exit_status == 0)
 				exit_status = handle_command(data, env_lst, index, 0);
 			close_std_fd(data->std_fd);
-			free_env_lst(env_lst);
-			ft_free_data(data, 0);
+			free_env_lst(env_lst); // RISK OF DOUBLE FREE (other is just before execve)
+			ft_free_data(data, 0); // RISK OF DOUBLE FREE (other is just before execve)
 			exit(exit_status);
 		}
 		index++;
@@ -58,7 +58,6 @@ int	create_processes(t_data *data, t_env *env_lst)
 	set_signals_to_dfl_or_ign(1);
 	if (enter_fork_loop(data, env_lst, pids, fd_pipes) == 1)
 		return (1);
-	set_signals_to_dfl_or_ign(0);
 	return (free_close_wait(pids, fd_pipes, data, 0));
 }
 
@@ -79,5 +78,6 @@ int	make_processes(t_data *data, t_env *env_lst, int *std_fd)
 	if (is_builtin(data, env_lst, std_fd, &exit_status) == 1)
 		return (exit_status);
 	exit_status = create_processes(data, env_lst);
+	set_signals_to_dfl_or_ign(0);
 	return (exit_status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/07 16:04:48 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 18:08:35 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,6 @@ int			analyze_path(char *path, t_data *data);
 int			check_valid_path(char *path);
 int			get_parsing_cur_dir(char *parsing_cur_dir);
 
-void		free_all_from_process(char *cmd_path, char **e_a, char **e_v);
 int			check_empty_input(char *cmd);
 int			check_cmd_path(t_data *data, char *cmd);
 void		add_path_to_data_cur_dir(t_data *data, char *path);

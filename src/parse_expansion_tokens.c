@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:22:11 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/07 13:40:02 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/07 17:15:41 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,16 +91,13 @@ static int	expand_file(t_parse *head, t_env *e_lst, t_data *d, char **temp)
 	exit_status = 0;
 	exit_status = ft_iter_and_exp_files(head, e_lst, d, exit_status);
 	if (exit_status != 0)
-		return (ft_free_parse(head, exit_status));
+		return (exit_status);
 	exit_status = ft_lst_iter_remove_quotes(head);
 	if (exit_status != 0)
-		return (ft_free_parse(head, exit_status));
+		return (exit_status);
 	*temp = ft_lstiter_and_make_new_str(head);
-	if (!temp)
-	{
-		ft_free_parse(head, 0);
+	if (!(*temp))
 		return (write_sys_error("malloc error"));
-	}
 	return (0);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:38:51 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 13:13:47 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/07 18:00:53 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,10 @@ int	check_for_env_var(t_token *cur_token, t_env *env_lst)
 		return (2);
 	else if (cur_token->args != NULL && *cur_token->args != NULL)
 		return (change_command(cur_token));
-	else
+	else if (ft_strchr(cur_token->com, '=') != NULL)
 		exit_status = process_non_global_env_node(env_lst, cur_token->com);
+	else if (cur_token->com[0] == '\0')
+		return (2);
 	return (exit_status);
 }
 
@@ -98,7 +100,8 @@ int	handle_command(t_data *data, t_env *env_lst, int index, int e_flag)
 
 	cur_token = get_cur_token(data, index);
 	exit_status = 0;
-	if (cur_token->com != NULL && ft_strchr(cur_token->com, '=') != NULL)
+	if (cur_token->com != NULL && (ft_strchr(cur_token->com, '=') != NULL || \
+	cur_token->com[0] == '\0'))
 	{
 		exit_status = check_for_env_var(cur_token, env_lst);
 		if (exit_status != 2)
