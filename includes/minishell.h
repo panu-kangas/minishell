@@ -215,7 +215,7 @@ int			ft_just_create_file(char *filename, t_file *file);
 int			open_outfile_append(char *filename, t_file *file);
 t_token		*get_cur_token(t_data *data, int index);
 
-int			process_signal_main(void);
+void		process_signal_main(void);
 void		process_signal_commands(void);
 void		sig_handler_hd(int signum);
 int			alter_termios(int flag);
@@ -227,13 +227,13 @@ int			check_quot_syntax(t_data *data);
 
 int			analyze_path(char *path, t_data *data);
 int			check_valid_path(char *path);
-void		get_parsing_cur_dir(char *parsing_cur_dir);
+int			get_parsing_cur_dir(char *parsing_cur_dir);
 
 // from norminetting
 
 void		free_all_from_process(char *cmd_path, char **e_a, char **e_v);
 int			check_empty_input(char *cmd);
-int			check_cmd_path(char *cmd);
+int			check_cmd_path(t_data *data, char *cmd);
 void		copy_cur_dir_to_data(t_data *data, char *cur_dir);
 void		add_path_to_data_cur_dir(t_data *data, char *path);
 int			update_pwd_env_var(t_data *data, t_env *env_lst, char *cur_dir);
@@ -263,13 +263,16 @@ int			handle_heredoc(t_data *data, t_env *env, int *std_fd, int *e_st);
 int			store_stdin_stdout(int *std_fd);
 char		*update_cur_dir(char *temp_cur_dir, char *path);
 int			check_path_backtrack(t_data *data, char *path);
-int			free_hd_str(char *str);
+int			free_hd_str(char *str, int exit_status);
 void		close_std_fd(int *std_fd);
-void		set_signals_to_dfl(void);
+void		set_signals_to_dfl_or_ign(int flag);
+
 
 
 int			check_bad_redir_syntax(char **tokenarr, int i);
 int			check_empty_rl_input(t_data *data);
+int			search_for_limiter(char *hd_str, char *lim, int hd_len, int lim_len);
+int			check_for_hd_error(int i, int prev_i, int *whole_len);
 
 
 #endif

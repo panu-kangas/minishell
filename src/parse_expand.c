@@ -36,7 +36,7 @@ static char	*expand_substr_file(char *str, t_env *env_lst, int put_d)
 		temp = ft_strdup(expand_env_var(env_lst, str));
 	else
 	{
-		if(put_d != 0)
+		if (put_d != 0)
 			temp = ft_strjoin("$", str);
 		else
 			temp = ft_strdup("");
@@ -108,7 +108,7 @@ char	*expand_str_file(char *str, t_env *env_lst, char quote)
 	char	*temp;
 	int		i;
 	int		j;
-	int put_d = 1;
+	int 	put_d = 1;
 
 	i = 0;
 	j = 0;

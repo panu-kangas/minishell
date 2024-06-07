@@ -33,13 +33,13 @@ int	set_input_and_env(t_env *env_lst, int exit_status)
 	t_data		*data;
 	char		parsing_cur_dir[256];
 
-	get_parsing_cur_dir(parsing_cur_dir);
-	if (parsing_cur_dir[0] == 0)
-		write_sys_error("malloc error; current dir storage set up failed");
+	if (get_parsing_cur_dir(parsing_cur_dir) == 1)
+		return (write_sys_error("current dir storage set up failed"));
 	g_signal_marker = 0;
 	while (1)
 	{
-		alter_termios(0);
+		if (alter_termios(0) == 1)
+			return (1); // THINK THIS THROUGH
 		process_signal_main();
 		data = (t_data *)malloc(sizeof (t_data));
 		if (!data)
@@ -48,6 +48,7 @@ int	set_input_and_env(t_env *env_lst, int exit_status)
 		data->input = readline("minishell-1.1$: ");
 		if (g_signal_marker == 2)
 			update_prev_exit_status(data);
+		set_signals_to_dfl_or_ign(1); // THINK THIS THROUGH
 		exit_status = parsing(data, env_lst, exit_status);
 		copy_cur_dir_from_data(data, parsing_cur_dir);
 		ft_free_data(data, 0);
@@ -59,7 +60,7 @@ int	set_input_and_env(t_env *env_lst, int exit_status)
 int	main(int argc, char **argv)
 {
 	extern char	**environ;
-	t_env	*env_lst;
+	t_env		*env_lst;
 	int			exit_status;
 
 	exit_status = 0;

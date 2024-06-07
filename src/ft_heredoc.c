@@ -12,23 +12,26 @@
 
 #include "minishell.h"
 
-int	write_hd(char *hd_str, char *read_line, char *limiter, int fd)
+int	write_hd(char *hd_str, char *lim, int fd)
 {
 	int	str_len;
-	int	limit_len;
+	int	lim_len;
 
 	if (hd_str == NULL)
 	{
 		write(fd, "\0", 1);
 		return (0);
 	}
+	else if (ft_strlen(hd_str) > 60000)
+	{
+		free(hd_str);
+		return (write_error(NULL, "heredoc error", "heredoc input too long"));
+	}
 	str_len = ft_strlen(hd_str);
-	limit_len = ft_strlen(limiter);
-	if (limit_len == 0 && read_line != NULL)
-		hd_str[str_len - 1] = '\0';
-	else if (limit_len != 0 && read_line != NULL)
-		hd_str[str_len - limit_len - 1] = '\0';
-	else if (str_len == 1 && limit_len == 0)
+	lim_len = ft_strlen(lim);
+	if (search_for_limiter(hd_str, lim, str_len, lim_len) == 1)
+		hd_str[str_len - lim_len - 1] = '\0';
+	else if (str_len == 1 && lim_len == 0)
 		hd_str[0] = '\0';
 	write(fd, hd_str, ft_strlen(hd_str));
 	free(hd_str);
@@ -41,6 +44,8 @@ int	check_limiter(char *hd_str, char *limiter, int line_len)
 	int		i;
 	int		limit_len;
 
+	if (hd_str == NULL)
+		return (0);
 	i = ft_strlen(hd_str);
 	limit_len = ft_strlen(limiter);
 	if (--i == 0 && limit_len > 0)
@@ -49,9 +54,8 @@ int	check_limiter(char *hd_str, char *limiter, int line_len)
 		return (1);
 	else if (hd_str[i] == '\n' && hd_str[i - 1] == '\n' && limit_len == 0)
 		return (1);
-	else if (hd_str[i] == '\n' && line_len == 0 && limit_len == 0)
+	else if (hd_str[i--] == '\n' && line_len == 0 && limit_len == 0)
 		return (1);
-	i--;
 	while (i > 0 && hd_str[i] != '\n')
 		i--;
 	if (hd_str[i] == '\n')
@@ -97,7 +101,8 @@ int	ft_heredoc(t_env *env_lst, char *limiter, int *hd_pipe_fd, int flag)
 	int		line_len;
 
 	hd_str = NULL;
-	while (1)
+	line_len = 0;
+	while (check_limiter(hd_str, limiter, line_len) != 1)
 	{
 		read_line = readline("> ");
 		line_len = ft_strlen(read_line);
@@ -106,17 +111,15 @@ int	ft_heredoc(t_env *env_lst, char *limiter, int *hd_pipe_fd, int flag)
 		hd_str = get_whole_hd_str(read_line, hd_str);
 		if (hd_str == NULL)
 			return (write_sys_error("malloc failed"));
-		if (check_limiter(hd_str, limiter, line_len) == 1)
-			break ;
 	}
 	if (g_signal_marker == 2)
-		free_hd_str(hd_str);
-	if (pipe(hd_pipe_fd) < 0)
+		free_hd_str(hd_str, 1);
+	if (ft_strlen(hd_str) <= 60000 && pipe(hd_pipe_fd) < 0)
 		return (write_sys_error("pipe failed"));
 	if (hd_str != NULL && ft_strchr(hd_str, '$') != NULL && flag == 0)
 		return (write_expanded_hd(env_lst, hd_str, limiter, hd_pipe_fd[1]));
 	else
-		return (write_hd(hd_str, read_line, limiter, hd_pipe_fd[1]));
+		return (write_hd(hd_str, limiter, hd_pipe_fd[1]));
 }
 
 int	process_heredoc(t_data *data, t_env *env_lst, int exit_status)

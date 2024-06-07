@@ -51,7 +51,7 @@ int	add_slash(char **paths)
 
 char	**get_paths(t_env *env_lst)
 {
-	char		**paths;
+	char	**paths;
 	t_env	*temp;
 
 	temp = check_if_var_exist(env_lst, "PATH");

@@ -58,8 +58,6 @@ char	*find_env_var_name(char *hd_str, int i)
 
 	orig_i = i;
 	var_name_len = 0;
-	if (ft_isdigit(hd_str[i]) == 1)
-		return (ft_substr(hd_str, i, 1));
 	while (hd_str[i] != '\0')
 	{
 		if (ft_isalnum(hd_str[i]) == 0 && hd_str[i] != '_')
@@ -71,20 +69,17 @@ char	*find_env_var_name(char *hd_str, int i)
 	return (ft_substr(hd_str, i, var_name_len));
 }
 
-int	write_expanded_env_var(t_env *env_lst, char *hd_str, int i, int fd)
+int	write_expanded_env_var(t_env *env_lst, char *var_name, int fd, int w_len)
 {
-	char	*var_name;
-	char	*var_value;
-	int		var_name_len;
+	char		*var_value;
+	int			var_name_len;
 
-	var_name = find_env_var_name(hd_str, i);
 	if (var_name == NULL)
 		return (-1);
+	else if (w_len > 60000)
+		return (0);
 	var_name_len = ft_strlen(var_name);
 	var_value = expand_env_var(env_lst, var_name);
-	if (var_name[0] == '0')
-		write(fd, "./minishell", 11);
-	free(var_name);
 	if (var_value != NULL)
 		write(fd, var_value, ft_strlen(var_value));
 	return (var_name_len);
@@ -92,25 +87,29 @@ int	write_expanded_env_var(t_env *env_lst, char *hd_str, int i, int fd)
 
 int	write_expanded_hd(t_env *env_lst, char *hd_str, char *limiter, int fd)
 {
-	int	i;
-	int	prev_i;
+	int		i;
+	int		prev_i;
+	int		whole_len;
+	char	*var_name;
 
 	remove_limiter(hd_str, limiter);
 	i = 0;
+	whole_len = 0;
 	while (hd_str[i] != '\0')
 	{
 		prev_i = i;
 		if (hd_str[i] == '$' && (ft_isalnum(hd_str[i + 1]) == 1 \
 		|| hd_str[i + 1] == '_'))
-			i += write_expanded_env_var(env_lst, hd_str, i + 1, fd) + 1;
+		{
+			var_name = find_env_var_name(hd_str, i + 1);
+			whole_len += ft_strlen(expand_env_var(env_lst, var_name)) - 1;
+			i += write_expanded_env_var(env_lst, var_name, fd, whole_len) + 1;
+			free(var_name);
+		}
 		else
 			write(fd, &hd_str[i++], 1);
-		if (prev_i == i)
-		{
-			free(hd_str);
-			return (write_sys_error("malloc failed"));
-		}
+		if (check_for_hd_error(i, prev_i, &whole_len) == 1)
+			return (free_hd_str(hd_str, 1));
 	}
-	free(hd_str);
-	return (0);
+	return (free_hd_str(hd_str, 0));
 }

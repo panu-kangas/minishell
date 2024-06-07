@@ -17,13 +17,13 @@ int	alter_termios(int flag)
 	struct termios	term;
 
 	if (tcgetattr(2, &term) == -1)
-		return (write_sys_error("termios alteration failed")); // How to handle this in main ??
+		return (write_sys_error("termios alteration failed"));
 	if (flag == 0)
 		term.c_lflag &= ~ECHOCTL;
 	else
 		term.c_lflag |= ECHOCTL;
 	if (tcsetattr(2, TCSANOW, &term) == -1)
-		return (write_sys_error("termios alteration failed")); // How to handle this in main ??
+		return (write_sys_error("termios alteration failed"));
 	return (0);
 }
 
@@ -49,21 +49,22 @@ void	sig_handler_main(int signum)
 	}
 }
 
-void	set_signals_to_dfl(void)
+void	set_signals_to_dfl_or_ign(int flag)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	if (flag == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+	}
+	else
+	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
+	}
 }
 
-int	process_signal_main(void)
+void	process_signal_main(void)
 {
-	struct sigaction	sigact;
-
-	sigact.sa_handler = &sig_handler_main;
-	sigemptyset(&sigact.sa_mask);
-	sigact.sa_flags = SA_RESTART;
-	if (sigaction(SIGINT, &sigact, NULL) == -1)
-		return (write_sys_error("sigaction failed")); // How to handle this in main ??
+	signal(SIGINT, &sig_handler_main);
 	signal(SIGQUIT, SIG_IGN);
-	return (0);
 }

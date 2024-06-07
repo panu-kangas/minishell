@@ -99,7 +99,7 @@ int	make_pwd_variables(t_env *env_lst)
 
 t_env	*save_env_list(char **environ)
 {
-	int			i;
+	int		i;
 	t_env	*env_lst;
 	t_env	*temp;
 

@@ -12,28 +12,24 @@
 
 #include "minishell.h"
 
-char	*is_a_path(char *cmd, int *exit_status)
+char	*is_a_path(t_data *data, char *cmd, int *exit_status)
 {
 	char	*cmd_path;
 
-	if (cmd != NULL && ft_strchr(cmd, '/') != NULL)
-	{
-		*exit_status = check_cmd_path(cmd);
-		if (*exit_status != 0)
-			return (NULL);
-		cmd_path = ft_strdup(cmd);
-		return (cmd_path);
-	}
-	return (NULL);
+	*exit_status = check_cmd_path(data, cmd);
+	if (*exit_status != 0)
+		return (NULL);
+	cmd_path = ft_strdup(cmd);
+	return (cmd_path);
 }
 
-char	*find_cmd_path(char *cmd, char **paths, int *exit_status)
+char	*find_cmd_path(t_data *data, char *cmd, char **paths, int *exit_status)
 {
 	int		i;
 	char	*cmd_path;
 
 	if (cmd != NULL && ft_strchr(cmd, '/') != NULL)
-		return (is_a_path(cmd, exit_status));
+		return (is_a_path(data, cmd, exit_status));
 	i = -1;
 	while (paths != NULL && paths[++i] != NULL)
 	{
@@ -95,9 +91,6 @@ int	handle_cmd_path(char **paths, char *cmd_path, int exit_status)
 	return (0);
 }
 
-// CHECK LEAKS (for every possible fail condition separately)
-// Run few tests to ensure correct exit codes etc
-
 int	execute_command(char *cmd, char **e_args, t_env *env_lst, t_data *data)
 {
 	char	*cmd_path;
@@ -108,7 +101,7 @@ int	execute_command(char *cmd, char **e_args, t_env *env_lst, t_data *data)
 	exit_status = handle_paths(env_lst, cmd, &paths);
 	if (exit_status != 0)
 		return (exit_status);
-	cmd_path = find_cmd_path(cmd, paths, &exit_status);
+	cmd_path = find_cmd_path(data, cmd, paths, &exit_status);
 	exit_status = handle_cmd_path(paths, cmd_path, exit_status);
 	if (exit_status != 0)
 		return (exit_status);

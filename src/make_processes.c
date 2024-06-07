@@ -26,7 +26,7 @@ int	enter_fork_loop(t_data *data, t_env *env_lst, int *pids, int **fd_pipes)
 			return (fork_exit(fd_pipes, index, pids, data));
 		else if (pids[index] == 0)
 		{
-			set_signals_to_dfl();
+			set_signals_to_dfl_or_ign(0);
 			free(pids);
 			exit_status = ft_redirect(data, fd_pipes, index);
 			if (exit_status == 0)
@@ -55,8 +55,6 @@ int	create_processes(t_data *data, t_env *env_lst)
 		free(pids);
 		return (write_sys_error("malloc failed"));
 	}
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
 	if (enter_fork_loop(data, env_lst, pids, fd_pipes) == 1)
 		return (1);
 	return (free_close_wait(pids, fd_pipes, data, 0));
@@ -69,8 +67,6 @@ int	make_processes(t_data *data, t_env *env_lst, int *std_fd)
 	exit_status = 0;
 	if (handle_heredoc(data, env_lst, std_fd, &exit_status) != 0)
 		return (exit_status);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
 	if (data->tokens->com != NULL && ft_strchr(data->tokens->com, '=') != NULL \
 	&& data->tokens->next == NULL)
 	{

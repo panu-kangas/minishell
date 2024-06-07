@@ -52,9 +52,9 @@ char	*get_full_env_str(t_env *node)
 
 char	**make_env_var_array(t_env *env_lst)
 {
-	char		**env_var_arr;
+	char	**env_var_arr;
 	t_env	*temp;
-	int			i;
+	int		i;
 
 	env_var_arr = malloc((env_lstsize_all(env_lst) + 1) * sizeof(char *));
 	if (env_var_arr == NULL)

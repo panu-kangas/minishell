@@ -80,8 +80,8 @@ char	**get_env_var_alph_order(t_env *env_lst, char **alph_order)
 
 int	ft_empty_export(t_env *env_lst)
 {
-	char		**alph_order;
-	int			i;
+	char	**alph_order;
+	int		i;
 	t_env	*temp;
 
 	alph_order = NULL;

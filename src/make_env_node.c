@@ -15,7 +15,7 @@
 int	process_global_env_node(t_env *env_lst, char *new_env_var)
 {
 	t_env	*temp;
-	char		*var_name;
+	char	*var_name;
 
 	var_name = get_var_name(new_env_var);
 	if (var_name == NULL)
@@ -43,7 +43,7 @@ int	process_global_env_node(t_env *env_lst, char *new_env_var)
 int	process_non_global_env_node(t_env *env_lst, char *new_env_var)
 {
 	t_env	*temp;
-	char		*var_name;
+	char	*var_name;
 
 	var_name = get_var_name(new_env_var);
 	if (var_name == NULL)
@@ -71,7 +71,7 @@ int	process_non_global_env_node(t_env *env_lst, char *new_env_var)
 int	process_null_value_env_node(t_env *env_lst, char *new_env_var)
 {
 	t_env	*temp;
-	char		*var_name;
+	char	*var_name;
 
 	var_name = get_var_name(new_env_var);
 	if (var_name == NULL)

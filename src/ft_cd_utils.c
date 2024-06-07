@@ -62,7 +62,7 @@ int	handle_oldpwd(t_env *env_lst, t_env *pwd)
 int	update_pwd_env_var(t_data *data, t_env *env_lst, char *cur_dir)
 {
 	t_env	*pwd;
-	char		*pwd_env_var;
+	char	*pwd_env_var;
 
 	if (cur_dir == NULL)
 		cur_dir = data->current_directory;
