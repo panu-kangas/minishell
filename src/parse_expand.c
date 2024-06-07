@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expand.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:27 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/07 14:28:31 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/07 16:18:41 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 static char	*expand_substr(char *str, t_env *env_lst)
 {
@@ -57,7 +57,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	j = 0;
 	final_str = (char *) malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (final_str == 0)
-		return (0);
+		return (NULL);
 	while (s1[i] != '\0')
 	{
 		final_str[j] = s1[i];
@@ -75,55 +75,51 @@ char	*ft_strjoin_free(char *s1, char *s2)
 
 char	*expand_str(char *str, t_env *env_lst)
 {
-	char	*new;
+	char	*exp;
 	char	*temp;
 	int		i;
 	int		j;
 
 	i = 0;
 	j = 0;
-	new = malloc(sizeof(char) * (ft_strlen(str) + 1));
+
 	while (str[i] != 0 && str[i] != '$')
 		i++;
-	ft_strlcpy(new, str, i - j + 1);
 	j = i + 1;
 	i++;
 	while ((ft_isalnum(str[i]) == 1 || str[i] == '_') && str[i] != 0)
 		i++;
-	temp = ft_strjoin_free (ft_strdup(new), \
-	expand_substr(ft_substr(str, j, i - j), env_lst));
-	free (new);
+	exp = expand_substr(ft_substr(str, j, i - j), env_lst);
+	if (!exp)
+		return (NULL);
+	temp = ft_strjoin_free (ft_substr(str, 0, j - 1), exp);
 	if (!temp)
 		return (NULL);
-	j = i;
-	while (str[i] != 0)
-		i++;
-	temp = ft_strjoin_free(temp, ft_substr(str + j, 0, i));
+	temp = ft_strjoin_free(temp, ft_strdup(str + i));
 	return (temp);
 }
 
 char	*expand_str_file(char *str, t_env *env_lst, char quote, int put_d)
 {
-	char	*new;
+	char	*exp;
 	char	*temp;
 	int		i;
 	int		j;
 
 	i = 0;
 	j = 0;
-	new = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	while (str[i] != 0 && str[i] != '$')
 		i++;
-	ft_strlcpy(new, str, i - j + 1);
 	j = i + 1;
 	i++;
 	while ((ft_isalnum(str[i]) == 1 || str[i] == '_') && str[i] != 0)
 		i++;
 	if (quote == '"' || str[i] != 0 || j > 1)
 		put_d = 0;
-	temp = ft_strjoin_free(ft_strdup(new), \
-	expand_substr_file(ft_substr(str, j, i - j), env_lst, put_d));
-	free (new);
+	exp = expand_substr_file(ft_substr(str, j, i - j), env_lst, put_d);
+	if (!exp)
+		return (NULL);
+	temp = ft_strjoin_free(ft_substr(str, 0, j - 1), exp);
 	if (!temp)
 		return (NULL);
 	temp = ft_strjoin_free(temp, ft_strdup(str + i));

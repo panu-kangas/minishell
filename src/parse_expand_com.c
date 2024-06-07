@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expand_com.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:38:10 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/07 13:12:17 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/07 16:15:00 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ static char	*expand_substr_com(char *str, t_env *env_lst, t_token *cur)
 
 static char	*expand_str_com(char *str, t_env *env_lst, t_token *current)
 {
+	char	*exp;
 	char	*temp;
 	int		i;
 	int		j;
@@ -94,14 +95,13 @@ static char	*expand_str_com(char *str, t_env *env_lst, t_token *current)
 	i++;
 	while ((ft_isalnum(str[i]) == 1 || str[i] == '_') && str[i] != 0)
 		i++;
-	temp = ft_strjoin_free(ft_substr(str, 0, j), \
-	expand_substr_com(ft_substr(str, j, i - j), env_lst, current));
+	exp = expand_substr_com(ft_substr(str, j, i - j), env_lst, current);
+	if (!exp)
+		return (NULL);
+	temp = ft_strjoin_free(ft_substr(str, 0, j - 1), exp);
 	if (!temp)
 		return (NULL);
-	j = i;
-	while (str[i] != 0)
-		i++;
-	temp = ft_strjoin_free(temp, ft_substr(str + j, 0, i));
+	temp = ft_strjoin_free(temp, ft_strdup(str + i));
 	return (temp);
 }
 
