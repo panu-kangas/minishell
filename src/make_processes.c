@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+void	free_all_before_exit(t_data *data, t_env *env_lst)
+{
+	free_env_lst(env_lst);
+	ft_free_data(data, 0);
+}
+
 int	enter_fork_loop(t_data *data, t_env *env_lst, int *pids, int **fd_pipes)
 {
 	int	exit_status;
@@ -32,8 +38,8 @@ int	enter_fork_loop(t_data *data, t_env *env_lst, int *pids, int **fd_pipes)
 			if (exit_status == 0)
 				exit_status = handle_command(data, env_lst, index, 0);
 			close_std_fd(data->std_fd);
-			free_env_lst(env_lst); // RISK OF DOUBLE FREE (other is just before execve)
-			ft_free_data(data, 0); // RISK OF DOUBLE FREE (other is just before execve)
+			if (exit_status != -2)
+				free_all_before_exit(data, env_lst);
 			exit(exit_status);
 		}
 		index++;

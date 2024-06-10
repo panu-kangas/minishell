@@ -96,10 +96,10 @@ int	ft_empty_export(t_env *env_lst)
 	{
 		temp = check_if_var_exist(env_lst, alph_order[i]);
 		if (temp->value == NULL)
-			ft_printf("declare -x %s\n", alph_order[i]);
+			printf("declare -x %s\n", alph_order[i]);
 		else
 		{
-			ft_printf("declare -x %s=\"%s\"\n", \
+			printf("declare -x %s=\"%s\"\n", \
 			alph_order[i], expand_env_var(env_lst, alph_order[i]));
 		}
 	}

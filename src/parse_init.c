@@ -55,6 +55,7 @@ void	init_file(t_file *new)
 void	init_token(t_token *new)
 {
 	new->com = NULL;
+	new->com_is_expanded_empty = 0;
 	new->args = NULL;
 	new->files = NULL;
 	new->next = NULL;

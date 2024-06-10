@@ -41,6 +41,7 @@ typedef struct s_file
 typedef struct s_token
 {
 	char			*com;
+	int				com_is_expanded_empty;
 	t_file			*files;
 	int				filecount;
 	char			**args;
@@ -239,7 +240,7 @@ void		set_signals_to_dfl_or_ign(int flag);
 int			check_bad_redir_syntax(char **tokenarr, int i);
 int			search_for_limiter(char *str, char *lim, int hd_len, int lim_len);
 int			check_for_hd_error(int i, int prev_i, int *whole_len);
-void		free_all_from_process(char *c_path, char **e_args, char **env_var);
+void		free_all_after_execve_error(char *cmd_path, char **env_var_arr);
 void		free_and_exit(t_data *data, t_env *env_lst);
 int			check_for_bad_path(t_data *data, char *cmd, int i);
 

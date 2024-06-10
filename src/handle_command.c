@@ -59,20 +59,21 @@ int	change_command(t_token *cur_token)
 {
 	int	i;
 
-	free(cur_token->com);
-	cur_token->com = cur_token->args[0];
-	if (cur_token->args[1] == NULL)
+	while (ft_strlen(cur_token->com) == 0 \
+	|| ft_strchr(cur_token->com, '=') != NULL)
 	{
-		cur_token->args[0] = NULL;
-		return (2);
+		if (cur_token->args[0] == NULL)
+			return (0);
+		free(cur_token->com);
+		cur_token->com = cur_token->args[0];
+		i = 1;
+		while (cur_token->args[i] != NULL)
+		{
+			cur_token->args[i - 1] = cur_token->args[i];
+			i++;
+		}
+		cur_token->args[i - 1] = NULL;
 	}
-	i = 0;
-	while (cur_token->args[i + 1] != NULL)
-	{
-		cur_token->args[i] = cur_token->args[i + 1];
-		i++;
-	}
-	cur_token->args[i] = NULL;
 	return (2);
 }
 
@@ -88,7 +89,12 @@ int	check_for_env_var(t_token *cur_token, t_env *env_lst)
 	else if (ft_strchr(cur_token->com, '=') != NULL)
 		exit_status = process_non_global_env_node(env_lst, cur_token->com);
 	else if (cur_token->com[0] == '\0')
-		return (2);
+	{
+		if (cur_token->com_is_expanded_empty == 1)
+			return (0);
+		else
+			return (2);
+	}
 	return (exit_status);
 }
 

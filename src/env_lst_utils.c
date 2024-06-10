@@ -32,11 +32,11 @@ void	free_env_lst(t_env *env_lst)
 	}
 }
 
-void	free_all_from_process(char *cmd_path, char **e_args, char **env_var)
+void	free_all_after_execve_error(char *cmd_path, char **env_var_arr)
 {
 	free(cmd_path);
-	ft_free_doubleptr(e_args);
-	ft_free_doubleptr(env_var);
+	ft_free_doubleptr(env_var_arr);
+	write_sys_error("execve failed");
 }
 
 void	free_and_exit(t_data *data, t_env *env_lst)

@@ -67,7 +67,10 @@ static char	*expand_substr_com(char *str, t_env *env_lst, t_token *cur)
 	if (expand_env_var(env_lst, str) != NULL)
 		temp = ft_strdup(expand_env_var(env_lst, str));
 	else
+	{
+		cur->com_is_expanded_empty = 1;
 		temp = ft_strdup("");
+	}
 	split = ft_split(temp, ' ');
 	if (ft_array_len(split) > 1)
 	{

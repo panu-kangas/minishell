@@ -14,8 +14,7 @@ NAME = minishell
 
 CC = cc
 RM = rm -rf
-CFLAGS =  -g -Wall -Wextra -Werror # remove the -g flag eventually ??
-#FSFLAGS =-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 
 LIBFT = libft/libft.a
 HEADERS = -I includes -I /Users/$(USER)/.brew/opt/readline/include

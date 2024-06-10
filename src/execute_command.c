@@ -95,7 +95,7 @@ int	execute_command(char *cmd, char **e_args, t_env *env_lst, t_data *data)
 {
 	char	*cmd_path;
 	char	**paths;
-	char	**env_var;
+	char	**env_var_arr;
 	int		exit_status;
 
 	exit_status = handle_paths(env_lst, cmd, &paths);
@@ -105,8 +105,8 @@ int	execute_command(char *cmd, char **e_args, t_env *env_lst, t_data *data)
 	exit_status = handle_cmd_path(paths, cmd_path, exit_status);
 	if (exit_status != 0)
 		return (exit_status);
-	env_var = make_env_var_array(env_lst);
-	if (env_var == NULL)
+	env_var_arr = make_env_var_array(env_lst);
+	if (env_var_arr == NULL)
 	{
 		ft_free_doubleptr(paths);
 		free(cmd_path);
@@ -114,7 +114,8 @@ int	execute_command(char *cmd, char **e_args, t_env *env_lst, t_data *data)
 	}
 	free_env_lst(env_lst);
 	ft_free_data(data, 0);
-	execve(cmd_path, e_args, env_var);
-	free_all_from_process(cmd_path, NULL, env_var);
-	return (write_sys_error("execve failed"));
+	close_std_fd(data->std_fd);
+	execve(cmd_path, e_args, env_var_arr);
+	free_all_after_execve_error(cmd_path, env_var_arr);
+	return (-2);
 }
