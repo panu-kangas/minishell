@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:27 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/07 16:18:41 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/10 15:18:07 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,25 +51,25 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	int		j;
 	char	*final_str;
 
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
-	i = 0;
-	j = 0;
-	final_str = (char *) malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (final_str == 0)
-		return (NULL);
-	while (s1[i] != '\0')
+	final_str = NULL;
+	if (s1 != NULL && s2 != NULL)
 	{
-		final_str[j] = s1[i];
-		i++;
-		j++;
+		i = 0;
+		j = 0;
+		final_str = (char *) malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+		if (final_str == 0)
+			return (NULL);
+		while (s1[i] != '\0')
+			final_str[j++] = s1[i++];
+		i = 0;
+		while (s2[i] != '\0')
+			final_str[j++] = s2[i++];
+		final_str[j] = '\0';
 	}
-	i = 0;
-	while (s2[i] != '\0')
-		final_str[j++] = s2[i++];
-	final_str[j] = '\0';
-	free(s1);
-	free(s2);
+	if (s1 != NULL)
+		free(s1);
+	if (s2 != NULL)
+		free(s2);
 	return (final_str);
 }
 
@@ -82,7 +82,6 @@ char	*expand_str(char *str, t_env *env_lst)
 
 	i = 0;
 	j = 0;
-
 	while (str[i] != 0 && str[i] != '$')
 		i++;
 	j = i + 1;
