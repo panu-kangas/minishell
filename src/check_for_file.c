@@ -39,3 +39,14 @@ int	check_for_infile(t_token *cur_token)
 	}
 	return (0);
 }
+
+char	*add_slash_to_first_path(char *path)
+{
+	char	*temp;
+
+	temp = ft_strjoin("/", path);
+	free(path);
+	if (temp == NULL)
+		return (NULL);
+	return (temp);
+}

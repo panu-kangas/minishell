@@ -108,7 +108,7 @@ int			ft_iter_and_exp_files(t_parse *head, t_env *e, t_data *d, int e_st);
 char		*ft_lstiter_and_make_new_str(t_parse *lst);
 t_parse		*new_node(char *str, int isexpand, int istrim);
 void		ft_lstadd_back_parse(t_parse **lst, t_parse *new);
-void		change_expand_status(t_parse *head);
+void		change_expand_status(t_parse *head, t_file *file);
 void		change_amb_status(t_parse *head, t_file *file);
 int			ft_lst_iter_remove_quotes(t_parse *lst);
 
@@ -243,5 +243,6 @@ int			check_for_hd_error(int i, int prev_i, int *whole_len);
 void		free_all_after_execve_error(char *cmd_path, char **env_var_arr);
 void		free_and_exit(t_data *data, t_env *env_lst);
 int			check_for_bad_path(t_data *data, char *cmd, int i);
+char		*add_slash_to_first_path(char *path);
 
 #endif

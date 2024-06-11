@@ -16,7 +16,9 @@ int	change_dir_to_home(t_env *home, t_data *data)
 {
 	int	flag;
 
-	flag = analyze_path(home->value, data);
+	flag = -1;
+	if (home->value != NULL)
+		flag = analyze_path(home->value, data);
 	if (flag >= 0)
 		return (flag);
 	else
@@ -104,12 +106,14 @@ int	ft_cd(t_data *data, t_env *env_lst, t_token *token)
 	int		flag;
 	char	*path;
 
+	flag = -1;
 	path = token->args[0];
 	if (path != NULL && path[0] == '\0')
 		return (0);
 	if (ft_strlen(path) >= 256)
 		return (write_error("cd", path, "File name too long"));
-	flag = analyze_path(path, data);
+	if (path != NULL)
+		flag = analyze_path(path, data);
 	if (flag >= 0)
 		return (flag);
 	else if (flag == -2)

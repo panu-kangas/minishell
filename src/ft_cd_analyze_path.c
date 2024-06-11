@@ -73,6 +73,10 @@ int	break_and_test_path(t_data *data, char *path)
 	split_path = ft_pipex_split(path, '/');
 	if (split_path == NULL)
 		return (write_sys_error("malloc failed"));
+	if (path[0] == '/')
+		split_path[0] = add_slash_to_first_path(split_path[0]);
+	if (split_path[0] == NULL)
+		return (write_sys_error("malloc failed"));
 	test_flag = test_whole_path(split_path, &path_flag, -1);
 	if (test_flag == 1)
 	{

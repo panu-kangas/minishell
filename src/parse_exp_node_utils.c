@@ -88,8 +88,6 @@ void	change_amb_status(t_parse *head, t_file *file)
 	t_parse	*temp;
 
 	temp = head;
-	if (file->filename[0] == '"' || file->filename[0] == '\'')
-		file->quoted_heredoc = 1;
 	while (temp != NULL)
 	{
 		if ((temp->str[0] != '"' && temp->str[0] != '\'') \

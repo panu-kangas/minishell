@@ -96,11 +96,13 @@ t_parse	*new_node(char *str, int isexpand, int istrim)
 	return (new);
 }
 
-void	change_expand_status(t_parse *head)
+void	change_expand_status(t_parse *head, t_file *file)
 {
 	t_parse	*temp;
 
 	temp = head;
+	if (file->filename[0] == '"' || file->filename[0] == '\'')
+		file->quoted_heredoc = 1;
 	while (temp != NULL)
 	{
 		temp->isexpand = 0;

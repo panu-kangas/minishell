@@ -115,7 +115,7 @@ int	expand_files(t_token *cur, t_env *e_lst, t_data *d, int e_st)
 		if (e_st != 0)
 			return (ft_free_parse(head, e_st));
 		if (tempfile->is_append == 1 && tempfile->is_infile == 1)
-			change_expand_status(head);
+			change_expand_status(head, tempfile);
 		else
 			change_amb_status(head, tempfile);
 		e_st = expand_file(head, e_lst, d, &temp);
