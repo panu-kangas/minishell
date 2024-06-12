@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expand_args.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:41:18 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 13:15:26 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/12 14:12:09 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	ft_iter_and_exp_arg(t_parse *head, t_env *e_lst, int i)
 	temp = head;
 	while (temp != NULL)
 	{
+		i = -1;
 		while (temp->str[++i] != 0)
 		{
 			if ((temp->str[i] == '$' && temp->isexpand == 1) && \

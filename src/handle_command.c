@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:38:51 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/07 18:00:53 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/12 15:30:54 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,10 @@ char	**get_execve_args(char *cmd, char **args)
 int	change_command(t_token *cur_token)
 {
 	int	i;
+	int	exp_flag;
 
-	while (ft_strlen(cur_token->com) == 0 \
+	exp_flag = cur_token->com_is_expanded_empty;
+	while ((ft_strlen(cur_token->com) == 0 && exp_flag == 1) \
 	|| ft_strchr(cur_token->com, '=') != NULL)
 	{
 		if (cur_token->args[0] == NULL)

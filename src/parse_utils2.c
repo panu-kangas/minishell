@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:44:13 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/07 11:22:28 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/12 13:46:42 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ char	*check_non_spaced_files(char *str)
 	char	*result;
 	char	*ret;
 
-	result = malloc(sizeof(char) * ft_strlen(str) * 2);
+	result = malloc((sizeof(char) * ft_strlen(str) * 2) + 1);
 	j = 0;
 	i = 0;
 	while (str[i] != '\0')

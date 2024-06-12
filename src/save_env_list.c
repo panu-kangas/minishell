@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   save_env_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:52:58 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/06 14:14:58 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/12 14:49:53 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,10 @@ int	create_pwd(t_env *temp)
 		return (1);
 	temp->next = get_global_env_node(pwd);
 	free(pwd);
+	if (temp->next == NULL)
+		return (1);
+	temp = temp->next;
+	temp->next = get_non_global_env_node("1secret_env_var=amazing");
 	if (temp->next == NULL)
 		return (1);
 	return (0);
