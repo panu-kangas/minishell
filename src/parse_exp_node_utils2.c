@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_exp_node_utils2.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/07 13:15:32 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/12 15:15:00 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,11 @@ int	expand_prev_exit_code(t_parse *lst, t_data *data)
 	t_parse	*head;
 	int		i;
 
-	i = 0;
+
 	head = lst;
 	while (head)
 	{
+		i = 0;
 		while (head->str[i] != 0)
 		{
 			if (head->str[i] == '$' && head->str[i + 1] == '?')
