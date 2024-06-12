@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
 /*   Updated: 2024/06/12 14:54:33 by pkangas          ###   ########.fr       */
@@ -122,7 +122,7 @@ int			expand_files(t_token *cur, t_env *e_lst, t_data *d, int e_st);
 int			add_files_to_token(t_token *new, char **tokenarr, int i);
 t_file		*add_file(char *str, int is_append, int is_infile);
 int			check_redir(char *str);
-int			ft_iter_and_exp_arg(t_parse *head, t_env *e_lst, int i);
+int			ft_iter_and_exp_arg(t_parse *head, t_env *e_lst);
 int			expand_prev_exit_code(t_parse *lst, t_data *data);
 char		*trim_str(char *str);
 int			check_no_filename(char **tokenarr, int i, int exit_status);
