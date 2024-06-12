@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_built_in.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:18:45 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 13:10:00 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/12 14:24:42 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,26 @@ int	handle_unset(t_env *env_lst, char **args)
 	return (exit_status);
 }
 
+int	check_echo_flag(char *arg)
+{
+	int	i;
+
+	if (arg == NULL || arg[0] != '-')
+		return (0);
+	i = 1;
+	while (arg[i] != '\0')
+	{
+		if (arg[i] == 'n')
+			i++;
+		else
+			return (0);
+	}
+	return (1);
+}
+
 void	handle_echo(char **args)
 {
-	if (ft_strncmp(args[0], "-n", 3) == 0)
+	if (check_echo_flag(args[0]) == 1)
 		ft_echo(1, args);
 	else
 		ft_echo(0, args);

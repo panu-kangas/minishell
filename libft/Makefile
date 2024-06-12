@@ -6,13 +6,13 @@
 #    By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/23 12:06:35 by pkangas           #+#    #+#              #
-#    Updated: 2024/02/14 12:27:38 by pkangas          ###   ########.fr        #
+#    Updated: 2024/06/12 15:02:17 by pkangas          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address
 
 MY_SOURCES = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 			 ft_strlen.c ft_memset.c ft_bzero.c ft_memcpy.c ft_memmove.c \

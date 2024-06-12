@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:36:30 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/12 14:31:07 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/12 13:14:40 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,8 @@ int	execute_command(char *cmd, char **e_args, t_env *env_lst, t_data *data)
 		free(cmd_path);
 		return (write_sys_error("malloc failed"));
 	}
-	free_env_lst(env_lst);
 	close_std_fd(data->std_fd);
+	free_env_lst(env_lst);
 	ft_free_data(data, 0);
 	execve(cmd_path, e_args, env_var_arr);
 	free_all_after_execve_error(cmd_path, env_var_arr);

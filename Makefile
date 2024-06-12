@@ -3,7 +3,7 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+         #
+#    By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
 #    Updated: 2024/06/12 14:14:31 by tsaari           ###   ########.fr        #

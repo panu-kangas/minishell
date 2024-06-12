@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_heredoc_env_var.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:37:44 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 13:10:40 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/12 15:23:41 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	search_for_limiter(char *hd_str, char *limiter, int hd_len, int limit_len)
 
 	i = hd_len - 1 - limit_len;
 	j = 0;
+	if (hd_str != NULL && ft_strlen(hd_str) == 1 && hd_str[0] == '\n')
+		return (0);
 	if (limit_len == 0 && hd_str[i] == '\n' && hd_str[i - 1] == '\n')
 		return (1);
 	else if (limit_len == 0)

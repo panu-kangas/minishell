@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expand_args.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:41:18 by tsaari            #+#    #+#             */
 /*   Updated: 2024/06/12 14:49:54 by tsaari           ###   ########.fr       */
