@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expansion_tokens.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:22:11 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/07 17:15:41 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/12 14:55:08 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	handle_arg_exp(t_parse *head, t_env *e_lst, t_data *d)
 	e_st = expand_prev_exit_code(head, d);
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
-	e_st = ft_iter_and_exp_arg(head, e_lst, -1);
+	e_st = ft_iter_and_exp_arg(head, e_lst);
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
 	e_st = ft_lst_iter_remove_quotes(head);
