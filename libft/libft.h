@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 14:34:59 by pkangas           #+#    #+#             */
-/*   Updated: 2024/01/23 12:11:50 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/12 10:59:32 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,4 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
-int		ft_printf(const char *format, ...);
-int		print_char(int i);
-int		print_str(char *str);
-int		print_num(int n, int count);
-int		print_unsigned_num(unsigned int n, int count);
-int		print_hexa(unsigned int num, char c, int count);
-int		print_pointer(void *ptr);
 #endif
