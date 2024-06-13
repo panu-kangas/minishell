@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:18:45 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 13:10:00 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/13 10:15:01 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ int	handle_unset(t_env *env_lst, char **args)
 	return (exit_status);
 }
 
-void	handle_echo(char **args)
+void	handle_echo(char **args, t_token *t)
 {
 	if (ft_strncmp(args[0], "-n", 3) == 0)
-		ft_echo(1, args);
+		ft_echo(1, args, t);
 	else
-		ft_echo(0, args);
+		ft_echo(0, args, t);
 }
 
 int	execute_built_in(t_env *env_lst, t_data *data, t_token *t, int e_flag)
@@ -72,7 +72,7 @@ int	execute_built_in(t_env *env_lst, t_data *data, t_token *t, int e_flag)
 	cmd = t->com;
 	args = t->args;
 	if (is_echo(cmd) == 1)
-		handle_echo(args);
+		handle_echo(args, t);
 	else if (ft_strncmp(cmd, "export", ft_strlen(cmd) + 1) == 0)
 		exit_status = handle_export(env_lst, args);
 	else if (ft_strncmp(cmd, "cd", ft_strlen(cmd) + 1) == 0)

@@ -6,13 +6,13 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:41:18 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/12 14:49:54 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/13 10:05:59 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_iter_and_exp_arg(t_parse *head, t_env *e_lst)
+int	ft_iter_and_exp_arg(t_parse *head, t_env *e_lst, int arg_nbr)
 {
 	char	*tempstr;
 	t_parse	*temp;
@@ -26,9 +26,9 @@ int	ft_iter_and_exp_arg(t_parse *head, t_env *e_lst)
 			|| *(ft_strchr(temp->str, '$') + 1) == 0)
 				break ;
 			if (temp->istrim != 0)
-				tempstr = trim_str(expand_str(temp->str, e_lst));
+				tempstr = trim_str(expand_str(temp->str, e_lst, arg_nbr));
 			else
-				tempstr = expand_str(temp->str, e_lst);
+				tempstr = expand_str(temp->str, e_lst, arg_nbr);
 			if (!tempstr)
 				return (write_sys_error("malloc error"));
 			free(temp->str);

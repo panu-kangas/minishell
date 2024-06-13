@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expansion.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:20:40 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/07 13:37:55 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/13 10:01:01 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	parse_expansions(t_data *data, t_env *env_lst)
 	temp_token = data->tokens;
 	while (temp_token != NULL)
 	{
+		env_lst->cur_token = temp_token;
 		exit_status = expand_token(temp_token, env_lst, data);
 		if (exit_status != 0)
 			return (exit_status);

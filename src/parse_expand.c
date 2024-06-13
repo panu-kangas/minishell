@@ -6,13 +6,13 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:27 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/10 15:18:07 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/13 10:07:22 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static char	*expand_substr(char *str, t_env *env_lst)
+static char	*expand_substr(char *str, t_env *env_lst, int arg_nbr)
 {
 	char	*temp;
 
@@ -21,7 +21,10 @@ static char	*expand_substr(char *str, t_env *env_lst)
 	if (expand_env_var(env_lst, str) != NULL)
 		temp = ft_strdup(expand_env_var(env_lst, str));
 	else
+	{
+		env_lst->cur_token->arg_is_expanded_empty = arg_nbr;
 		temp = ft_strdup("");
+	}
 	free(str);
 	return (temp);
 }
@@ -73,7 +76,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	return (final_str);
 }
 
-char	*expand_str(char *str, t_env *env_lst)
+char	*expand_str(char *str, t_env *env_lst, int arg_nbr)
 {
 	char	*exp;
 	char	*temp;
@@ -88,7 +91,7 @@ char	*expand_str(char *str, t_env *env_lst)
 	i++;
 	while ((ft_isalnum(str[i]) == 1 || str[i] == '_') && str[i] != 0)
 		i++;
-	exp = expand_substr(ft_substr(str, j, i - j), env_lst);
+	exp = expand_substr(ft_substr(str, j, i - j), env_lst, arg_nbr);
 	if (!exp)
 		return (NULL);
 	temp = ft_strjoin_free (ft_substr(str, 0, j - 1), exp);

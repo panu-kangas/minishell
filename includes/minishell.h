@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/12 14:54:23 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/13 10:13:07 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_token
 {
 	char			*com;
 	int				com_is_expanded_empty;
+	int				arg_is_expanded_empty;
 	t_file			*files;
 	int				filecount;
 	char			**args;
@@ -70,6 +71,7 @@ typedef struct s_parse
 
 typedef struct s_env
 {
+	t_token			*cur_token;
 	char			*name;
 	char			*value;
 	int				is_global;
@@ -112,7 +114,7 @@ void		change_expand_status(t_parse *head, t_file *file);
 void		change_amb_status(t_parse *head, t_file *file);
 int			ft_lst_iter_remove_quotes(t_parse *lst);
 
-char		*expand_str(char *str, t_env *env_lst);
+char		*expand_str(char *str, t_env *env_lst, int arg_nbr);
 char		*expand_str_file(char *str, t_env *env_lst, char quote, int put_d);
 char		*ft_strjoin_free(char *s1, char *s2);
 int			expand_com(t_token *cur, t_env *e_lst, t_data *d, int e_status);
@@ -122,7 +124,7 @@ int			expand_files(t_token *cur, t_env *e_lst, t_data *d, int e_st);
 int			add_files_to_token(t_token *new, char **tokenarr, int i);
 t_file		*add_file(char *str, int is_append, int is_infile);
 int			check_redir(char *str);
-int			ft_iter_and_exp_arg(t_parse *head, t_env *e_lst);
+int			ft_iter_and_exp_arg(t_parse *head, t_env *e_lst, int arg_nbr);
 int			expand_prev_exit_code(t_parse *lst, t_data *data);
 char		*trim_str(char *str);
 int			check_no_filename(char **tokenarr, int i, int exit_status);
@@ -140,7 +142,7 @@ int			ft_empty_export(t_env *env_lst);
 int			ft_pwd(t_data *data);
 void		ft_env(t_env *env_lst);
 int			ft_cd(t_data *data, t_env *env_lst, t_token *token);
-void		ft_echo(int flag, char **args);
+void		ft_echo(int flag, char **args, t_token *t);
 int			ft_exit(t_env *env_lst, t_data *data, char **args, int e_flag);
 
 int			ft_redirect(t_data *data, int **fd_pipes, int index);

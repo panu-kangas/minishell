@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:01:29 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/03 11:58:59 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/13 09:56:14 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	init_token(t_token *new)
 {
 	new->com = NULL;
 	new->com_is_expanded_empty = 0;
+	new->arg_is_expanded_empty = -1;
 	new->args = NULL;
 	new->files = NULL;
 	new->next = NULL;
