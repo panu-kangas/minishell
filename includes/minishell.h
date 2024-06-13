@@ -246,5 +246,6 @@ void		free_all_after_execve_error(char *cmd_path, char **env_var_arr);
 void		free_and_exit(t_data *data, t_env *env_lst);
 int			check_for_bad_path(t_data *data, char *cmd, int i);
 char		*add_slash_to_first_path(char *path);
+int			check_echo_flag(char *arg);
 
 #endif

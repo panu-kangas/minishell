@@ -17,7 +17,7 @@ void	ft_echo(int flag, char **args, t_token *t)
 	int	i;
 
 	i = 0;
-	if (flag == 1)
+	while (check_echo_flag(args[i]) == 1)
 		i++;
 	while (args != NULL && args[i] != NULL)
 	{
