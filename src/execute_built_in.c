@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_built_in.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:18:45 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/13 10:15:01 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/13 11:06:51 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ int	check_echo_flag(char *arg)
 	return (1);
 }
 
-void	handle_echo(char **args)
+void	handle_echo(char **args, t_token *t)
 {
 	if (check_echo_flag(args[0]) == 1)
-		ft_echo(1, args);
+		ft_echo(1, args, t);
 	else
 		ft_echo(0, args, t);
 }
