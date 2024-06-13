@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/12 15:15:00 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/13 10:41:46 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	expand_prev_exit_code(t_parse *lst, t_data *data)
 	char	*temp;
 	t_parse	*head;
 	int		i;
-
 
 	head = lst;
 	while (head)

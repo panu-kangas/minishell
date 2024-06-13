@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:34:38 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/12 15:08:24 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/13 10:40:12 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_echo(int flag, char **args)
+void	ft_echo(int flag, char **args, t_token *t)
 {
 	int	i;
 
@@ -22,7 +22,7 @@ void	ft_echo(int flag, char **args)
 	while (args != NULL && args[i] != NULL)
 	{
 		ft_putstr_fd(args[i++], 1);
-		if (args[i] != NULL)
+		if (args[i] != NULL && t->arg_is_expanded_empty != i - 1)
 			ft_putchar_fd(' ', 1);
 	}
 	if (flag == 0)

@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:18:45 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/12 14:24:42 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/13 10:15:01 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	handle_echo(char **args)
 	if (check_echo_flag(args[0]) == 1)
 		ft_echo(1, args);
 	else
-		ft_echo(0, args);
+		ft_echo(0, args, t);
 }
 
 int	execute_built_in(t_env *env_lst, t_data *data, t_token *t, int e_flag)
@@ -89,7 +89,7 @@ int	execute_built_in(t_env *env_lst, t_data *data, t_token *t, int e_flag)
 	cmd = t->com;
 	args = t->args;
 	if (is_echo(cmd) == 1)
-		handle_echo(args);
+		handle_echo(args, t);
 	else if (ft_strncmp(cmd, "export", ft_strlen(cmd) + 1) == 0)
 		exit_status = handle_export(env_lst, args);
 	else if (ft_strncmp(cmd, "cd", ft_strlen(cmd) + 1) == 0)

@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:22:11 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/12 14:55:08 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/13 10:08:00 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,14 @@ int	expand_com(t_token *cur, t_env *e_lst, t_data *d, int e_status)
 	return (e_status);
 }
 
-static int	handle_arg_exp(t_parse *head, t_env *e_lst, t_data *d)
+static int	handle_arg_exp(t_parse *head, t_env *e_lst, t_data *d, int arg_nbr)
 {
 	int	e_st;
 
 	e_st = expand_prev_exit_code(head, d);
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
-	e_st = ft_iter_and_exp_arg(head, e_lst);
+	e_st = ft_iter_and_exp_arg(head, e_lst, arg_nbr);
 	if (e_st != 0)
 		return (ft_free_parse(head, e_st));
 	e_st = ft_lst_iter_remove_quotes(head);
@@ -70,7 +70,7 @@ int	expand_args(t_token *cur, t_env *e_lst, t_data *d, int e_st)
 		e_st = handle_substrings(cur->args[i], &head);
 		if (e_st != 0)
 			return (ft_free_parse(head, e_st));
-		e_st = handle_arg_exp(head, e_lst, d);
+		e_st = handle_arg_exp(head, e_lst, d, i);
 		if (e_st != 0)
 			return (e_st);
 		tempstr = ft_lstiter_and_make_new_str(head);
