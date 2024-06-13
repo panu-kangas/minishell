@@ -6,7 +6,7 @@
 /*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:18:45 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/13 11:06:51 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/13 11:36:07 by tsaari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int	check_echo_flag(char *arg)
 	if (arg == NULL || arg[0] != '-')
 		return (0);
 	i = 1;
+	if (arg[i] == '\0')
+		return (0);
 	while (arg[i] != '\0')
 	{
 		if (arg[i] == 'n')
