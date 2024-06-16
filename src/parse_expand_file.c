@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expand_file.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: musiikkiteatterinyt <musiikkiteatteriny    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:39:13 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/04 12:09:05 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/17 00:57:53 by musiikkitea      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	expand_filename(t_parse *t_p, t_env *env_lst, int e_st, int i)
 	while (t_p->str[++i] != 0)
 	{
 		if (t_p->str[i] == '$' && \
-		(t_p->str[i + 1] != ' ' || t_p->str[i + 1] != 0))
+		(t_p->str[i + 1] != ' ' || t_p->str[i + 1] != 0)) // Should this be && ...?
 		{
 			if (t_p->istrim != 0)
 				temp = trim_str(expand_str_file(t_p->str, env_lst, quote, 1));
@@ -59,6 +59,8 @@ static int	expand_filename(t_parse *t_p, t_env *env_lst, int e_st, int i)
 				return (write_sys_error("malloc error"));
 			free(t_p->str);
 			t_p->str = temp;
+			if (t_p->str[i] == '\0')
+				break ;
 		}
 	}
 	return (e_st);

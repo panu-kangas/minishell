@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: musiikkiteatterinyt <musiikkiteatteriny    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:51:38 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/07 12:27:37 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/16 11:16:46 by musiikkitea      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,16 @@ void	copy_cur_dir_from_data(t_data *data, char *parsing_cur_dir)
 	parsing_cur_dir[i] = '\0';
 }
 
-void	update_prev_exit_status(t_data *data)
+int	update_prev_exit_status(t_data *data, int exit_status)
 {
 	if (g_signal_marker == 2)
 	{
 		data->prev_exit_status = 1;
+		exit_status = 1;
 		g_signal_marker = 0;
 	}
 	set_signals_to_dfl_or_ign(0);
+	return (exit_status);
 }
 
 int	set_input_and_env(t_env *env_lst, int exit_status)
@@ -53,7 +55,7 @@ int	set_input_and_env(t_env *env_lst, int exit_status)
 		data->input = readline("minishell-1.1$: ");
 		if (errno == ENOMEM)
 			write_sys_error("malloc failed in readline");
-		update_prev_exit_status(data);
+		exit_status = update_prev_exit_status(data, exit_status);
 		exit_status = parsing(data, env_lst, exit_status);
 		copy_cur_dir_from_data(data, parsing_cur_dir);
 		ft_free_data(data, 0);

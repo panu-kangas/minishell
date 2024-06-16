@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_lst_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: musiikkiteatterinyt <musiikkiteatteriny    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:18:30 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/07 18:07:34 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/16 10:47:45 by musiikkitea      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	free_and_exit(t_data *data, t_env *env_lst)
 	int	exit_status;
 
 	exit_status = data->prev_exit_status;
+	alter_termios(1);
 	free(data);
 	free_env_lst(env_lst);
 	ft_putstr_fd("exit\n", 2);

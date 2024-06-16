@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_analyze_path_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: musiikkiteatterinyt <musiikkiteatteriny    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 16:10:34 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/07 11:11:56 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/16 23:53:38 by musiikkitea      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	is_relative_path(char *path)
 	int	i;
 
 	i = ft_strlen(path) - 1;
-	if (path == NULL)
+	if (path == NULL || path[0] == '/')
 		return (0);
 	if (ft_strncmp(path, ".", 2) == 0 || ft_strncmp(path, "./", 3) == 0)
 		return (1);

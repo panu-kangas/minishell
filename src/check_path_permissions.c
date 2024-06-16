@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_path_permissions.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: musiikkiteatterinyt <musiikkiteatteriny    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 16:11:01 by pkangas           #+#    #+#             */
-/*   Updated: 2024/05/31 16:14:37 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/16 21:57:03 by musiikkitea      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	test_whole_path(char **sp_path, int *path_flag, int i)
 				sp_path[i + 1] = ft_strdup(sp_path[i]);
 				if (sp_path[i + 1] == NULL)
 				{
-					ft_free_doubleptr(sp_path);
+					*path_flag = -1;
 					return (write_sys_error("malloc failed"));
 				}
 			}

@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+         #
+#    By: musiikkiteatterinyt <musiikkiteatteriny    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/23 12:06:35 by pkangas           #+#    #+#              #
-#    Updated: 2024/06/12 15:02:17 by pkangas          ###   ########.fr        #
+#    Updated: 2024/06/17 00:58:38 by musiikkitea      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 
 MY_SOURCES = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 			 ft_strlen.c ft_memset.c ft_bzero.c ft_memcpy.c ft_memmove.c \

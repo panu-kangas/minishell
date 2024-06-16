@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+         #
+#    By: musiikkiteatterinyt <musiikkiteatteriny    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 10:39:11 by tsaari            #+#    #+#              #
-#    Updated: 2024/06/12 14:14:31 by tsaari           ###   ########.fr        #
+#    Updated: 2024/06/17 01:13:08 by musiikkitea      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 CC = cc
 RM = rm -rf
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 
 LIBFT = libft/libft.a
 HEADERS = -I includes -I /Users/$(USER)/.brew/opt/readline/include
@@ -53,8 +53,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)%.c
 $(LIBFT):
 	@make -C libft
 
-$(NAME):  $(OBJ_DIR) $(OBJS) $(LIBFT)
-	@$(CC) $(OBJS) $(CFLAGS) -lreadline -L /Users/$(USER)/.brew/opt/readline/lib   $(LIBFT) $(FSFLAGS) -o $(NAME)
+$(NAME): $(OBJ_DIR) $(OBJS) $(LIBFT)
+	@$(CC) $(OBJS) $(CFLAGS) -lreadline -L /Users/$(USER)/.brew/opt/readline/lib $(LIBFT) $(FSFLAGS) -o $(NAME)
 	@echo "\033[1;32mMinishell compile success!\n\033[0m"
 
 clean:

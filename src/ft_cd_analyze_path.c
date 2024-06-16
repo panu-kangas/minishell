@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd_analyze_path.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: musiikkiteatterinyt <musiikkiteatteriny    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 16:16:50 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/03 13:36:24 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/17 01:10:40 by musiikkitea      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ int	handle_valid_path(char *path)
 	valid_path_flag = check_valid_path(path);
 	if (valid_path_flag == 0)
 		return (0);
-	else if (valid_path_flag == 1 && is_relative_path(path) == 0)
-		return (write_error("cd", path, "No such file or directory"));
 	else if (valid_path_flag == 2)
 		return (write_error("cd", path, "Not a directory"));
 	else if (valid_path_flag == 3)
@@ -78,17 +76,18 @@ int	break_and_test_path(t_data *data, char *path)
 	if (split_path[0] == NULL)
 		return (write_sys_error("malloc failed"));
 	test_flag = test_whole_path(split_path, &path_flag, -1);
+	ft_free_doubleptr(split_path);
 	if (test_flag == 1)
 	{
-		ft_free_doubleptr(split_path);
 		if (chdir(data->current_directory) != 0)
 			return (write_sys_error("chdir failed"));
 		if (path_flag == ENOENT)
 			return (write_error("cd", path, "No such file or directory"));
 		else if (path_flag == EACCES)
 			return (write_error("cd", path, "Permission denied"));
+		else if (path_flag == ENOTDIR)
+			return (write_error("cd", path, "Not a directory"));
 	}
-	ft_free_doubleptr(split_path);
 	return (-3);
 }
 
@@ -115,7 +114,7 @@ int	analyze_path(char *path, t_data *data)
 		return (write_error("cd", path, "No such file or directory"));
 	else if (is_relative != 0 && (cur_dir_flag == 3 || cur_dir_flag == 1))
 		return (try_to_change_dir(path, cur_dir_flag));
-	else if (cur_dir_flag == 0)
+	else if (cur_dir_flag == 0 || is_relative == 0)
 		return (break_and_test_path(data, path));
 	return (-1);
 }
