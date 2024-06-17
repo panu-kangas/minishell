@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expand_file.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:39:13 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/17 09:48:42 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/17 11:57:58 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,47 @@ static int	check_file_name(char **temp, char *orig)
 	return (exit_status);
 }
 
-static int	expand_filename(t_parse *t_p, t_env *env_lst, int e_st, int i)
+int	all_non_found(t_env *env_lst, char *str, int *e_st)
+{
+	int	i;
+	int	j;
+	char	*var_name;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '$' && (ft_isalnum(str[i + 1]) == 1 || str[i + 1] == '_'))
+		{
+			j = ++i;
+			while ((ft_isalnum(str[i]) == 1 || str[i] == '_') && str[i] != 0)
+				i++;
+			var_name = ft_substr(str, j, i - j);
+			if (var_name == NULL)
+			{
+				*e_st = 1;
+				return (write_sys_error("malloc failed"));
+			}
+			if (expand_env_var(env_lst, var_name) != NULL)
+			{
+				free(var_name);
+				return (0);
+			}
+			free(var_name);
+		}
+		else if (str[i] != '$')
+			return (0);
+	}
+	return (1);
+}
+
+static int	expand_filename(t_parse *t_p, t_env *env_lst, int e_st, size_t i)
 {
 	char	*temp;
 
-	while (t_p->str[++i] != 0)
+	while (i < ft_strlen(t_p->str) && all_non_found(env_lst, t_p->str, &e_st) == 0)
 	{
 		if (t_p->str[i] == '$' && \
-		(t_p->str[i + 1] != ' ' && t_p->str[i + 1] != 0))
+		((ft_isalnum(t_p->str[i + 1]) == 1 || t_p->str[i + 1] == '_')))
 		{
 			if (t_p->istrim != 0)
 				temp = trim_str(expand_str_file(t_p->str, env_lst, t_p->str[0], 1));
@@ -57,9 +90,10 @@ static int	expand_filename(t_parse *t_p, t_env *env_lst, int e_st, int i)
 				return (write_sys_error("malloc error"));
 			free(t_p->str);
 			t_p->str = temp;
-			if (t_p->str[i] == '\0')
-				break ;
+			i = 0;
 		}
+		else
+			i++;
 	}
 	return (e_st);
 }
@@ -74,9 +108,9 @@ int	ft_iter_and_exp_files(t_parse *head, t_env *e_lst, t_data *d, int e_st)
 		return (e_st);
 	while (temp_parse)
 	{
-		if (temp_parse->isexpand == 1)
+		if (temp_parse->isexpand == 1 && ft_char_counter(head->str, '$') > 0)
 		{
-			e_st = expand_filename(temp_parse, e_lst, e_st, -1);
+			e_st = expand_filename(temp_parse, e_lst, e_st, 0);
 			if (e_st != 0)
 				return (e_st);
 		}

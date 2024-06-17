@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expand.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:27 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/13 10:07:22 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/17 10:55:06 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,13 @@ char	*expand_str_file(char *str, t_env *env_lst, char quote, int put_d)
 	int		i;
 	int		j;
 
-	i = 0;
+	i = -1;
 	j = 0;
-	while (str[i] != 0 && str[i] != '$')
-		i++;
+	while (str[++i] != 0)
+	{
+		if (str[i] == '$' && (ft_isalnum(str[i + 1]) == 1 || str[i + 1] == '_'))
+			break ;
+	}
 	j = i + 1;
 	i++;
 	while ((ft_isalnum(str[i]) == 1 || str[i] == '_') && str[i] != 0)

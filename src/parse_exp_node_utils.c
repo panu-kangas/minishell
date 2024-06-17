@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/07 13:16:30 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/17 11:11:06 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ char	*trimmed_str(char *str, int in_word, int j, int i)
 	char	*ret;
 
 	temp = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (temp == NULL)
+		return (NULL);
 	while (str[i] != '\0')
 	{
 		if (str[i] != ' ')

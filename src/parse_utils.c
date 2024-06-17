@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 09:39:53 by tsaari            #+#    #+#             */
-/*   Updated: 2024/05/31 11:01:02 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/17 10:32:56 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	ft_char_counter(char *str, char c)
 	i = 0;
 	while (str[i] != 0)
 	{
-		if (str[i] == c)
+		if (str[i] == c && (ft_isalnum(str[i + 1]) == 1 || str[i + 1] == '_'))
 			ctr++;
 		i++;
 	}

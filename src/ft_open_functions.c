@@ -6,11 +6,26 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:35:51 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/07 16:45:20 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/17 11:03:04 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	check_amb_status(t_file *file, char *fname)
+{
+	int	i;
+
+	i = 0;
+	while (fname[i] != '\0')
+	{
+		if (fname[i] == '$' && (ft_isalnum(fname[i + 1]) == 1 || fname[i + 1] == '_') \
+		&& file->is_amb == 1)
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 int	check_for_bad_filename(t_data *data, char *filename, t_file *file)
 {
@@ -20,7 +35,7 @@ int	check_for_bad_filename(t_data *data, char *filename, t_file *file)
 	&& ft_strlen(filename) == 1)
 		return (0);
 	if (filename != NULL && ft_strchr(filename, '$') != NULL \
-	&& file->is_amb == 1)
+	&& check_amb_status(file, filename) == 1)
 		return (write_amb_error(filename));
 	if (ft_strchr(filename, '/') != NULL \
 	&& check_for_bad_path(data, filename, -1) != 0)
