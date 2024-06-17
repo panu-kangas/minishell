@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsaari <tsaari@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:15:43 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/13 10:13:07 by tsaari           ###   ########.fr       */
+/*   Updated: 2024/06/17 13:10:38 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void		change_amb_status(t_parse *head, t_file *file);
 int			ft_lst_iter_remove_quotes(t_parse *lst);
 
 char		*expand_str(char *str, t_env *env_lst, int arg_nbr);
-char		*expand_str_file(char *str, t_env *env_lst, char quote, int put_d);
+char		*exp_str_file(char *str, t_env *env_lst, char quote, int put_d);
 char		*ft_strjoin_free(char *s1, char *s2);
 int			expand_com(t_token *cur, t_env *e_lst, t_data *d, int e_status);
 int			expand_args(t_token *cur, t_env *e_lst, t_data *d, int e_st);
@@ -247,5 +247,7 @@ void		free_and_exit(t_data *data, t_env *env_lst);
 int			check_for_bad_path(t_data *data, char *cmd, int i);
 char		*add_slash_to_first_path(char *path);
 int			check_echo_flag(char *arg);
+int			check_amb_status(t_file *file, char *fname);
+int			analyze_e_st(int e_st, char **t_p_str, char **temp);
 
 #endif

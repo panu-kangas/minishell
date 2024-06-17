@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd_analyze_path.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musiikkiteatterinyt <musiikkiteatteriny    +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/31 16:16:50 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/17 01:10:40 by musiikkitea      ###   ########.fr       */
+/*   Created: 2024/06/17 13:20:34 by pkangas           #+#    #+#             */
+/*   Updated: 2024/06/17 13:20:36 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:07:44 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/17 11:11:06 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/17 12:50:16 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,12 @@ char	*ft_lstiter_and_make_new_str(t_parse *head)
 	return (new);
 }
 
-char	*trimmed_str(char *str, int in_word, int j, int i)
+char	*trimmed_str(char *str, char *temp, int in_word, int i)
 {
-	char	*temp;
 	char	*ret;
+	int		j;
 
-	temp = malloc(sizeof(char) * (ft_strlen(str) + 1));
-	if (temp == NULL)
-		return (NULL);
+	j = 0;
 	while (str[i] != '\0')
 	{
 		if (str[i] != ' ')
@@ -60,7 +58,7 @@ char	*trimmed_str(char *str, int in_word, int j, int i)
 	}
 	temp[j] = 0;
 	ret = ft_strdup(temp);
-	free (temp);
+	free(temp);
 	return (ret);
 }
 
@@ -68,17 +66,18 @@ char	*trim_str(char *str)
 {
 	char	*temp;
 	int		i;
-	int		j;
 	int		in_word;
 
 	if (!str)
 		return (NULL);
 	i = 0;
-	j = 0;
 	in_word = 0;
 	while (str[i] == ' ')
 		i++;
-	temp = trimmed_str(str, in_word, j, i);
+	temp = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (temp == NULL)
+		return (NULL);
+	temp = trimmed_str(str, temp, in_word, i);
 	free(str);
 	if (!temp)
 		return (NULL);

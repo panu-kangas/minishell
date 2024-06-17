@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:07:27 by tsaari            #+#    #+#             */
-/*   Updated: 2024/06/17 10:55:06 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/17 12:50:03 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ char	*expand_str(char *str, t_env *env_lst, int arg_nbr)
 	return (temp);
 }
 
-char	*expand_str_file(char *str, t_env *env_lst, char quote, int put_d)
+char	*exp_str_file(char *str, t_env *env_lst, char quote, int put_d)
 {
 	char	*exp;
 	char	*temp;
@@ -115,8 +115,7 @@ char	*expand_str_file(char *str, t_env *env_lst, char quote, int put_d)
 		if (str[i] == '$' && (ft_isalnum(str[i + 1]) == 1 || str[i + 1] == '_'))
 			break ;
 	}
-	j = i + 1;
-	i++;
+	j = ++i;
 	while ((ft_isalnum(str[i]) == 1 || str[i] == '_') && str[i] != 0)
 		i++;
 	if (quote == '"' || str[i] != 0 || j > 1)

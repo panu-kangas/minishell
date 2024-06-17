@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_lst_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musiikkiteatterinyt <musiikkiteatteriny    +#+  +:+       +#+        */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/30 15:18:30 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/16 10:47:45 by musiikkitea      ###   ########.fr       */
+/*   Created: 2024/06/17 13:20:25 by pkangas           #+#    #+#             */
+/*   Updated: 2024/06/17 13:20:27 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
