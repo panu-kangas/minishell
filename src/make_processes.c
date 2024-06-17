@@ -6,7 +6,7 @@
 /*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 15:10:39 by pkangas           #+#    #+#             */
-/*   Updated: 2024/06/07 18:11:32 by pkangas          ###   ########.fr       */
+/*   Updated: 2024/06/17 14:32:28 by pkangas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	free_all_before_exit(t_data *data, t_env *env_lst)
 {
+	close_std_fd(data->std_fd);
 	free_env_lst(env_lst);
 	ft_free_data(data, 0);
 }
@@ -37,7 +38,6 @@ int	enter_fork_loop(t_data *data, t_env *env_lst, int *pids, int **fd_pipes)
 			exit_status = ft_redirect(data, fd_pipes, index);
 			if (exit_status == 0)
 				exit_status = handle_command(data, env_lst, index, 0);
-			close_std_fd(data->std_fd);
 			if (exit_status != -2)
 				free_all_before_exit(data, env_lst);
 			exit(exit_status);
