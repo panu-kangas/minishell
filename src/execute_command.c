@@ -28,7 +28,7 @@ char	*find_cmd_path(t_data *data, char *cmd, char **paths, int *exit_status)
 	int		i;
 	char	*cmd_path;
 
-	if (cmd != NULL && ft_strchr(cmd, '/') != NULL)
+	if (cmd != NULL && ft_strchr(cmd, '/') != NULL) // write a new function for checking, and add . && .. to the check
 		return (is_a_path(data, cmd, exit_status));
 	i = -1;
 	while (paths != NULL && paths[++i] != NULL)
@@ -52,6 +52,23 @@ char	*find_cmd_path(t_data *data, char *cmd, char **paths, int *exit_status)
 	return (cmd_path);
 }
 
+int	handle_cmd_path(char **paths, char *cmd_path, int exit_status)
+{
+	if (cmd_path == NULL)
+	{
+		ft_free_doubleptr(paths);
+		return (exit_status);
+	}
+	if (access(cmd_path, X_OK) == -1)
+	{
+		ft_free_doubleptr(paths);
+		write_error(NULL, cmd_path, "Permission denied");
+		return (126);
+	}
+	ft_free_doubleptr(paths);
+	return (0);
+}
+
 int	handle_paths(t_env *env_lst, char *cmd, char ***final_paths)
 {
 	char	**paths;
@@ -71,23 +88,6 @@ int	handle_paths(t_env *env_lst, char *cmd, char ***final_paths)
 		return (127);
 	}
 	*final_paths = paths;
-	return (0);
-}
-
-int	handle_cmd_path(char **paths, char *cmd_path, int exit_status)
-{
-	if (cmd_path == NULL)
-	{
-		ft_free_doubleptr(paths);
-		return (exit_status);
-	}
-	if (access(cmd_path, X_OK) == -1)
-	{
-		ft_free_doubleptr(paths);
-		write_error(NULL, cmd_path, "Permission denied");
-		return (126);
-	}
-	ft_free_doubleptr(paths);
 	return (0);
 }
 
