@@ -14,7 +14,7 @@ NAME = minishell
 
 CC = cc
 RM = rm -rf
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 
 LIBFT = libft/libft.a
 HEADERS = -I includes -I /Users/$(USER)/.brew/opt/readline/include

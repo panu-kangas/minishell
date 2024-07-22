@@ -50,3 +50,15 @@ void	free_and_exit(t_data *data, t_env *env_lst)
 	ft_putstr_fd("exit\n", 2);
 	exit(exit_status);
 }
+
+int	check_is_cmd_path(char *cmd)
+{
+	if (cmd != NULL && ft_strchr(cmd, '/') != NULL)
+		return (1);
+	else if (ft_strncmp(cmd, ".", 2) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "..", 3) == 0)
+		return (1);
+	else
+		return (0);
+}

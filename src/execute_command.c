@@ -16,6 +16,12 @@ char	*is_a_path(t_data *data, char *cmd, int *exit_status)
 {
 	char	*cmd_path;
 
+	if (ft_strncmp(cmd, ".", 2) == 0 || ft_strncmp(cmd, "..", 3) == 0)
+	{
+		write_error(NULL, cmd, "command not found");
+		*exit_status = 127;
+		return (NULL);
+	}
 	*exit_status = check_cmd_path(data, cmd);
 	if (*exit_status != 0)
 		return (NULL);
@@ -28,7 +34,7 @@ char	*find_cmd_path(t_data *data, char *cmd, char **paths, int *exit_status)
 	int		i;
 	char	*cmd_path;
 
-	if (cmd != NULL && ft_strchr(cmd, '/') != NULL) // write a new function for checking, and add . && .. to the check
+	if (check_is_cmd_path(cmd) == 1)
 		return (is_a_path(data, cmd, exit_status));
 	i = -1;
 	while (paths != NULL && paths[++i] != NULL)

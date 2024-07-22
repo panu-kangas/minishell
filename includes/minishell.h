@@ -179,6 +179,7 @@ char		**make_env_var_array(t_env *env_lst);
 
 int			handle_command(t_data *data, t_env *env_lst, int index, int e_f);
 int			execute_command(char *cmd, char **args, t_env *env_lst, t_data *d);
+int			check_is_cmd_path(char *cmd);
 int			execute_built_in(t_env *env, t_data *d, t_token *c_n, int e_f);
 
 int			check_for_built_in(char *cmd);
