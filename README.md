@@ -26,7 +26,7 @@ Minishell is designed to mimic the behavior of a standard shell, offering suppor
 - **Environment Variables**: The shell handles environment variables, allowing users to set, unset, and display them.
 - **Exit Expansion**: We implemented support for `$?` expansion, where commands expand to the exit status of the most recently executed foreground pipeline.
 - **Pipes and Redirections**: We support piping the output of one command to the input of another and handling input/output redirections.
-- **Signal Handling**: The shell responds appropriately to signals such as Ctrl+C, Ctrl+D, and Ctrl+\, ensuring smooth user interaction.
+- **Signal Handling**: The shell responds appropriately to signals such as Ctrl+C, Ctrl+D, and Ctrl+\\, ensuring smooth user interaction.
 - **Error Handling**: Our minishell program follows strictly the bash error handling; all the error cases have their own distinctive error messages, so that the user can easily see what went wrong with the command execution.
 
 ## Installation
