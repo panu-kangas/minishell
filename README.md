@@ -153,6 +153,6 @@ In addition to the core functionality, we implemented several advanced features 
 
 This project was created by:
 
-- Lauri Litovuo
-- Aida Neitenbach
+- [Panu Kangas](https://github.com/panu-kangas)
+- [Timo Saari](https://github.com/LandSurroundedByWater)
 
