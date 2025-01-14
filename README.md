@@ -11,9 +11,7 @@ This projects was created by Panu Kangas and Timo Saari.
 - [Usage](#usage)
 - [Shell Commands](#shell-commands)
 - [Bonus Features](#bonus-features)
-- [Project Structure](#project-structure)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Overview
 
